@@ -8,744 +8,434 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   F31N FILES — Pixel Arcade Theme
-   ============================================================ */
 :root {
-  --bg:        #0a0a1a;
-  --surface:   #12122a;
-  --surface2:  #1a1a3a;
-  --border:    #2a2a5a;
-  --green:     #39ff14;
-  --pink:      #ff2d95;
-  --cyan:      #00f0ff;
-  --yellow:    #ffd700;
-  --red:       #ff3131;
-  --orange:    #ff8c00;
-  --text:      #e0e0ff;
-  --dim:       #6666aa;
-  --black:     #000000;
+  --bg:#0a0a1a; --surface:#12122a; --surface2:#1a1a3a; --border:#2a2a5a;
+  --green:#39ff14; --pink:#ff2d95; --cyan:#00f0ff; --yellow:#ffd700;
+  --red:#ff3131; --orange:#ff8c00; --text:#e0e0ff; --dim:#6666aa; --black:#000000;
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
+* { margin:0; padding:0; box-sizing:border-box; }
 html, body {
-  width: 100%;
-  min-height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
-  line-height: 1.7;
-  -webkit-font-smoothing: none;
-  image-rendering: pixelated;
+  width:100%; min-height:100%; background:var(--bg); color:var(--text);
+  font-family:'Press Start 2P', monospace; font-size:10px; line-height:1.7;
+  -webkit-font-smoothing:none; image-rendering:pixelated;
 }
-
-/* CRT scanlines */
 body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0,0,0,0.12) 0px,
-    rgba(0,0,0,0.12) 1px,
-    transparent 1px,
-    transparent 3px
-  );
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 3px);
 }
-
-/* Subtle pixel grid background */
 body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
   background-image:
     linear-gradient(rgba(57,255,20,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(57,255,20,0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-size:32px 32px;
 }
-
-#app {
-  position: relative;
-  z-index: 1;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 16px 12px 80px;
-}
-
-/* ---------- HEADER ---------- */
-.header {
-  text-align: center;
-  padding: 24px 0 16px;
-  border-bottom: 3px solid var(--border);
-  margin-bottom: 20px;
-}
-
+#app { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:16px 12px 80px; }
+.header { text-align:center; padding:24px 0 16px; border-bottom:3px solid var(--border); margin-bottom:20px; position:relative; }
 .header h1 {
-  font-size: 22px;
-  color: var(--green);
-  text-shadow: 3px 3px 0 var(--black), 0 0 20px rgba(57,255,20,0.4);
-  letter-spacing: 4px;
-  animation: flicker 3s infinite;
+  font-size:22px; color:var(--green);
+  text-shadow:3px 3px 0 var(--black), 0 0 20px rgba(57,255,20,0.4);
+  letter-spacing:4px; animation:flicker 3s infinite;
 }
-
-@keyframes flicker {
-  0%, 95%, 100% { opacity: 1; }
-  96% { opacity: 0.7; }
-  97% { opacity: 1; }
-  98% { opacity: 0.8; }
+@keyframes flicker { 0%,95%,100% {opacity:1;} 96%{opacity:0.7;} 97%{opacity:1;} 98%{opacity:0.8;} }
+.header .sub { font-size:7px; color:var(--dim); margin-top:8px; letter-spacing:2px; }
+.sync-dot {
+  position:absolute; top:12px; right:0; font-size:7px; color:var(--yellow);
+  display:flex; align-items:center; gap:6px;
 }
-
-.header .sub {
-  font-size: 7px;
-  color: var(--dim);
-  margin-top: 8px;
-  letter-spacing: 2px;
+.sync-dot::before {
+  content:''; width:8px; height:8px; background:var(--yellow); border-radius:50%;
+  animation:syncpulse 0.8s infinite;
 }
-
-/* ---------- NAV TABS ---------- */
-.nav {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-
+@keyframes syncpulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.nav { display:flex; gap:6px; margin-bottom:18px; flex-wrap:wrap; }
 .nav button {
-  font-family: inherit;
-  font-size: 8px;
-  padding: 10px 14px;
-  background: var(--surface);
-  color: var(--dim);
-  border: 3px solid var(--border);
-  box-shadow: 4px 4px 0 var(--black);
-  cursor: pointer;
-  letter-spacing: 1px;
-  transition: none;
-  flex: 1;
-  min-width: 90px;
+  font-family:inherit; font-size:8px; padding:10px 14px; background:var(--surface);
+  color:var(--dim); border:3px solid var(--border); box-shadow:4px 4px 0 var(--black);
+  cursor:pointer; letter-spacing:1px; flex:1; min-width:90px;
 }
-
-.nav button:hover { background: var(--surface2); color: var(--text); }
+.nav button:hover { background:var(--surface2); color:var(--text); }
 .nav button.active {
-  background: var(--green);
-  color: var(--black);
-  border-color: var(--green);
-  box-shadow: 4px 4px 0 var(--black), 0 0 12px rgba(57,255,20,0.5);
+  background:var(--green); color:var(--black); border-color:var(--green);
+  box-shadow:4px 4px 0 var(--black), 0 0 12px rgba(57,255,20,0.5);
 }
-
-/* ---------- PIXEL BOX ---------- */
-.pixel-box {
-  background: var(--surface);
-  border: 3px solid var(--border);
-  box-shadow: 6px 6px 0 var(--black);
-  padding: 16px;
-  margin-bottom: 14px;
+.pixel-box { background:var(--surface); border:3px solid var(--border); box-shadow:6px 6px 0 var(--black); padding:16px; margin-bottom:14px; }
+.cache-badge {
+  display:inline-block; font-size:7px; padding:3px 8px; margin-left:8px;
+  background:rgba(255,215,0,0.15); color:var(--yellow);
+  border:2px solid rgba(255,215,0,0.4); vertical-align:middle;
 }
-
-/* ---------- ROSTER LIST ---------- */
 .roster-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px;
-  margin-bottom: 8px;
-  background: var(--surface);
-  border: 3px solid var(--border);
-  box-shadow: 4px 4px 0 var(--black);
-  cursor: pointer;
-  transition: none;
-  gap: 10px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px; margin-bottom:8px; background:var(--surface);
+  border:3px solid var(--border); box-shadow:4px 4px 0 var(--black);
+  cursor:pointer; gap:10px;
 }
-
-.roster-item:hover {
-  background: var(--surface2);
-  border-color: var(--green);
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0 var(--black);
-}
-
-.roster-item .left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-width: 0;
-}
-
+.roster-item:hover { background:var(--surface2); border-color:var(--green); transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--black); }
+.roster-item .left { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
 .roster-item .roll {
-  font-size: 8px;
-  color: var(--cyan);
-  background: rgba(0,240,255,0.1);
-  padding: 4px 8px;
-  border: 2px solid rgba(0,240,255,0.3);
-  white-space: nowrap;
+  font-size:8px; color:var(--cyan); background:rgba(0,240,255,0.1);
+  padding:4px 8px; border:2px solid rgba(0,240,255,0.3); white-space:nowrap;
 }
-
-.roster-item .name {
-  font-size: 10px;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.roster-item .right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.rating-badge {
-  font-size: 12px;
-  font-weight: bold;
-  padding: 6px 10px;
-  border: 3px solid;
-  min-width: 60px;
-  text-align: center;
-}
-
-.rating-pos { color: var(--green); border-color: var(--green); background: rgba(57,255,20,0.08); }
-.rating-neg { color: var(--red);   border-color: var(--red);   background: rgba(255,49,49,0.08); }
-.rating-mid { color: var(--yellow);border-color: var(--yellow);background: rgba(255,215,0,0.08); }
-
-.kk-mini {
-  display: flex;
-  gap: 4px;
-  font-size: 8px;
-}
-
-.kk-mini span {
-  padding: 3px 6px;
-  border: 2px solid var(--border);
-}
-
-.kk-kiss { color: var(--pink); border-color: rgba(255,45,149,0.4) !important; }
-.kk-kick { color: var(--orange); border-color: rgba(255,140,0,0.4) !important; }
-
-/* ---------- DETAIL VIEW ---------- */
-.detail-header {
-  text-align: center;
-  padding: 20px;
-  margin-bottom: 14px;
-}
-
-.detail-header .big-name {
-  font-size: 16px;
-  color: var(--green);
-  margin-bottom: 8px;
-  text-shadow: 2px 2px 0 var(--black);
-}
-
-.detail-header .big-roll {
-  font-size: 10px;
-  color: var(--cyan);
-  margin-bottom: 14px;
-}
-
-.detail-header .big-score {
-  font-size: 28px;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-/* criteria grid */
-.criteria-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.criteria-card {
-  padding: 12px;
-  border: 3px solid var(--border);
-  background: var(--surface);
-  text-align: center;
-}
-
-.criteria-card.positive { border-color: rgba(57,255,20,0.4); }
-.criteria-card.negative { border-color: rgba(255,49,49,0.4); }
-
-.criteria-card .label {
-  font-size: 7px;
-  color: var(--dim);
-  margin-bottom: 6px;
-  letter-spacing: 1px;
-}
-
-.criteria-card .value {
-  font-size: 18px;
-}
-
-.criteria-card.positive .value { color: var(--green); }
-.criteria-card.negative .value { color: var(--red); }
-
-/* star display */
-.stars-display {
-  font-size: 12px;
-  letter-spacing: 2px;
-  margin-top: 4px;
-}
-
-/* section title */
-.section-title {
-  font-size: 10px;
-  color: var(--yellow);
-  padding: 8px 0;
-  border-bottom: 2px solid var(--border);
-  margin-bottom: 12px;
-  letter-spacing: 2px;
-}
-
-/* ---------- EVALUATION FORM ---------- */
-.eval-section { margin-bottom: 18px; }
-
-.criterion-row {
-  margin-bottom: 14px;
-  padding: 10px;
-  border: 3px solid var(--border);
-  background: var(--surface);
-}
-
-.criterion-row.positive { border-left: 6px solid var(--green); }
-.criterion-row.negative { border-left: 6px solid var(--red); }
-
-.criterion-row .cr-label {
-  font-size: 8px;
-  margin-bottom: 8px;
-  color: var(--text);
-  display: flex;
-  justify-content: space-between;
-}
-
-.criterion-row .cr-label .cr-hint {
-  font-size: 6px;
-  color: var(--dim);
-}
-
-.star-input {
-  display: flex;
-  gap: 6px;
-}
-
-.star-input span {
-  font-size: 22px;
-  color: #333;
-  cursor: pointer;
-  transition: none;
-  user-select: none;
-  line-height: 1;
-}
-
-.star-input span.on { color: var(--yellow); text-shadow: 0 0 8px rgba(255,215,0,0.6); }
-.star-input span:hover { transform: scale(1.2); }
-
-/* ---------- BUTTONS ---------- */
+.roster-item .name { font-size:10px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.roster-item .right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.rating-badge { font-size:12px; font-weight:bold; padding:6px 10px; border:3px solid; min-width:60px; text-align:center; }
+.rating-pos { color:var(--green); border-color:var(--green); background:rgba(57,255,20,0.08); }
+.rating-neg { color:var(--red); border-color:var(--red); background:rgba(255,49,49,0.08); }
+.rating-mid { color:var(--yellow); border-color:var(--yellow); background:rgba(255,215,0,0.08); }
+.kk-mini { display:flex; gap:4px; font-size:8px; }
+.kk-mini span { padding:3px 6px; border:2px solid var(--border); }
+.kk-kiss { color:var(--pink); border-color:rgba(255,45,149,0.4) !important; }
+.kk-kick { color:var(--orange); border-color:rgba(255,140,0,0.4) !important; }
+.detail-header { text-align:center; padding:20px; margin-bottom:14px; }
+.detail-header .big-name { font-size:16px; color:var(--green); margin-bottom:8px; text-shadow:2px 2px 0 var(--black); }
+.detail-header .big-roll { font-size:10px; color:var(--cyan); margin-bottom:14px; }
+.detail-header .big-score { font-size:28px; font-weight:bold; margin:10px 0; }
+.criteria-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.criteria-card { padding:12px; border:3px solid var(--border); background:var(--surface); text-align:center; }
+.criteria-card.positive { border-color:rgba(57,255,20,0.4); }
+.criteria-card.negative { border-color:rgba(255,49,49,0.4); }
+.criteria-card .label { font-size:7px; color:var(--dim); margin-bottom:6px; letter-spacing:1px; }
+.criteria-card .value { font-size:18px; }
+.criteria-card.positive .value { color:var(--green); }
+.criteria-card.negative .value { color:var(--red); }
+.stars-display { font-size:12px; letter-spacing:2px; margin-top:4px; }
+.section-title { font-size:10px; color:var(--yellow); padding:8px 0; border-bottom:2px solid var(--border); margin-bottom:12px; letter-spacing:2px; }
+.eval-section { margin-bottom:18px; }
+.criterion-row { margin-bottom:14px; padding:10px; border:3px solid var(--border); background:var(--surface); }
+.criterion-row.positive { border-left:6px solid var(--green); }
+.criterion-row.negative { border-left:6px solid var(--red); }
+.criterion-row .cr-label { font-size:8px; margin-bottom:8px; color:var(--text); display:flex; justify-content:space-between; }
+.criterion-row .cr-label .cr-hint { font-size:6px; color:var(--dim); }
+.star-input { display:flex; gap:6px; }
+.star-input span { font-size:22px; color:#333; cursor:pointer; user-select:none; line-height:1; }
+.star-input span.on { color:var(--yellow); text-shadow:0 0 8px rgba(255,215,0,0.6); }
+.star-input span:hover { transform:scale(1.2); }
 .pixel-btn {
-  font-family: inherit;
-  font-size: 9px;
-  padding: 12px 18px;
-  background: var(--surface2);
-  color: var(--text);
-  border: 3px solid var(--border);
-  box-shadow: 5px 5px 0 var(--black);
-  cursor: pointer;
-  letter-spacing: 1px;
-  transition: none;
-  display: inline-block;
+  font-family:inherit; font-size:9px; padding:12px 18px; background:var(--surface2);
+  color:var(--text); border:3px solid var(--border); box-shadow:5px 5px 0 var(--black);
+  cursor:pointer; letter-spacing:1px; display:inline-block;
 }
-
-.pixel-btn:hover { background: var(--border); }
-.pixel-btn:active {
-  transform: translate(3px, 3px);
-  box-shadow: 2px 2px 0 var(--black);
-}
-
-.pixel-btn.green { background: var(--green); color: var(--black); border-color: var(--green); }
-.pixel-btn.pink  { background: var(--pink);  color: #fff; border-color: var(--pink); }
-.pixel-btn.cyan  { background: var(--cyan);  color: var(--black); border-color: var(--cyan); }
-.pixel-btn.red   { background: var(--red);   color: #fff; border-color: var(--red); }
-.pixel-btn.yellow{ background: var(--yellow);color: var(--black); border-color: var(--yellow); }
-.pixel-btn.wide  { width: 100%; text-align: center; }
-
-/* ---------- TEXT INPUT ---------- */
+.pixel-btn:hover:not(:disabled) { background:var(--border); }
+.pixel-btn:active:not(:disabled) { transform:translate(3px,3px); box-shadow:2px 2px 0 var(--black); }
+.pixel-btn:disabled { opacity:0.3; cursor:not-allowed; }
+.pixel-btn.green { background:var(--green); color:var(--black); border-color:var(--green); }
+.pixel-btn.pink { background:var(--pink); color:#fff; border-color:var(--pink); }
+.pixel-btn.cyan { background:var(--cyan); color:var(--black); border-color:var(--cyan); }
+.pixel-btn.red { background:var(--red); color:#fff; border-color:var(--red); }
+.pixel-btn.yellow { background:var(--yellow); color:var(--black); border-color:var(--yellow); }
+.pixel-btn.wide { width:100%; text-align:center; }
 .pixel-input, .pixel-textarea {
-  font-family: inherit;
-  font-size: 9px;
-  width: 100%;
-  padding: 12px;
-  background: var(--bg);
-  color: var(--text);
-  border: 3px solid var(--border);
-  outline: none;
-  resize: vertical;
+  font-family:inherit; font-size:9px; width:100%; padding:12px;
+  background:var(--bg); color:var(--text); border:3px solid var(--border);
+  outline:none; resize:vertical;
 }
-
-.pixel-textarea { min-height: 70px; }
-.pixel-input:focus, .pixel-textarea:focus { border-color: var(--green); }
-
-/* ---------- ENTRY LOG ---------- */
-.entry-item {
-  padding: 10px;
-  border: 2px solid var(--border);
-  margin-bottom: 8px;
-  background: var(--surface);
-  font-size: 8px;
-}
-
-.entry-item .entry-top {
-  display: flex;
-  justify-content: space-between;
-  color: var(--dim);
-  font-size: 7px;
-  margin-bottom: 6px;
-}
-
-.entry-item .entry-scores {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  font-size: 7px;
-}
-
-.entry-item .entry-scores span {
-  padding: 2px 6px;
-  border: 2px solid var(--border);
-}
-
-/* ---------- LORE ---------- */
-.lore-item {
-  padding: 12px;
-  border: 3px solid var(--border);
-  margin-bottom: 10px;
-  background: var(--surface);
-}
-
-.lore-item .lore-text {
-  font-size: 9px;
-  margin-bottom: 8px;
-  color: var(--text);
-  line-height: 1.8;
-}
-
-.lore-item .lore-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 7px;
-  color: var(--dim);
-}
-
-.lore-vote-btns {
-  display: flex;
-  gap: 6px;
-}
-
+.pixel-textarea { min-height:70px; }
+.pixel-input:focus, .pixel-textarea:focus { border-color:var(--green); }
+.entry-item { padding:10px; border:2px solid var(--border); margin-bottom:8px; background:var(--surface); font-size:8px; }
+.entry-item .entry-top { display:flex; justify-content:space-between; color:var(--dim); font-size:7px; margin-bottom:6px; }
+.entry-item .entry-scores { display:flex; flex-wrap:wrap; gap:6px; font-size:7px; }
+.entry-item .entry-scores span { padding:2px 6px; border:2px solid var(--border); }
+.lore-item { padding:12px; border:3px solid var(--border); margin-bottom:10px; background:var(--surface); }
+.lore-item .lore-text { font-size:9px; margin-bottom:8px; color:var(--text); line-height:1.8; }
+.lore-item .lore-meta { display:flex; justify-content:space-between; align-items:center; font-size:7px; color:var(--dim); }
+.lore-vote-btns { display:flex; gap:6px; }
 .lore-vote-btns button {
-  font-family: inherit;
-  font-size: 7px;
-  padding: 4px 8px;
-  border: 2px solid var(--border);
-  background: var(--surface2);
-  color: var(--text);
-  cursor: pointer;
+  font-family:inherit; font-size:7px; padding:4px 8px;
+  border:2px solid var(--border); background:var(--surface2); color:var(--text); cursor:pointer;
 }
-
-.lore-vote-btns button:hover { background: var(--border); }
-.lore-vote-btns .kiss-btn { color: var(--pink); border-color: rgba(255,45,149,0.5); }
-.lore-vote-btns .kick-btn { color: var(--orange); border-color: rgba(255,140,0,0.5); }
-
-/* ---------- SWIPE DECK ---------- */
-.swipe-container {
-  position: relative;
-  height: 520px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  touch-action: none;
-}
-
+.lore-vote-btns button:hover { background:var(--border); }
+.lore-vote-btns .kiss-btn { color:var(--pink); border-color:rgba(255,45,149,0.5); }
+.lore-vote-btns .kick-btn { color:var(--orange); border-color:rgba(255,140,0,0.5); }
+.swipe-container { position:relative; height:520px; display:flex; align-items:center; justify-content:center; touch-action:none; }
 .swipe-card {
-  position: absolute;
-  width: 100%;
-  max-width: 380px;
-  background: var(--surface);
-  border: 4px solid var(--border);
-  box-shadow: 8px 8px 0 var(--black);
-  padding: 22px;
-  text-align: center;
-  cursor: grab;
-  user-select: none;
-  will-change: transform;
+  position:absolute; width:100%; max-width:380px; background:var(--surface);
+  border:4px solid var(--border); box-shadow:8px 8px 0 var(--black);
+  padding:22px; text-align:center; cursor:grab; user-select:none;
+  contain:layout paint style; will-change:transform, opacity; backface-visibility:hidden;
 }
-
-.swipe-card:active { cursor: grabbing; }
-
-.swipe-card .sc-name {
-  font-size: 16px;
-  color: var(--green);
-  margin-bottom: 6px;
-  text-shadow: 2px 2px 0 var(--black);
-}
-
-.swipe-card .sc-roll {
-  font-size: 9px;
-  color: var(--cyan);
-  margin-bottom: 14px;
-}
-
-.swipe-card .sc-score {
-  font-size: 30px;
-  font-weight: bold;
-  margin: 12px 0;
-}
-
-.swipe-card .sc-kk {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin: 12px 0;
-  font-size: 10px;
-}
-
-.swipe-card .sc-criteria {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-top: 14px;
-  text-align: left;
-}
-
-.swipe-card .sc-criteria .sc-crit {
-  font-size: 7px;
-  padding: 6px 8px;
-  border: 2px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-}
-
+.swipe-card:active { cursor:grabbing; }
+.swipe-card .sc-name { font-size:16px; color:var(--green); margin-bottom:6px; text-shadow:2px 2px 0 var(--black); }
+.swipe-card .sc-roll { font-size:9px; color:var(--cyan); margin-bottom:14px; }
+.swipe-card .sc-score { font-size:30px; font-weight:bold; margin:12px 0; }
+.swipe-card .sc-kk { display:flex; justify-content:center; gap:16px; margin:12px 0; font-size:10px; }
+.swipe-card .sc-criteria { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:14px; text-align:left; }
+.swipe-card .sc-criteria .sc-crit { font-size:7px; padding:6px 8px; border:2px solid var(--border); display:flex; justify-content:space-between; }
 .swipe-overlay {
-  position: absolute;
-  top: 20px;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 8px 16px;
-  border: 4px solid;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 10;
-  letter-spacing: 4px;
+  position:absolute; top:20px; font-size:24px; font-weight:bold; padding:8px 16px;
+  border:4px solid; opacity:0; pointer-events:none; z-index:10; letter-spacing:4px;
 }
-
-.swipe-overlay.kiss { right: 20px; color: var(--pink); border-color: var(--pink); transform: rotate(12deg); }
-.swipe-overlay.kick { left: 20px; color: var(--orange); border-color: var(--orange); transform: rotate(-12deg); }
-
-.swipe-hint {
-  text-align: center;
-  font-size: 7px;
-  color: var(--dim);
-  margin-top: 12px;
-}
-
-.swipe-actions {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 16px;
-}
-
+.swipe-overlay.kiss { right:20px; color:var(--pink); border-color:var(--pink); transform:rotate(12deg); }
+.swipe-overlay.kick { left:20px; color:var(--orange); border-color:var(--orange); transform:rotate(-12deg); }
+.swipe-hint { text-align:center; font-size:7px; color:var(--dim); margin-top:12px; }
+.swipe-actions { display:flex; justify-content:center; gap:16px; margin-top:16px; }
 .swipe-actions button {
-  font-family: inherit;
-  font-size: 10px;
-  padding: 14px 22px;
-  border: 3px solid;
-  box-shadow: 5px 5px 0 var(--black);
-  cursor: pointer;
-  letter-spacing: 2px;
+  font-family:inherit; font-size:10px; padding:14px 22px;
+  border:3px solid; box-shadow:5px 5px 0 var(--black); cursor:pointer; letter-spacing:2px;
 }
-
-.swipe-actions button:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--black); }
-
-/* ---------- TOAST ---------- */
+.swipe-actions button:active { transform:translate(3px,3px); box-shadow:2px 2px 0 var(--black); }
 #toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: var(--green);
-  color: var(--black);
-  font-size: 9px;
-  padding: 14px 24px;
-  border: 3px solid var(--black);
-  box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
-  z-index: 10000;
-  opacity: 0;
-  transition: all 0.2s;
-  pointer-events: none;
-  max-width: 90%;
-  text-align: center;
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px);
+  background:var(--green); color:var(--black); font-size:9px; padding:14px 24px;
+  border:3px solid var(--black); box-shadow:6px 6px 0 rgba(0,0,0,0.5);
+  z-index:10000; opacity:0; transition:all 0.2s; pointer-events:none;
+  max-width:90%; text-align:center;
 }
-
-#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-#toast.error { background: var(--red); color: #fff; }
-
-/* ---------- LOADING ---------- */
-.loading {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--dim);
-  font-size: 10px;
-}
-
-.loading .blink { animation: blink 0.8s infinite; }
-@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-
-/* ---------- EMPTY ---------- */
-.empty {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--dim);
-  font-size: 9px;
-}
-
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 500px) {
-  .header h1 { font-size: 16px; letter-spacing: 2px; }
-  .criteria-grid { grid-template-columns: 1fr; }
-  .roster-item .name { font-size: 8px; }
-  .swipe-card { max-width: 92%; padding: 16px; }
-  .swipe-card .sc-name { font-size: 13px; }
-  .swipe-card .sc-score { font-size: 24px; }
+#toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+#toast.error { background:var(--red); color:#fff; }
+.loading { text-align:center; padding:60px 20px; color:var(--dim); font-size:10px; }
+.loading .blink { animation:blink 0.8s infinite; }
+@keyframes blink { 0%,50% {opacity:1;} 51%,100% {opacity:0;} }
+.empty { text-align:center; padding:40px 20px; color:var(--dim); font-size:9px; line-height:2; }
+@media (max-width:500px) {
+  .header h1 { font-size:16px; letter-spacing:2px; }
+  .criteria-grid { grid-template-columns:1fr; }
+  .roster-item .name { font-size:8px; }
+  .swipe-card { max-width:92%; padding:16px; }
+  .swipe-card .sc-name { font-size:13px; }
+  .swipe-card .sc-score { font-size:24px; }
 }
 </style>
 </head>
 <body>
 
 <div id="app">
-
-  <!-- HEADER -->
   <div class="header">
     <h1>F31N FILES</h1>
     <div class="sub">// CLASSIFIED // RATE // KISS // KICK //</div>
+    <div id="syncIndicator"></div>
   </div>
-
-  <!-- NAV -->
   <div class="nav" id="nav">
     <button data-tab="roster" class="active">ROSTER</button>
     <button data-tab="swipe">SWIPE</button>
   </div>
-
-  <!-- MAIN CONTENT -->
   <div id="content"></div>
-
 </div>
 
 <div id="toast"></div>
 
 <script>
 // ============================================================
-// F31N FILES — Frontend Logic
+// F31N FILES — Frontend v3 (with localStorage cache)
 // ============================================================
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbxYQgcFPxAj1U1Hsi53Y9Ylueg5xLSIu-RSW6qApv8yx-jGAxXbagaFW8wdMhzlhEY1NQ/exec';
 
-// ---------- STATE ----------
+const CACHE_PREFIX = 'f31n_';
+const CACHE_ALL_TTL = 10 * 60 * 1000;      // 10 minutes for roster
+const CACHE_DETAIL_TTL = 2 * 60 * 1000;    // 2 minutes for detail view
+
 let STATE = {
   students: [],
   currentTab: 'roster',
   currentStudent: null,
   currentDetail: null,
-  swipeIndex: 0,
-  swipeOrder: [],
+  detailError: null,
   loading: true,
-  demoMode: false
+  loadingStart: null,
+  status: '',
+  error: null,
+  fromCache: false,
+  syncing: false,
+  swipeOrder: [],
+  swipeIndex: 0,
+  rosterPage: 0,
+  rosterPageSize: 30,
+  rosterQuery: ''
 };
 
-// ---------- DEMO DATA (fallback if API fails) ----------
-const DEMO_STUDENTS = [
-  { roll: '30-153', name: 'MILON DAS',       rating: 3.5, kisses: 12, kicks: 3, evalCount: 5, personality: 4, cool: 3.8, helpfulness: 4.2, pettiness: 2, hate: 1.5, annoying: 2.5, loreCount: 2 },
-  { roll: '30-182', name: 'MEHRIN CHOWDHURY',rating: 4.1, kisses: 20, kicks: 1, evalCount: 7, personality: 4.5, cool: 4.2, helpfulness: 4.8, pettiness: 1.2, hate: 1, annoying: 1.5, loreCount: 3 },
-  { roll: '31-001', name: 'SUZANA TASNIM RUHI', rating: 2.8, kisses: 5, kicks: 8, evalCount: 4, personality: 3.5, cool: 3, helpfulness: 3.2, pettiness: 3.5, hate: 3, annoying: 3.8, loreCount: 1 },
-  { roll: '31-002', name: 'SHAMA MAHJABIN',  rating: 3.9, kisses: 15, kicks: 2, evalCount: 6, personality: 4.2, cool: 4, helpfulness: 4.5, pettiness: 1.8, hate: 1.5, annoying: 2, loreCount: 2 },
-  { roll: '31-003', name: 'RAWNAK JAHAN',    rating: 3.2, kisses: 8, kicks: 4, evalCount: 3, personality: 3.8, cool: 3.5, helpfulness: 3.6, pettiness: 2.5, hate: 2, annoying: 3, loreCount: 1 }
-];
+// ---------- LOCAL CACHE ----------
+function cacheWrite(key, data) {
+  try {
+    localStorage.setItem(CACHE_PREFIX + key, JSON.stringify({ t: Date.now(), d: data }));
+  } catch (_) {}
+}
+function cacheRead(key, maxAgeMs) {
+  try {
+    const raw = localStorage.getItem(CACHE_PREFIX + key);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (!obj || !obj.t) return null;
+    if (maxAgeMs && Date.now() - obj.t > maxAgeMs) return null;
+    return obj.d;
+  } catch (_) { return null; }
+}
+function cacheClear() {
+  try {
+    Object.keys(localStorage)
+      .filter(k => k.startsWith(CACHE_PREFIX))
+      .forEach(k => localStorage.removeItem(k));
+  } catch (_) {}
+}
 
 // ---------- API ----------
-async function api(action, params = {}) {
+async function api(action, params = {}, timeoutMs = 30000) {
+  const url = new URL(API_URL);
+  url.searchParams.set('action', action);
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+  });
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  const t0 = Date.now();
+
   try {
-    const url = new URL(API_URL);
-    url.searchParams.set('action', action);
-    Object.entries(params).forEach(([k, v]) => {
-      if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+    const res = await fetch(url.toString(), {
+      method: 'GET', signal: ctrl.signal, redirect: 'follow', cache: 'no-store'
     });
-    const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
+    clearTimeout(timer);
+    const text = await res.text();
+    console.log(`[F31N] ${action} → ${res.status} in ${Date.now() - t0}ms | ${text.length} bytes`);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
+    try { return JSON.parse(text); }
+    catch { throw new Error('Non-JSON: ' + text.slice(0, 120)); }
   } catch (err) {
-    console.warn('API error:', err);
+    clearTimeout(timer);
+    console.error(`[F31N FAIL] ${action} after ${Date.now() - t0}ms`, err);
     throw err;
   }
 }
 
+// ---------- BOOT ----------
+async function boot() {
+  // 1. Try instant cache
+  const cached = cacheRead('all', CACHE_ALL_TTL);
+  if (Array.isArray(cached) && cached.length) {
+    console.log('[F31N] Loaded from cache:', cached.length, 'records');
+    STATE.students = cached;
+    STATE.swipeOrder = shuffle([...cached]);
+    STATE.swipeIndex = 0;
+    STATE.loading = false;
+    STATE.fromCache = true;
+    render();
+    // silent background refresh
+    backgroundRefresh();
+    return;
+  }
+
+  // 2. Cold load
+  await loadAll();
+}
+
 async function loadAll() {
   STATE.loading = true;
+  STATE.loadingStart = Date.now();
+  STATE.status = 'CONNECTING...';
+  STATE.error = null;
   render();
+
   try {
+    STATE.status = 'FETCHING ROSTER...';
+    render();
     const data = await api('all');
-    if (data.error) throw new Error(data.error);
+    if (data && data.error) throw new Error(data.error);
+    if (!Array.isArray(data)) throw new Error('Bad payload');
     STATE.students = data;
-    STATE.demoMode = false;
+    STATE.swipeOrder = shuffle([...data]);
+    STATE.swipeIndex = 0;
+    STATE.status = 'LIVE';
+    STATE.fromCache = false;
+    cacheWrite('all', data);
   } catch (err) {
-    console.warn('Falling back to demo data:', err);
-    STATE.students = DEMO_STUDENTS;
-    STATE.demoMode = true;
-    toast('DEMO MODE — API unreachable', true);
+    STATE.students = [];
+    STATE.error = err.message || String(err);
+    STATE.status = 'ERROR';
   }
+
   STATE.loading = false;
-  STATE.swipeOrder = [...STATE.students].sort(() => Math.random() - 0.5);
-  STATE.swipeIndex = 0;
+  STATE.rosterPage = 0;
   render();
 }
 
-async function loadDetail(roll) {
+async function backgroundRefresh() {
+  if (STATE.syncing) return;
+  STATE.syncing = true;
+  renderSync();
+
   try {
-    const data = await api('detail', { roll });
-    if (data.error) throw new Error(data.error);
-    return data;
+    const data = await api('all', {}, 25000);
+    if (Array.isArray(data) && data.length) {
+      // rebuild the roster but PRESERVE the swipe deck order/position
+      const fresh = {};
+      data.forEach(s => { fresh[s.roll] = s; });
+
+      if (STATE.swipeOrder.length === 0) {
+        STATE.swipeOrder = shuffle([...data]);
+      } else {
+        const seen = new Set();
+        const newOrder = [];
+        STATE.swipeOrder.forEach(s => {
+          if (fresh[s.roll]) { newOrder.push(fresh[s.roll]); seen.add(s.roll); }
+        });
+        data.forEach(s => { if (!seen.has(s.roll)) newOrder.push(s); });
+        STATE.swipeOrder = newOrder;
+      }
+
+      STATE.students = data;
+      STATE.fromCache = false;
+      cacheWrite('all', data);
+    }
   } catch (err) {
-    // demo detail
-    const s = STATE.students.find(x => x.roll === roll);
-    if (!s) return null;
-    return {
-      student: s,
-      entries: [
-        { time: new Date().toISOString(), personality: 4, cool: 3, helpfulness: 5, pettiness: 2, hate: 1, annoying: 2, score: 3.83, lore: 'Demo entry' }
-      ],
-      lore: [
-        { id: 'demo1', roll, name: s.name, text: 'This is a demo lore entry. Deploy the Apps Script to enable real data.', kiss: 3, kick: 0 }
-      ]
-    };
+    console.warn('[F31N] Background refresh failed:', err);
   }
+
+  STATE.syncing = false;
+  renderSync();
+  render();
+}
+
+function renderSync() {
+  const el = document.getElementById('syncIndicator');
+  if (!el) return;
+  el.className = STATE.syncing ? 'sync-dot' : '';
+  el.textContent = STATE.syncing ? 'SYNCING' : '';
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
 // ---------- RENDER ----------
 function render() {
-  const nav = document.getElementById('nav');
-  nav.querySelectorAll('button').forEach(b => {
+  document.querySelectorAll('#nav button').forEach(b => {
     b.classList.toggle('active', b.dataset.tab === STATE.currentTab);
   });
 
   const content = document.getElementById('content');
 
   if (STATE.loading) {
-    content.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING DATA...</div>`;
+    const secs = STATE.loadingStart
+      ? Math.floor((Date.now() - STATE.loadingStart) / 1000) : 0;
+    content.innerHTML = `
+      <div class="loading">
+        <div><span class="blink">▮</span> ${STATE.status || 'LOADING DATA...'}</div>
+        <div style="margin-top:16px;font-size:9px;color:var(--yellow);">${secs}s</div>
+        <div style="margin-top:16px;font-size:7px;color:var(--dim);line-height:2;">
+          Apps Script cold start can take 15–25 seconds.<br>
+          Subsequent requests are fast.
+        </div>
+      </div>`;
+    clearTimeout(window._tick);
+    window._tick = setTimeout(render, 1000);
+    return;
+  }
+
+  if (STATE.error) {
+    content.innerHTML = `
+      <div class="pixel-box" style="text-align:center;padding:30px;">
+        <div style="font-size:14px;color:var(--red);margin-bottom:12px;">⚠ CONNECTION FAILED</div>
+        <div style="font-size:8px;color:var(--text);margin-bottom:16px;line-height:2;word-break:break-word;">${esc(STATE.error)}</div>
+        <div style="font-size:7px;color:var(--dim);margin-bottom:20px;line-height:2;">
+          Check DevTools Console.<br>Confirm Apps Script is deployed as <b>New version</b>.
+        </div>
+        <button class="pixel-btn green" onclick="loadAll()">▶ RETRY</button>
+        <button class="pixel-btn" onclick="hardReset()" style="margin-left:8px;">↻ CLEAR CACHE</button>
+      </div>`;
     return;
   }
 
@@ -757,24 +447,62 @@ function render() {
   }
 }
 
+function hardReset() {
+  cacheClear();
+  STATE.students = [];
+  STATE.swipeOrder = [];
+  STATE.swipeIndex = 0;
+  STATE.error = null;
+  loadAll();
+}
+
 // ---------- ROSTER ----------
 function renderRoster(el) {
   if (!STATE.students.length) {
-    el.innerHTML = `<div class="empty">NO STUDENTS FOUND<br><br>Add rows to the "Students" sheet.</div>`;
+    el.innerHTML = `<div class="empty">NO STUDENTS FOUND.<br><br>Add rows to the <b>Student</b> tab.</div>`;
     return;
   }
 
-  let html = `<div style="margin-bottom:12px;font-size:7px;color:var(--dim);text-align:center;">
-    ${STATE.demoMode ? '⚠ DEMO MODE' : '● LIVE DATA'} — ${STATE.students.length} RECORDS
-  </div>`;
+  const q = STATE.rosterQuery.trim().toLowerCase();
+  const filtered = q
+    ? STATE.students.filter(s => s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q))
+    : STATE.students;
 
-  STATE.students.forEach(s => {
+  const total = filtered.length;
+  const pageSize = STATE.rosterPageSize;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  if (STATE.rosterPage >= totalPages) STATE.rosterPage = totalPages - 1;
+  const start = STATE.rosterPage * pageSize;
+  const pageItems = filtered.slice(start, start + pageSize);
+
+  const badge = STATE.fromCache ? '<span class="cache-badge">CACHED</span>' : '';
+
+  let html = `
+    <div style="margin-bottom:12px;">
+      <input class="pixel-input" id="rosterSearch"
+             placeholder="SEARCH NAME OR ROLL..."
+             value="${esc(STATE.rosterQuery)}"
+             oninput="onRosterSearch(this.value)">
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:7px;color:var(--dim);margin-bottom:10px;">
+      <span>● ${total} RECORD${total !== 1 ? 'S' : ''} ${badge}</span>
+      <span>PAGE ${STATE.rosterPage + 1} / ${totalPages}</span>
+    </div>
+  `;
+
+  if (!pageItems.length) {
+    html += `<div class="empty">NO MATCHES FOR "${esc(STATE.rosterQuery)}"</div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  pageItems.forEach(s => {
     const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
     html += `
       <div class="roster-item" onclick="openDetail('${s.roll}')">
         <div class="left">
-          <span class="roll">${s.roll}</span>
-          <span class="name">${s.name}</span>
+          <span class="roll">${esc(s.roll)}</span>
+          <span class="name">${esc(s.name)}</span>
         </div>
         <div class="right">
           <div class="kk-mini">
@@ -786,26 +514,95 @@ function renderRoster(el) {
       </div>`;
   });
 
+  if (totalPages > 1) {
+    html += `
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="pixel-btn" style="flex:1;" ${STATE.rosterPage === 0 ? 'disabled' : ''}
+                onclick="rosterPage(-1)">← PREV</button>
+        <button class="pixel-btn" style="flex:1;" ${STATE.rosterPage >= totalPages - 1 ? 'disabled' : ''}
+                onclick="rosterPage(1)">NEXT →</button>
+      </div>`;
+  }
+
   el.innerHTML = html;
+}
+
+let _searchTimer;
+function onRosterSearch(val) {
+  STATE.rosterQuery = val;
+  STATE.rosterPage = 0;
+  clearTimeout(_searchTimer);
+  _searchTimer = setTimeout(() => {
+    const active = document.activeElement;
+    const wasSearch = active && active.id === 'rosterSearch';
+    const pos = wasSearch ? active.selectionStart : 0;
+    render();
+    if (wasSearch) {
+      const inp = document.getElementById('rosterSearch');
+      if (inp) { inp.focus(); inp.setSelectionRange(pos, pos); }
+    }
+  }, 120);
+}
+
+function rosterPage(dir) {
+  STATE.rosterPage += dir;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ---------- DETAIL ----------
 async function openDetail(roll) {
   STATE.currentStudent = roll;
   STATE.currentDetail = null;
+  STATE.detailError = null;
   render();
-  const detail = await loadDetail(roll);
-  STATE.currentDetail = detail;
+
+  // instant from cache
+  const cached = cacheRead('detail_' + roll, CACHE_DETAIL_TTL);
+  if (cached && cached.student) {
+    STATE.currentDetail = cached;
+    render();
+    // refresh in background
+    api('detail', { roll }).then(fresh => {
+      if (fresh && fresh.student) {
+        STATE.currentDetail = fresh;
+        cacheWrite('detail_' + roll, fresh);
+        render();
+      }
+    }).catch(() => {});
+    return;
+  }
+
+  try {
+    const detail = await api('detail', { roll });
+    if (!detail || detail.error) throw new Error(detail?.error || 'No data');
+    STATE.currentDetail = detail;
+    cacheWrite('detail_' + roll, detail);
+  } catch (err) {
+    STATE.detailError = err.message || String(err);
+  }
   render();
 }
 
 function closeDetail() {
   STATE.currentStudent = null;
   STATE.currentDetail = null;
+  STATE.detailError = null;
   render();
 }
 
 function renderDetail(el) {
+  if (STATE.detailError) {
+    el.innerHTML = `
+      <button class="pixel-btn" onclick="closeDetail()" style="margin-bottom:12px;">← BACK</button>
+      <div class="pixel-box" style="text-align:center;padding:30px;">
+        <div style="font-size:12px;color:var(--red);margin-bottom:12px;">⚠ COULD NOT LOAD FILE</div>
+        <div style="font-size:8px;color:var(--text);margin-bottom:16px;line-height:2;word-break:break-word;">${esc(STATE.detailError)}</div>
+        <button class="pixel-btn green" onclick="openDetail('${STATE.currentStudent}')">▶ RETRY</button>
+      </div>`;
+    return;
+  }
+
   if (!STATE.currentDetail) {
     el.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING FILE...</div>`;
     return;
@@ -814,12 +611,12 @@ function renderDetail(el) {
   const { student: s, entries, lore } = STATE.currentDetail;
   const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
 
-  let html = `
+  el.innerHTML = `
     <button class="pixel-btn" onclick="closeDetail()" style="margin-bottom:12px;">← BACK TO ROSTER</button>
 
     <div class="pixel-box detail-header">
-      <div class="big-roll">${s.roll}</div>
-      <div class="big-name">${s.name}</div>
+      <div class="big-roll">${esc(s.roll)}</div>
+      <div class="big-name">${esc(s.name)}</div>
       <div class="big-score ${cls}">${s.rating.toFixed(2)}</div>
       <div style="font-size:8px;color:var(--dim);">
         ${s.evalCount} EVAL${s.evalCount !== 1 ? 'S' : ''} &nbsp;|&nbsp;
@@ -830,49 +627,25 @@ function renderDetail(el) {
 
     <div class="section-title">► STAT BREAKDOWN</div>
     <div class="criteria-grid">
-      <div class="criteria-card positive">
-        <div class="label">PERSONALITY</div>
-        <div class="value">${s.personality.toFixed(1)}</div>
-        <div class="stars-display">${stars(s.personality, 'var(--green)')}</div>
-      </div>
-      <div class="criteria-card positive">
-        <div class="label">COOL</div>
-        <div class="value">${s.cool.toFixed(1)}</div>
-        <div class="stars-display">${stars(s.cool, 'var(--green)')}</div>
-      </div>
-      <div class="criteria-card positive">
-        <div class="label">HELPFULNESS</div>
-        <div class="value">${s.helpfulness.toFixed(1)}</div>
-        <div class="stars-display">${stars(s.helpfulness, 'var(--green)')}</div>
-      </div>
-      <div class="criteria-card negative">
-        <div class="label">PETTINESS</div>
-        <div class="value">${s.pettiness.toFixed(1)}</div>
-        <div class="stars-display">${stars(s.pettiness, 'var(--red)')}</div>
-      </div>
-      <div class="criteria-card negative">
-        <div class="label">HATE</div>
-        <div class="value">${s.hate.toFixed(1)}</div>
-        <div class="stars-display">${stars(s.hate, 'var(--red)')}</div>
-      </div>
-      <div class="criteria-card negative">
-        <div class="label">ANNOYING</div>
-        <div class="value">${s.annoying.toFixed(1)}</div>
-        <div class="stars-display">${stars(s.annoying, 'var(--red)')}</div>
-      </div>
+      ${critCard('PERSONALITY', s.personality, true)}
+      ${critCard('COOL',        s.cool,        true)}
+      ${critCard('HELPFULNESS', s.helpfulness, true)}
+      ${critCard('PETTINESS',   s.pettiness,   false)}
+      ${critCard('HATE',        s.hate,        false)}
+      ${critCard('ANNOYING',    s.annoying,    false)}
     </div>
 
     <div class="section-title">► SUBMIT EVALUATION</div>
     <div class="eval-section" id="evalForm">
       ${criteriaRow('Personality', 'personality', true)}
-      ${criteriaRow('Cool', 'cool', true)}
+      ${criteriaRow('Cool',        'cool',        true)}
       ${criteriaRow('Helpfulness', 'helpfulness', true)}
-      ${criteriaRow('Pettiness', 'pettiness', false)}
-      ${criteriaRow('Hate', 'hate', false)}
-      ${criteriaRow('Annoying', 'annoying', false)}
+      ${criteriaRow('Pettiness',   'pettiness',   false)}
+      ${criteriaRow('Hate',        'hate',        false)}
+      ${criteriaRow('Annoying',    'annoying',    false)}
       <textarea class="pixel-textarea" id="evalLore" placeholder="Optional lore / comment..."></textarea>
       <div style="margin-top:10px;">
-        <button class="pixel-btn green wide" onclick="submitEval('${s.roll}','${s.name}')">▶ SUBMIT EVALUATION</button>
+        <button class="pixel-btn green wide" onclick="submitEval('${s.roll}')">▶ SUBMIT EVALUATION</button>
       </div>
     </div>
 
@@ -880,39 +653,43 @@ function renderDetail(el) {
     <div style="margin-bottom:10px;">
       <textarea class="pixel-textarea" id="loreInput" placeholder="Drop some lore..."></textarea>
       <div style="margin-top:8px;">
-        <button class="pixel-btn cyan wide" onclick="addLore('${s.roll}','${s.name}')">+ ADD LORE</button>
+        <button class="pixel-btn cyan wide" onclick="addLore('${s.roll}','${esc(s.name)}')">+ ADD LORE</button>
       </div>
     </div>
     <div id="loreList">
-      ${lore.length ? lore.map(l => loreItem(l)).join('') : '<div class="empty">NO LORE YET. BE THE FIRST.</div>'}
+      ${lore.length ? lore.map(loreItem).join('') : '<div class="empty">NO LORE YET. BE THE FIRST.</div>'}
     </div>
 
     <div class="section-title">► ENTRY HISTORY (${entries.length})</div>
     <div>
-      ${entries.length ? entries.map(e => entryItem(e)).join('') : '<div class="empty">NO EVALUATIONS YET.</div>'}
+      ${entries.length ? entries.map(entryItem).join('') : '<div class="empty">NO EVALUATIONS YET.</div>'}
     </div>
   `;
 
-  el.innerHTML = html;
-
-  // initialize star inputs
   document.querySelectorAll('.star-input').forEach(inp => {
-    const target = inp.dataset.target;
     inp.querySelectorAll('span').forEach(star => {
       star.addEventListener('click', () => {
         const val = parseInt(star.dataset.val);
         inp.dataset.value = val;
-        inp.querySelectorAll('span').forEach(s => {
-          s.classList.toggle('on', parseInt(s.dataset.val) <= val);
+        inp.querySelectorAll('span').forEach(s2 => {
+          s2.classList.toggle('on', parseInt(s2.dataset.val) <= val);
         });
       });
     });
-    // default to 3
     inp.dataset.value = 3;
-    inp.querySelectorAll('span').forEach(s => {
-      if (parseInt(s.dataset.val) <= 3) s.classList.add('on');
+    inp.querySelectorAll('span').forEach(s2 => {
+      if (parseInt(s2.dataset.val) <= 3) s2.classList.add('on');
     });
   });
+}
+
+function critCard(label, value, positive) {
+  return `
+    <div class="criteria-card ${positive ? 'positive' : 'negative'}">
+      <div class="label">${label}</div>
+      <div class="value">${value.toFixed(1)}</div>
+      <div class="stars-display">${stars(value, positive ? 'var(--green)' : 'var(--red)')}</div>
+    </div>`;
 }
 
 function criteriaRow(label, key, positive) {
@@ -920,17 +697,13 @@ function criteriaRow(label, key, positive) {
     <div class="criterion-row ${positive ? 'positive' : 'negative'}">
       <div class="cr-label">
         <span>${positive ? '▲' : '▼'} ${label.toUpperCase()}</span>
-        <span class="cr-hint">${positive ? '1-5 STARS' : '1=NO DEDUCT, 5=-3'}</span>
+        <span class="cr-hint">${positive ? '1-5 STARS' : '1=0 · 2=-0.5 · 3=-1 · 4=-2 · 5=-3'}</span>
       </div>
       <div class="star-input" data-target="${key}">
-        <span data-val="1">★</span>
-        <span data-val="2">★</span>
-        <span data-val="3">★</span>
-        <span data-val="4">★</span>
-        <span data-val="5">★</span>
+        <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span>
+        <span data-val="4">★</span><span data-val="5">★</span>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 function stars(value, color) {
@@ -959,8 +732,7 @@ function entryItem(e) {
         <span style="color:var(--red)">An:${e.annoying}</span>
       </div>
       ${e.lore ? `<div style="margin-top:6px;color:var(--dim);font-size:7px;">"${esc(e.lore)}"</div>` : ''}
-    </div>
-  `;
+    </div>`;
 }
 
 function loreItem(l) {
@@ -974,30 +746,37 @@ function loreItem(l) {
           <button class="kick-btn" onclick="voteLore('${l.id}','kick')">✖ KICK ${l.kick}</button>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 // ---------- ACTIONS ----------
-async function submitEval(roll, name) {
+async function submitEval(roll) {
   const form = document.getElementById('evalForm');
+  if (!form) return;
+  const student = STATE.students.find(x => x.roll === roll);
   const data = {};
   form.querySelectorAll('.star-input').forEach(inp => {
     data[inp.dataset.target] = inp.dataset.value || 3;
   });
   data.roll = roll;
-  data.name = name;
+  data.name = student ? student.name : '';
   data.lore = document.getElementById('evalLore').value.trim();
 
   try {
     const res = await api('submitEval', data);
     if (res.error) throw new Error(res.error);
-    toast('EVALUATION SUBMITTED — SCORE: ' + res.score);
-    // refresh detail
-    const d = await loadDetail(roll);
+    toast('SUBMITTED — SCORE: ' + res.score);
+    // invalidate caches
+    cacheClear();
+    const d = await api('detail', { roll });
     STATE.currentDetail = d;
-    // also refresh list in background
-    api('all').then(list => { STATE.students = list; }).catch(() => {});
+    cacheWrite('detail_' + roll, d);
+    api('all').then(list => {
+      if (Array.isArray(list)) {
+        STATE.students = list;
+        cacheWrite('all', list);
+      }
+    }).catch(() => {});
     render();
   } catch (err) {
     toast('FAILED: ' + err.message, true);
@@ -1012,8 +791,10 @@ async function addLore(roll, name) {
     if (res.error) throw new Error(res.error);
     document.getElementById('loreInput').value = '';
     toast('LORE ADDED');
-    const d = await loadDetail(roll);
+    cacheClear();
+    const d = await api('detail', { roll });
     STATE.currentDetail = d;
+    cacheWrite('detail_' + roll, d);
     render();
   } catch (err) {
     toast('FAILED: ' + err.message, true);
@@ -1025,8 +806,11 @@ async function voteLore(loreId, vote) {
     const res = await api('voteLore', { loreId, vote });
     if (res.error) throw new Error(res.error);
     toast(vote === 'kiss' ? '♥ KISSED' : '✖ KICKED');
-    const d = await loadDetail(STATE.currentStudent);
+    const roll = STATE.currentStudent;
+    cacheClear();
+    const d = await api('detail', { roll });
     STATE.currentDetail = d;
+    cacheWrite('detail_' + roll, d);
     render();
   } catch (err) {
     toast('FAILED: ' + err.message, true);
@@ -1034,50 +818,62 @@ async function voteLore(loreId, vote) {
 }
 
 async function sendKiss(roll) {
-  try {
-    await api('kiss', { roll });
-    toast('♥ KISS SENT TO ' + roll);
-    const s = STATE.students.find(x => x.roll === roll);
-    if (s) s.kisses++;
-  } catch (err) { toast('FAILED', true); }
+  const s = STATE.students.find(x => x.roll === roll);
+  if (s) s.kisses++;
+  cacheWrite('all', STATE.students);
+  try { await api('kiss', { roll }); toast('♥ KISS SENT'); }
+  catch { toast('NOT SAVED', true); }
 }
 
 async function sendKick(roll) {
-  try {
-    await api('kick', { roll });
-    toast('✖ KICK SENT TO ' + roll);
-    const s = STATE.students.find(x => x.roll === roll);
-    if (s) s.kicks++;
-  } catch (err) { toast('FAILED', true); }
+  const s = STATE.students.find(x => x.roll === roll);
+  if (s) s.kicks++;
+  cacheWrite('all', STATE.students);
+  try { await api('kick', { roll }); toast('✖ KICK SENT'); }
+  catch { toast('NOT SAVED', true); }
 }
 
 // ---------- SWIPE ----------
 function renderSwipe(el) {
   if (!STATE.swipeOrder.length) {
-    el.innerHTML = `<div class="empty">NO PROFILES TO SWIPE.</div>`;
+    el.innerHTML = `<div class="empty">NO PROFILES TO SWIPE.<br><br>Load the roster first.</div>`;
     return;
   }
 
-  if (STATE.swipeIndex >= STATE.swipeOrder.length) {
+  const total = STATE.swipeOrder.length;
+  const idx = STATE.swipeIndex;
+
+  if (idx >= total) {
     el.innerHTML = `
       <div class="pixel-box" style="text-align:center;padding:40px;">
         <div style="font-size:14px;color:var(--green);margin-bottom:12px;">DECK CLEARED</div>
-        <div style="font-size:8px;color:var(--dim);margin-bottom:20px;">You went through everyone.</div>
-        <button class="pixel-btn green" onclick="resetSwipe()">▶ RESHUFFLE</button>
+        <div style="font-size:8px;color:var(--dim);margin-bottom:20px;">You went through all ${total} profiles.</div>
+        <button class="pixel-btn green wide" onclick="resetSwipe()">▶ RESHUFFLE</button>
       </div>`;
     return;
   }
 
-  const s = STATE.swipeOrder[STATE.swipeIndex];
+  const s = STATE.swipeOrder[idx];
   const cls = s.rating > 3 ? 'var(--green)' : s.rating < 2 ? 'var(--red)' : 'var(--yellow)';
+  const pct = Math.round((idx / total) * 100);
 
   el.innerHTML = `
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:7px;color:var(--dim);margin-bottom:6px;">
+        <span>CARD ${idx + 1} / ${total}</span>
+        <span>${pct}%</span>
+      </div>
+      <div style="height:8px;background:var(--surface2);border:2px solid var(--border);">
+        <div style="height:100%;width:${pct}%;background:var(--green);"></div>
+      </div>
+    </div>
+
     <div class="swipe-container" id="swipeContainer">
       <div class="swipe-overlay kiss" id="overlayKiss">KISS</div>
       <div class="swipe-overlay kick" id="overlayKick">KICK</div>
       <div class="swipe-card" id="swipeCard">
-        <div class="sc-name">${s.name}</div>
-        <div class="sc-roll">${s.roll}</div>
+        <div class="sc-name">${esc(s.name)}</div>
+        <div class="sc-roll">${esc(s.roll)}</div>
         <div class="sc-score" style="color:${cls}">${s.rating.toFixed(2)}</div>
         <div class="sc-kk">
           <span style="color:var(--pink)">♥ ${s.kisses}</span>
@@ -1086,25 +882,34 @@ function renderSwipe(el) {
         <div class="sc-criteria">
           <div class="sc-crit" style="color:var(--green)"><span>PERSONALITY</span><span>${s.personality.toFixed(1)}</span></div>
           <div class="sc-crit" style="color:var(--green)"><span>COOL</span><span>${s.cool.toFixed(1)}</span></div>
-          <div class="sc-crit" style="color:var(--green)"><span>HELPFULNESS</span><span>${s.helpfulness.toFixed(1)}</span></div>
-          <div class="sc-crit" style="color:var(--red)"><span>PETTINESS</span><span>${s.pettiness.toFixed(1)}</span></div>
+          <div class="sc-crit" style="color:var(--green)"><span>HELPFUL</span><span>${s.helpfulness.toFixed(1)}</span></div>
+          <div class="sc-crit" style="color:var(--red)"><span>PETTY</span><span>${s.pettiness.toFixed(1)}</span></div>
           <div class="sc-crit" style="color:var(--red)"><span>HATE</span><span>${s.hate.toFixed(1)}</span></div>
-          <div class="sc-crit" style="color:var(--red)"><span>ANNOYING</span><span>${s.annoying.toFixed(1)}</span></div>
+          <div class="sc-crit" style="color:var(--red)"><span>ANNOY</span><span>${s.annoying.toFixed(1)}</span></div>
         </div>
       </div>
     </div>
-    <div class="swipe-hint">DRAG CARD OR USE BUTTONS</div>
+
+    <div class="swipe-hint">DRAG · ← → ARROWS · SPACE = SKIP</div>
+
     <div class="swipe-actions">
       <button class="pixel-btn pink" onclick="doSwipe('kiss')">♥ KISS</button>
       <button class="pixel-btn yellow" onclick="skipSwipe()">SKIP</button>
       <button class="pixel-btn red" onclick="doSwipe('kick')">✖ KICK</button>
     </div>
+
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="pixel-btn" style="flex:1;" ${idx === 0 ? 'disabled' : ''}
+              onclick="prevSwipe()">← PREV</button>
+      <button class="pixel-btn" style="flex:1;" ${idx >= total - 1 ? 'disabled' : ''}
+              onclick="nextSwipe()">NEXT →</button>
+    </div>
   `;
 
-  initSwipeDrag(s.roll);
+  initSwipeDrag();
 }
 
-function initSwipeDrag(roll) {
+function initSwipeDrag() {
   const card = document.getElementById('swipeCard');
   if (!card) return;
   const kissOv = document.getElementById('overlayKiss');
@@ -1112,10 +917,10 @@ function initSwipeDrag(roll) {
   let startX = 0, currentX = 0, dragging = false;
 
   card.addEventListener('pointerdown', e => {
-    startX = e.clientX;
-    dragging = true;
-    card.setPointerCapture(e.pointerId);
+    if (e.target.closest('button')) return;
+    startX = e.clientX; currentX = 0; dragging = true;
     card.style.transition = 'none';
+    try { card.setPointerCapture(e.pointerId); } catch (_) {}
   });
 
   card.addEventListener('pointermove', e => {
@@ -1124,78 +929,58 @@ function initSwipeDrag(roll) {
     const rot = currentX * 0.06;
     card.style.transform = `translateX(${currentX}px) rotate(${rot}deg)`;
     const pct = Math.min(Math.abs(currentX) / 120, 1);
-    if (currentX > 0) {
-      kissOv.style.opacity = pct;
-      kickOv.style.opacity = 0;
-    } else {
-      kickOv.style.opacity = pct;
-      kissOv.style.opacity = 0;
-    }
+    if (currentX > 0) { kissOv.style.opacity = pct; kickOv.style.opacity = 0; }
+    else              { kickOv.style.opacity = pct; kissOv.style.opacity = 0; }
   });
 
-  card.addEventListener('pointerup', e => {
+  function endDrag() {
     if (!dragging) return;
     dragging = false;
-    if (currentX > 100) {
-      doSwipe('kiss', roll);
-    } else if (currentX < -100) {
-      doSwipe('kick', roll);
-    } else {
+    if (currentX > 100)       doSwipe('kiss');
+    else if (currentX < -100) doSwipe('kick');
+    else {
       card.style.transition = 'transform 0.2s';
       card.style.transform = '';
-      kissOv.style.opacity = 0;
-      kickOv.style.opacity = 0;
+      kissOv.style.opacity = 0; kickOv.style.opacity = 0;
     }
     currentX = 0;
-  });
+  }
 
-  card.addEventListener('pointercancel', () => {
-    dragging = false;
-    card.style.transform = '';
-    kissOv.style.opacity = 0;
-    kickOv.style.opacity = 0;
-  });
+  card.addEventListener('pointerup', endDrag);
+  card.addEventListener('pointercancel', endDrag);
+  card.addEventListener('pointerleave', endDrag);
 }
 
-function doSwipe(direction, roll) {
+function doSwipe(direction) {
   const s = STATE.swipeOrder[STATE.swipeIndex];
   if (!s) return;
   if (direction === 'kiss') sendKiss(s.roll);
   else if (direction === 'kick') sendKick(s.roll);
-  animateOut(direction, () => {
-    STATE.swipeIndex++;
-    render();
-  });
+  animateOut(direction, () => { STATE.swipeIndex++; render(); });
 }
 
 function skipSwipe() {
-  animateOut('skip', () => {
-    STATE.swipeIndex++;
-    render();
-  });
+  animateOut('skip', () => { STATE.swipeIndex++; render(); });
+}
+
+function prevSwipe() { if (STATE.swipeIndex > 0) { STATE.swipeIndex--; render(); } }
+function nextSwipe() { if (STATE.swipeIndex < STATE.swipeOrder.length - 1) { STATE.swipeIndex++; render(); } }
+
+function resetSwipe() {
+  STATE.swipeOrder = shuffle([...STATE.students]);
+  STATE.swipeIndex = 0;
+  render();
 }
 
 function animateOut(direction, cb) {
   const card = document.getElementById('swipeCard');
   if (!card) { cb(); return; }
   card.style.transition = 'transform 0.3s, opacity 0.3s';
-  if (direction === 'kiss') {
-    card.style.transform = 'translateX(400px) rotate(30deg)';
-    card.style.opacity = '0';
-  } else if (direction === 'kick') {
-    card.style.transform = 'translateX(-400px) rotate(-30deg)';
-    card.style.opacity = '0';
-  } else {
-    card.style.transform = 'translateY(-400px)';
-    card.style.opacity = '0';
-  }
+  if (direction === 'kiss')      card.style.transform = 'translateX(400px) rotate(30deg)';
+  else if (direction === 'kick') card.style.transform = 'translateX(-400px) rotate(-30deg)';
+  else                           card.style.transform = 'translateY(-400px)';
+  card.style.opacity = '0';
   setTimeout(cb, 320);
-}
-
-function resetSwipe() {
-  STATE.swipeOrder = [...STATE.students].sort(() => Math.random() - 0.5);
-  STATE.swipeIndex = 0;
-  render();
 }
 
 // ---------- UTILITIES ----------
@@ -1221,18 +1006,32 @@ function toast(msg, isError) {
   toastTimer = setTimeout(() => { t.className = ''; }, 2500);
 }
 
-// ---------- NAV EVENTS ----------
+// ---------- EVENTS ----------
 document.getElementById('nav').addEventListener('click', e => {
   if (e.target.tagName === 'BUTTON') {
-    STATE.currentTab = e.target.dataset.tab;
+    const tab = e.target.dataset.tab;
+    if (tab === STATE.currentTab) return;
+    STATE.currentTab = tab;
     STATE.currentStudent = null;
     STATE.currentDetail = null;
+    STATE.detailError = null;
     render();
   }
 });
 
-// ---------- INIT ----------
-loadAll();
+document.addEventListener('keydown', e => {
+  if (STATE.currentTab !== 'swipe' || STATE.loading) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight')      { e.preventDefault(); doSwipe('kiss'); }
+  else if (e.key === 'ArrowLeft')  { e.preventDefault(); doSwipe('kick'); }
+  else if (e.key === ' ')          { e.preventDefault(); skipSwipe(); }
+  else if (e.key === 'ArrowDown')  { e.preventDefault(); nextSwipe(); }
+  else if (e.key === 'ArrowUp')    { e.preventDefault(); prevSwipe(); }
+});
+
+// ---------- BOOT ----------
+fetch(API_URL + '?action=ping&_t=' + Date.now(), { cache: 'no-store' }).catch(() => {});
+boot();
 </script>
 </body>
 </html>
