@@ -8,192 +8,171 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0a0a1a; --surface:#12122a; --surface2:#1a1a3a; --border:#2a2a5a;
-  --green:#39ff14; --pink:#ff2d95; --cyan:#00f0ff; --yellow:#ffd700;
-  --red:#ff3131; --orange:#ff8c00; --text:#e0e0ff; --dim:#6666aa; --black:#000000;
+:root{
+  --bg:#0a0a1a;--surface:#12122a;--surface2:#1a1a3a;--border:#2a2a5a;
+  --green:#39ff14;--pink:#ff2d95;--cyan:#00f0ff;--yellow:#ffd700;
+  --red:#ff3131;--orange:#ff8c00;--text:#e0e0ff;--dim:#6666aa;--black:#000;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-html, body {
-  width:100%; min-height:100%; background:var(--bg); color:var(--text);
-  font-family:'Press Start 2P', monospace; font-size:10px; line-height:1.7;
-  -webkit-font-smoothing:none; image-rendering:pixelated;
-}
-body::after {
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 3px);
-}
-body::before {
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background-image:
-    linear-gradient(rgba(57,255,20,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(57,255,20,0.03) 1px, transparent 1px);
-  background-size:32px 32px;
-}
-#app { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:16px 12px 80px; }
-.header { text-align:center; padding:24px 0 16px; border-bottom:3px solid var(--border); margin-bottom:20px; position:relative; }
-.header h1 {
-  font-size:22px; color:var(--green);
-  text-shadow:3px 3px 0 var(--black), 0 0 20px rgba(57,255,20,0.4);
-  letter-spacing:4px; animation:flicker 3s infinite;
-}
-@keyframes flicker { 0%,95%,100% {opacity:1;} 96%{opacity:0.7;} 97%{opacity:1;} 98%{opacity:0.8;} }
-.header .sub { font-size:7px; color:var(--dim); margin-top:8px; letter-spacing:2px; }
-.sync-dot {
-  position:absolute; top:12px; right:0; font-size:7px; color:var(--yellow);
-  display:flex; align-items:center; gap:6px;
-}
-.sync-dot::before {
-  content:''; width:8px; height:8px; background:var(--yellow); border-radius:50%;
-  animation:syncpulse 0.8s infinite;
-}
-@keyframes syncpulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-.nav { display:flex; gap:6px; margin-bottom:18px; flex-wrap:wrap; }
-.nav button {
-  font-family:inherit; font-size:8px; padding:10px 14px; background:var(--surface);
-  color:var(--dim); border:3px solid var(--border); box-shadow:4px 4px 0 var(--black);
-  cursor:pointer; letter-spacing:1px; flex:1; min-width:90px;
-}
-.nav button:hover { background:var(--surface2); color:var(--text); }
-.nav button.active {
-  background:var(--green); color:var(--black); border-color:var(--green);
-  box-shadow:4px 4px 0 var(--black), 0 0 12px rgba(57,255,20,0.5);
-}
-.pixel-box { background:var(--surface); border:3px solid var(--border); box-shadow:6px 6px 0 var(--black); padding:16px; margin-bottom:14px; }
-.cache-badge {
-  display:inline-block; font-size:7px; padding:3px 8px; margin-left:8px;
-  background:rgba(255,215,0,0.15); color:var(--yellow);
-  border:2px solid rgba(255,215,0,0.4); vertical-align:middle;
-}
-.roster-item {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 14px; margin-bottom:8px; background:var(--surface);
-  border:3px solid var(--border); box-shadow:4px 4px 0 var(--black);
-  cursor:pointer; gap:10px;
-}
-.roster-item:hover { background:var(--surface2); border-color:var(--green); transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--black); }
-.roster-item .left { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
-.roster-item .roll {
-  font-size:8px; color:var(--cyan); background:rgba(0,240,255,0.1);
-  padding:4px 8px; border:2px solid rgba(0,240,255,0.3); white-space:nowrap;
-}
-.roster-item .name { font-size:10px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.roster-item .right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-.rating-badge { font-size:12px; font-weight:bold; padding:6px 10px; border:3px solid; min-width:60px; text-align:center; }
-.rating-pos { color:var(--green); border-color:var(--green); background:rgba(57,255,20,0.08); }
-.rating-neg { color:var(--red); border-color:var(--red); background:rgba(255,49,49,0.08); }
-.rating-mid { color:var(--yellow); border-color:var(--yellow); background:rgba(255,215,0,0.08); }
-.kk-mini { display:flex; gap:4px; font-size:8px; }
-.kk-mini span { padding:3px 6px; border:2px solid var(--border); }
-.kk-kiss { color:var(--pink); border-color:rgba(255,45,149,0.4) !important; }
-.kk-kick { color:var(--orange); border-color:rgba(255,140,0,0.4) !important; }
-.detail-header { text-align:center; padding:20px; margin-bottom:14px; }
-.detail-header .big-name { font-size:16px; color:var(--green); margin-bottom:8px; text-shadow:2px 2px 0 var(--black); }
-.detail-header .big-roll { font-size:10px; color:var(--cyan); margin-bottom:14px; }
-.detail-header .big-score { font-size:28px; font-weight:bold; margin:10px 0; }
-.criteria-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
-.criteria-card { padding:12px; border:3px solid var(--border); background:var(--surface); text-align:center; }
-.criteria-card.positive { border-color:rgba(57,255,20,0.4); }
-.criteria-card.negative { border-color:rgba(255,49,49,0.4); }
-.criteria-card .label { font-size:7px; color:var(--dim); margin-bottom:6px; letter-spacing:1px; }
-.criteria-card .value { font-size:18px; }
-.criteria-card.positive .value { color:var(--green); }
-.criteria-card.negative .value { color:var(--red); }
-.stars-display { font-size:12px; letter-spacing:2px; margin-top:4px; }
-.section-title { font-size:10px; color:var(--yellow); padding:8px 0; border-bottom:2px solid var(--border); margin-bottom:12px; letter-spacing:2px; }
-.eval-section { margin-bottom:18px; }
-.criterion-row { margin-bottom:14px; padding:10px; border:3px solid var(--border); background:var(--surface); }
-.criterion-row.positive { border-left:6px solid var(--green); }
-.criterion-row.negative { border-left:6px solid var(--red); }
-.criterion-row .cr-label { font-size:8px; margin-bottom:8px; color:var(--text); display:flex; justify-content:space-between; }
-.criterion-row .cr-label .cr-hint { font-size:6px; color:var(--dim); }
-.star-input { display:flex; gap:6px; }
-.star-input span { font-size:22px; color:#333; cursor:pointer; user-select:none; line-height:1; }
-.star-input span.on { color:var(--yellow); text-shadow:0 0 8px rgba(255,215,0,0.6); }
-.star-input span:hover { transform:scale(1.2); }
-.pixel-btn {
-  font-family:inherit; font-size:9px; padding:12px 18px; background:var(--surface2);
-  color:var(--text); border:3px solid var(--border); box-shadow:5px 5px 0 var(--black);
-  cursor:pointer; letter-spacing:1px; display:inline-block;
-}
-.pixel-btn:hover:not(:disabled) { background:var(--border); }
-.pixel-btn:active:not(:disabled) { transform:translate(3px,3px); box-shadow:2px 2px 0 var(--black); }
-.pixel-btn:disabled { opacity:0.3; cursor:not-allowed; }
-.pixel-btn.green { background:var(--green); color:var(--black); border-color:var(--green); }
-.pixel-btn.pink { background:var(--pink); color:#fff; border-color:var(--pink); }
-.pixel-btn.cyan { background:var(--cyan); color:var(--black); border-color:var(--cyan); }
-.pixel-btn.red { background:var(--red); color:#fff; border-color:var(--red); }
-.pixel-btn.yellow { background:var(--yellow); color:var(--black); border-color:var(--yellow); }
-.pixel-btn.wide { width:100%; text-align:center; }
-.pixel-input, .pixel-textarea {
-  font-family:inherit; font-size:9px; width:100%; padding:12px;
-  background:var(--bg); color:var(--text); border:3px solid var(--border);
-  outline:none; resize:vertical;
-}
-.pixel-textarea { min-height:70px; }
-.pixel-input:focus, .pixel-textarea:focus { border-color:var(--green); }
-.entry-item { padding:10px; border:2px solid var(--border); margin-bottom:8px; background:var(--surface); font-size:8px; }
-.entry-item .entry-top { display:flex; justify-content:space-between; color:var(--dim); font-size:7px; margin-bottom:6px; }
-.entry-item .entry-scores { display:flex; flex-wrap:wrap; gap:6px; font-size:7px; }
-.entry-item .entry-scores span { padding:2px 6px; border:2px solid var(--border); }
-.lore-item { padding:12px; border:3px solid var(--border); margin-bottom:10px; background:var(--surface); }
-.lore-item .lore-text { font-size:9px; margin-bottom:8px; color:var(--text); line-height:1.8; }
-.lore-item .lore-meta { display:flex; justify-content:space-between; align-items:center; font-size:7px; color:var(--dim); }
-.lore-vote-btns { display:flex; gap:6px; }
-.lore-vote-btns button {
-  font-family:inherit; font-size:7px; padding:4px 8px;
-  border:2px solid var(--border); background:var(--surface2); color:var(--text); cursor:pointer;
-}
-.lore-vote-btns button:hover { background:var(--border); }
-.lore-vote-btns .kiss-btn { color:var(--pink); border-color:rgba(255,45,149,0.5); }
-.lore-vote-btns .kick-btn { color:var(--orange); border-color:rgba(255,140,0,0.5); }
-.swipe-container { position:relative; height:520px; display:flex; align-items:center; justify-content:center; touch-action:none; }
-.swipe-card {
-  position:absolute; width:100%; max-width:380px; background:var(--surface);
-  border:4px solid var(--border); box-shadow:8px 8px 0 var(--black);
-  padding:22px; text-align:center; cursor:grab; user-select:none;
-  contain:layout paint style; will-change:transform, opacity; backface-visibility:hidden;
-}
-.swipe-card:active { cursor:grabbing; }
-.swipe-card .sc-name { font-size:16px; color:var(--green); margin-bottom:6px; text-shadow:2px 2px 0 var(--black); }
-.swipe-card .sc-roll { font-size:9px; color:var(--cyan); margin-bottom:14px; }
-.swipe-card .sc-score { font-size:30px; font-weight:bold; margin:12px 0; }
-.swipe-card .sc-kk { display:flex; justify-content:center; gap:16px; margin:12px 0; font-size:10px; }
-.swipe-card .sc-criteria { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:14px; text-align:left; }
-.swipe-card .sc-criteria .sc-crit { font-size:7px; padding:6px 8px; border:2px solid var(--border); display:flex; justify-content:space-between; }
-.swipe-overlay {
-  position:absolute; top:20px; font-size:24px; font-weight:bold; padding:8px 16px;
-  border:4px solid; opacity:0; pointer-events:none; z-index:10; letter-spacing:4px;
-}
-.swipe-overlay.kiss { right:20px; color:var(--pink); border-color:var(--pink); transform:rotate(12deg); }
-.swipe-overlay.kick { left:20px; color:var(--orange); border-color:var(--orange); transform:rotate(-12deg); }
-.swipe-hint { text-align:center; font-size:7px; color:var(--dim); margin-top:12px; }
-.swipe-actions { display:flex; justify-content:center; gap:16px; margin-top:16px; }
-.swipe-actions button {
-  font-family:inherit; font-size:10px; padding:14px 22px;
-  border:3px solid; box-shadow:5px 5px 0 var(--black); cursor:pointer; letter-spacing:2px;
-}
-.swipe-actions button:active { transform:translate(3px,3px); box-shadow:2px 2px 0 var(--black); }
-#toast {
-  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px);
-  background:var(--green); color:var(--black); font-size:9px; padding:14px 24px;
-  border:3px solid var(--black); box-shadow:6px 6px 0 rgba(0,0,0,0.5);
-  z-index:10000; opacity:0; transition:all 0.2s; pointer-events:none;
-  max-width:90%; text-align:center;
-}
-#toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-#toast.error { background:var(--red); color:#fff; }
-.loading { text-align:center; padding:60px 20px; color:var(--dim); font-size:10px; }
-.loading .blink { animation:blink 0.8s infinite; }
-@keyframes blink { 0%,50% {opacity:1;} 51%,100% {opacity:0;} }
-.empty { text-align:center; padding:40px 20px; color:var(--dim); font-size:9px; line-height:2; }
-@media (max-width:500px) {
-  .header h1 { font-size:16px; letter-spacing:2px; }
-  .criteria-grid { grid-template-columns:1fr; }
-  .roster-item .name { font-size:8px; }
-  .swipe-card { max-width:92%; padding:16px; }
-  .swipe-card .sc-name { font-size:13px; }
-  .swipe-card .sc-score { font-size:24px; }
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;min-height:100%;background:var(--bg);color:var(--text);
+  font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.7;
+  -webkit-font-smoothing:none;image-rendering:pixelated}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0,rgba(0,0,0,.12) 1px,transparent 1px,transparent 3px)}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(57,255,20,.03) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(57,255,20,.03) 1px,transparent 1px);background-size:32px 32px}
+#app{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:16px 12px 80px}
+.header{text-align:center;padding:24px 0 16px;border-bottom:3px solid var(--border);margin-bottom:20px;position:relative}
+.header h1{font-size:22px;color:var(--green);text-shadow:3px 3px 0 var(--black),0 0 20px rgba(57,255,20,.4);letter-spacing:4px;animation:flicker 3s infinite}
+@keyframes flicker{0%,95%,100%{opacity:1}96%{opacity:.7}97%{opacity:1}98%{opacity:.8}}
+.header .sub{font-size:7px;color:var(--dim);margin-top:8px;letter-spacing:2px}
+.sync-dot{position:absolute;top:12px;right:0;font-size:7px;color:var(--yellow);display:flex;align-items:center;gap:6px}
+.sync-dot::before{content:'';width:8px;height:8px;background:var(--yellow);border-radius:50%;animation:syncpulse .8s infinite}
+@keyframes syncpulse{0%,100%{opacity:1}50%{opacity:.3}}
+.nav{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.nav button{font-family:inherit;font-size:8px;padding:10px 14px;background:var(--surface);
+  color:var(--dim);border:3px solid var(--border);box-shadow:4px 4px 0 var(--black);cursor:pointer;letter-spacing:1px;flex:1;min-width:80px}
+.nav button:hover{background:var(--surface2);color:var(--text)}
+.nav button.active{background:var(--green);color:var(--black);border-color:var(--green);
+  box-shadow:4px 4px 0 var(--black),0 0 12px rgba(57,255,20,.5)}
+.pixel-box{background:var(--surface);border:3px solid var(--border);box-shadow:6px 6px 0 var(--black);padding:16px;margin-bottom:14px}
+.cache-badge{display:inline-block;font-size:7px;padding:3px 8px;margin-left:8px;
+  background:rgba(255,215,0,.15);color:var(--yellow);border:2px solid rgba(255,215,0,.4);vertical-align:middle}
+.roster-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;
+  margin-bottom:8px;background:var(--surface);border:3px solid var(--border);
+  box-shadow:4px 4px 0 var(--black);cursor:pointer;gap:10px}
+.roster-item:hover{background:var(--surface2);border-color:var(--green);transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--black)}
+.roster-item .left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.roster-item .roll{font-size:8px;color:var(--cyan);background:rgba(0,240,255,.1);
+  padding:4px 8px;border:2px solid rgba(0,240,255,.3);white-space:nowrap}
+.roster-item .name{font-size:10px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.roster-item .right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.rating-badge{font-size:12px;font-weight:bold;padding:6px 10px;border:3px solid;min-width:60px;text-align:center}
+.rating-pos{color:var(--green);border-color:var(--green);background:rgba(57,255,20,.08)}
+.rating-neg{color:var(--red);border-color:var(--red);background:rgba(255,49,49,.08)}
+.rating-mid{color:var(--yellow);border-color:var(--yellow);background:rgba(255,215,0,.08)}
+.kk-mini{font-size:7px;color:var(--dim)}
+.detail-header{text-align:center;padding:20px;margin-bottom:14px}
+.detail-header .big-name{font-size:16px;color:var(--green);margin-bottom:8px;text-shadow:2px 2px 0 var(--black)}
+.detail-header .big-roll{font-size:10px;color:var(--cyan);margin-bottom:14px}
+.detail-header .big-score{font-size:28px;font-weight:bold;margin:10px 0}
+.score-formula{font-size:7px;color:var(--dim);margin-top:6px;line-height:1.9}
+.score-formula .pos{color:var(--green)}
+.score-formula .neg{color:var(--red)}
+.criteria-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.criteria-card{padding:12px;border:3px solid var(--border);background:var(--surface);text-align:center}
+.criteria-card.positive{border-color:rgba(57,255,20,.4)}
+.criteria-card.negative{border-color:rgba(255,49,49,.4)}
+.criteria-card .label{font-size:7px;color:var(--dim);margin-bottom:6px;letter-spacing:1px}
+.criteria-card .value{font-size:18px}
+.criteria-card.positive .value{color:var(--green)}
+.criteria-card.negative .value{color:var(--red)}
+.stars-display{font-size:12px;letter-spacing:2px;margin-top:4px}
+.section-title{font-size:10px;color:var(--yellow);padding:8px 0;border-bottom:2px solid var(--border);margin-bottom:12px;letter-spacing:2px}
+.eval-section{margin-bottom:18px}
+.criterion-row{margin-bottom:14px;padding:10px;border:3px solid var(--border);background:var(--surface)}
+.criterion-row.positive{border-left:6px solid var(--green)}
+.criterion-row.negative{border-left:6px solid var(--red)}
+.criterion-row .cr-label{font-size:8px;margin-bottom:8px;color:var(--text);display:flex;justify-content:space-between;gap:8px}
+.criterion-row .cr-label .cr-hint{font-size:6px;color:var(--dim);text-align:right}
+.star-input{display:flex;gap:6px}
+.star-input span{font-size:22px;color:#333;cursor:pointer;user-select:none;line-height:1}
+.star-input span.on{color:var(--yellow);text-shadow:0 0 8px rgba(255,215,0,.6)}
+.star-input span:hover{transform:scale(1.2)}
+.pixel-btn{font-family:inherit;font-size:9px;padding:12px 18px;background:var(--surface2);
+  color:var(--text);border:3px solid var(--border);box-shadow:5px 5px 0 var(--black);cursor:pointer;letter-spacing:1px;display:inline-block}
+.pixel-btn:hover:not(:disabled){background:var(--border)}
+.pixel-btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:2px 2px 0 var(--black)}
+.pixel-btn:disabled{opacity:.3;cursor:not-allowed}
+.pixel-btn.green{background:var(--green);color:var(--black);border-color:var(--green)}
+.pixel-btn.pink{background:var(--pink);color:#fff;border-color:var(--pink)}
+.pixel-btn.cyan{background:var(--cyan);color:var(--black);border-color:var(--cyan)}
+.pixel-btn.red{background:var(--red);color:#fff;border-color:var(--red)}
+.pixel-btn.yellow{background:var(--yellow);color:var(--black);border-color:var(--yellow)}
+.pixel-btn.wide{width:100%;text-align:center}
+.pixel-input,.pixel-textarea{font-family:inherit;font-size:9px;width:100%;padding:12px;
+  background:var(--bg);color:var(--text);border:3px solid var(--border);outline:none;resize:vertical}
+.pixel-textarea{min-height:70px}
+.pixel-input:focus,.pixel-textarea:focus{border-color:var(--green)}
+.entry-item{padding:10px;border:2px solid var(--border);margin-bottom:8px;background:var(--surface);font-size:8px}
+.entry-item .entry-top{display:flex;justify-content:space-between;color:var(--dim);font-size:7px;margin-bottom:6px}
+.entry-item .entry-scores{display:flex;flex-wrap:wrap;gap:6px;font-size:7px}
+.entry-item .entry-scores span{padding:2px 6px;border:2px solid var(--border)}
+.lore-item{padding:12px;border:3px solid var(--border);margin-bottom:10px;background:var(--surface)}
+.lore-item .lore-text{font-size:9px;margin-bottom:8px;color:var(--text);line-height:1.8}
+.lore-item .lore-meta{display:flex;justify-content:space-between;align-items:center;font-size:7px;color:var(--dim);gap:8px;flex-wrap:wrap}
+.lore-vote-btns{display:flex;gap:6px}
+.lore-vote-btns button{font-family:inherit;font-size:7px;padding:4px 8px;
+  border:2px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer}
+.lore-vote-btns button:hover{background:var(--border)}
+.lore-vote-btns .kiss-btn{color:var(--pink);border-color:rgba(255,45,149,.5)}
+.lore-vote-btns .kick-btn{color:var(--orange);border-color:rgba(255,140,0,.5)}
+.kisskick-row{display:flex;justify-content:center;gap:10px;margin-top:12px;font-size:8px}
+.kisskick-row button{font-family:inherit;font-size:8px;padding:8px 12px;
+  border:2px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer}
+.kisskick-row .kiss-btn{color:var(--pink);border-color:rgba(255,45,149,.5)}
+.kisskick-row .kick-btn{color:var(--orange);border-color:rgba(255,140,0,.5)}
+.swipe-container{position:relative;height:520px;display:flex;align-items:center;justify-content:center;touch-action:none}
+.swipe-card{position:absolute;width:100%;max-width:380px;background:var(--surface);
+  border:4px solid var(--border);box-shadow:8px 8px 0 var(--black);padding:22px;
+  text-align:center;cursor:grab;user-select:none;contain:layout paint style;
+  will-change:transform,opacity;backface-visibility:hidden}
+.swipe-card:active{cursor:grabbing}
+.swipe-card .sc-name{font-size:16px;color:var(--green);margin-bottom:6px;text-shadow:2px 2px 0 var(--black)}
+.swipe-card .sc-roll{font-size:9px;color:var(--cyan);margin-bottom:14px}
+.swipe-card .sc-score{font-size:30px;font-weight:bold;margin:12px 0}
+.swipe-card .sc-kk{display:flex;justify-content:center;gap:16px;margin:12px 0;font-size:9px;color:var(--dim)}
+.swipe-card .sc-criteria{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:14px;text-align:left}
+.swipe-card .sc-criteria .sc-crit{font-size:7px;padding:6px 8px;border:2px solid var(--border);display:flex;justify-content:space-between}
+.swipe-overlay{position:absolute;top:20px;font-size:24px;font-weight:bold;padding:8px 16px;
+  border:4px solid;opacity:0;pointer-events:none;z-index:10;letter-spacing:4px}
+.swipe-overlay.kiss{right:20px;color:var(--pink);border-color:var(--pink);transform:rotate(12deg)}
+.swipe-overlay.kick{left:20px;color:var(--orange);border-color:var(--orange);transform:rotate(-12deg)}
+.swipe-hint{text-align:center;font-size:7px;color:var(--dim);margin-top:12px}
+.swipe-actions{display:flex;justify-content:center;gap:16px;margin-top:16px}
+.swipe-actions button{font-family:inherit;font-size:10px;padding:14px 22px;border:3px solid;
+  box-shadow:5px 5px 0 var(--black);cursor:pointer;letter-spacing:2px}
+.swipe-actions button:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--black)}
+/* leaderboard */
+.lb-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.lb-tabs button{font-family:inherit;font-size:8px;padding:9px 12px;background:var(--surface);
+  color:var(--dim);border:3px solid var(--border);box-shadow:3px 3px 0 var(--black);cursor:pointer;flex:1;min-width:80px}
+.lb-tabs button.active{background:var(--yellow);color:var(--black);border-color:var(--yellow)}
+.lb-row{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:6px;
+  background:var(--surface);border:3px solid var(--border);box-shadow:3px 3px 0 var(--black);cursor:pointer}
+.lb-row:hover{background:var(--surface2);border-color:var(--green)}
+.lb-rank{font-size:14px;min-width:36px;text-align:center;color:var(--yellow);text-shadow:2px 2px 0 var(--black)}
+.lb-rank.gold{color:var(--yellow)}
+.lb-rank.silver{color:#c0c0c0}
+.lb-rank.bronze{color:#cd7f32}
+.lb-name{flex:1;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-roll{font-size:7px;color:var(--cyan);margin-right:8px}
+.lb-value{font-size:12px;font-weight:bold}
+.lb-value.pos{color:var(--green)}
+.lb-value.neg{color:var(--red)}
+.lb-value.mid{color:var(--yellow)}
+.lb-value.kiss{color:var(--pink)}
+.lb-value.kick{color:var(--orange)}
+.lb-section-title{font-size:10px;color:var(--yellow);margin:18px 0 10px;letter-spacing:2px;
+  padding-bottom:6px;border-bottom:2px solid var(--border)}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--green);color:var(--black);font-size:9px;padding:14px 24px;
+  border:3px solid var(--black);box-shadow:6px 6px 0 rgba(0,0,0,.5);z-index:10000;
+  opacity:0;transition:all .2s;pointer-events:none;max-width:90%;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+#toast.error{background:var(--red);color:#fff}
+.loading{text-align:center;padding:60px 20px;color:var(--dim);font-size:10px}
+.loading .blink{animation:blink .8s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+.empty{text-align:center;padding:40px 20px;color:var(--dim);font-size:9px;line-height:2}
+@media (max-width:500px){
+  .header h1{font-size:16px;letter-spacing:2px}
+  .criteria-grid{grid-template-columns:1fr}
+  .roster-item .name{font-size:8px}
+  .swipe-card{max-width:92%;padding:16px}
+  .swipe-card .sc-name{font-size:13px}
+  .swipe-card .sc-score{font-size:24px}
 }
 </style>
 </head>
@@ -207,6 +186,7 @@ body::before {
   </div>
   <div class="nav" id="nav">
     <button data-tab="roster" class="active">ROSTER</button>
+    <button data-tab="leaderboard">LEADERBOARD</button>
     <button data-tab="swipe">SWIPE</button>
   </div>
   <div id="content"></div>
@@ -216,17 +196,19 @@ body::before {
 
 <script>
 // ============================================================
-// F31N FILES — Frontend v3 (with localStorage cache)
+// F31N FILES — Frontend v4
 // ============================================================
-
 const API_URL = 'https://script.google.com/macros/s/AKfycbxYQgcFPxAj1U1Hsi53Y9Ylueg5xLSIu-RSW6qApv8yx-jGAxXbagaFW8wdMhzlhEY1NQ/exec';
 
-const CACHE_PREFIX = 'f31n_';
-const CACHE_ALL_TTL = 10 * 60 * 1000;      // 10 minutes for roster
-const CACHE_DETAIL_TTL = 2 * 60 * 1000;    // 2 minutes for detail view
+const CK = 'f31n_';
+const TTL_ROSTER = 10 * 60 * 1000;
+const TTL_DETAIL = 2 * 60 * 1000;
+const TTL_LEADER = 5 * 60 * 1000;
 
 let STATE = {
   students: [],
+  leaderboard: null,
+  lbTab: 'topRated',
   currentTab: 'roster',
   currentStudent: null,
   currentDetail: null,
@@ -245,104 +227,102 @@ let STATE = {
 };
 
 // ---------- LOCAL CACHE ----------
-function cacheWrite(key, data) {
-  try {
-    localStorage.setItem(CACHE_PREFIX + key, JSON.stringify({ t: Date.now(), d: data }));
-  } catch (_) {}
+function cWrite(key, data) {
+  try { localStorage.setItem(CK + key, JSON.stringify({ t: Date.now(), d: data })); } catch(_){}
 }
-function cacheRead(key, maxAgeMs) {
+function cRead(key, maxAge) {
   try {
-    const raw = localStorage.getItem(CACHE_PREFIX + key);
+    const raw = localStorage.getItem(CK + key);
     if (!raw) return null;
-    const obj = JSON.parse(raw);
-    if (!obj || !obj.t) return null;
-    if (maxAgeMs && Date.now() - obj.t > maxAgeMs) return null;
-    return obj.d;
-  } catch (_) { return null; }
+    const o = JSON.parse(raw);
+    if (!o || !o.t) return null;
+    if (maxAge && Date.now() - o.t > maxAge) return null;
+    return o.d;
+  } catch(_){ return null; }
 }
-function cacheClear() {
+function cClear() {
   try {
-    Object.keys(localStorage)
-      .filter(k => k.startsWith(CACHE_PREFIX))
-      .forEach(k => localStorage.removeItem(k));
-  } catch (_) {}
+    Object.keys(localStorage).filter(k => k.startsWith(CK)).forEach(k => localStorage.removeItem(k));
+  } catch(_){}
 }
 
 // ---------- API ----------
-async function api(action, params = {}, timeoutMs = 30000) {
+async function api(action, params = {}, timeoutMs = 25000) {
   const url = new URL(API_URL);
   url.searchParams.set('action', action);
   Object.entries(params).forEach(([k, v]) => {
     if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
   });
-
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   const t0 = Date.now();
-
   try {
     const res = await fetch(url.toString(), {
       method: 'GET', signal: ctrl.signal, redirect: 'follow', cache: 'no-store'
     });
     clearTimeout(timer);
-    const text = await res.text();
-    console.log(`[F31N] ${action} → ${res.status} in ${Date.now() - t0}ms | ${text.length} bytes`);
+    const txt = await res.text();
+    console.log(`[F31N] ${action} ${res.status} ${Date.now() - t0}ms ${txt.length}b`);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    try { return JSON.parse(text); }
-    catch { throw new Error('Non-JSON: ' + text.slice(0, 120)); }
+    try { return JSON.parse(txt); } catch { throw new Error('Bad JSON: ' + txt.slice(0, 100)); }
   } catch (err) {
     clearTimeout(timer);
-    console.error(`[F31N FAIL] ${action} after ${Date.now() - t0}ms`, err);
+    console.error(`[F31N FAIL] ${action} ${Date.now() - t0}ms`, err);
     throw err;
   }
 }
 
 // ---------- BOOT ----------
 async function boot() {
-  // 1. Try instant cache
-  const cached = cacheRead('all', CACHE_ALL_TTL);
-  if (Array.isArray(cached) && cached.length) {
-    console.log('[F31N] Loaded from cache:', cached.length, 'records');
-    STATE.students = cached;
-    STATE.swipeOrder = shuffle([...cached]);
+  const cachedRoster = cRead('roster', TTL_ROSTER);
+  const cachedLeader = cRead('leader', TTL_LEADER);
+
+  if (Array.isArray(cachedRoster) && cachedRoster.length) {
+    console.log('[F31N] instant boot from cache');
+    STATE.students = cachedRoster;
+    if (cachedLeader) STATE.leaderboard = cachedLeader;
+    STATE.swipeOrder = shuffle([...cachedRoster]);
     STATE.swipeIndex = 0;
     STATE.loading = false;
     STATE.fromCache = true;
     render();
-    // silent background refresh
     backgroundRefresh();
     return;
   }
 
-  // 2. Cold load
-  await loadAll();
-}
-
-async function loadAll() {
+  // cold: fetch leaderboard FIRST (small) so something appears fast
   STATE.loading = true;
   STATE.loadingStart = Date.now();
   STATE.status = 'CONNECTING...';
-  STATE.error = null;
   render();
 
   try {
-    STATE.status = 'FETCHING ROSTER...';
-    render();
-    const data = await api('all');
+    const lb = await api('leaderboard');
+    if (lb && !lb.error) {
+      STATE.leaderboard = lb;
+      cWrite('leader', lb);
+      STATE.status = 'LOADING ROSTER...';
+      render();
+    }
+  } catch(_){}
+
+  await loadRoster();
+}
+
+async function loadRoster() {
+  try {
+    const data = await api('roster');
     if (data && data.error) throw new Error(data.error);
     if (!Array.isArray(data)) throw new Error('Bad payload');
     STATE.students = data;
     STATE.swipeOrder = shuffle([...data]);
     STATE.swipeIndex = 0;
-    STATE.status = 'LIVE';
     STATE.fromCache = false;
-    cacheWrite('all', data);
+    STATE.error = null;
+    cWrite('roster', data);
   } catch (err) {
-    STATE.students = [];
     STATE.error = err.message || String(err);
-    STATE.status = 'ERROR';
   }
-
   STATE.loading = false;
   STATE.rosterPage = 0;
   render();
@@ -352,34 +332,27 @@ async function backgroundRefresh() {
   if (STATE.syncing) return;
   STATE.syncing = true;
   renderSync();
-
   try {
-    const data = await api('all', {}, 25000);
-    if (Array.isArray(data) && data.length) {
-      // rebuild the roster but PRESERVE the swipe deck order/position
-      const fresh = {};
-      data.forEach(s => { fresh[s.roll] = s; });
-
-      if (STATE.swipeOrder.length === 0) {
-        STATE.swipeOrder = shuffle([...data]);
-      } else {
-        const seen = new Set();
-        const newOrder = [];
-        STATE.swipeOrder.forEach(s => {
-          if (fresh[s.roll]) { newOrder.push(fresh[s.roll]); seen.add(s.roll); }
-        });
-        data.forEach(s => { if (!seen.has(s.roll)) newOrder.push(s); });
-        STATE.swipeOrder = newOrder;
-      }
-
-      STATE.students = data;
+    const [roster, lb] = await Promise.all([
+      api('roster').catch(() => null),
+      api('leaderboard').catch(() => null)
+    ]);
+    if (Array.isArray(roster) && roster.length) {
+      // patch swipe deck keeping order
+      const byRoll = {}; roster.forEach(s => byRoll[s.roll] = s);
+      const seen = new Set();
+      const newOrder = [];
+      STATE.swipeOrder.forEach(s => {
+        if (byRoll[s.roll]) { newOrder.push(byRoll[s.roll]); seen.add(s.roll); }
+      });
+      roster.forEach(s => { if (!seen.has(s.roll)) newOrder.push(s); });
+      STATE.swipeOrder = newOrder;
+      STATE.students = roster;
       STATE.fromCache = false;
-      cacheWrite('all', data);
+      cWrite('roster', roster);
     }
-  } catch (err) {
-    console.warn('[F31N] Background refresh failed:', err);
-  }
-
+    if (lb && !lb.error) { STATE.leaderboard = lb; cWrite('leader', lb); }
+  } catch(_){}
   STATE.syncing = false;
   renderSync();
   render();
@@ -405,19 +378,17 @@ function render() {
   document.querySelectorAll('#nav button').forEach(b => {
     b.classList.toggle('active', b.dataset.tab === STATE.currentTab);
   });
-
   const content = document.getElementById('content');
 
   if (STATE.loading) {
-    const secs = STATE.loadingStart
-      ? Math.floor((Date.now() - STATE.loadingStart) / 1000) : 0;
+    const secs = STATE.loadingStart ? Math.floor((Date.now() - STATE.loadingStart) / 1000) : 0;
     content.innerHTML = `
       <div class="loading">
-        <div><span class="blink">▮</span> ${STATE.status || 'LOADING DATA...'}</div>
+        <div><span class="blink">▮</span> ${STATE.status || 'LOADING...'}</div>
         <div style="margin-top:16px;font-size:9px;color:var(--yellow);">${secs}s</div>
         <div style="margin-top:16px;font-size:7px;color:var(--dim);line-height:2;">
-          Apps Script cold start can take 15–25 seconds.<br>
-          Subsequent requests are fast.
+          First load can take 15–25s (cold start).<br>
+          After that, everything is cached and instant.
         </div>
       </div>`;
     clearTimeout(window._tick);
@@ -425,15 +396,12 @@ function render() {
     return;
   }
 
-  if (STATE.error) {
+  if (STATE.error && !STATE.students.length) {
     content.innerHTML = `
       <div class="pixel-box" style="text-align:center;padding:30px;">
         <div style="font-size:14px;color:var(--red);margin-bottom:12px;">⚠ CONNECTION FAILED</div>
         <div style="font-size:8px;color:var(--text);margin-bottom:16px;line-height:2;word-break:break-word;">${esc(STATE.error)}</div>
-        <div style="font-size:7px;color:var(--dim);margin-bottom:20px;line-height:2;">
-          Check DevTools Console.<br>Confirm Apps Script is deployed as <b>New version</b>.
-        </div>
-        <button class="pixel-btn green" onclick="loadAll()">▶ RETRY</button>
+        <button class="pixel-btn green" onclick="loadRoster()">▶ RETRY</button>
         <button class="pixel-btn" onclick="hardReset()" style="margin-left:8px;">↻ CLEAR CACHE</button>
       </div>`;
     return;
@@ -442,61 +410,58 @@ function render() {
   if (STATE.currentTab === 'roster') {
     if (STATE.currentStudent) renderDetail(content);
     else renderRoster(content);
+  } else if (STATE.currentTab === 'leaderboard') {
+    renderLeaderboard(content);
   } else if (STATE.currentTab === 'swipe') {
     renderSwipe(content);
   }
 }
 
 function hardReset() {
-  cacheClear();
-  STATE.students = [];
-  STATE.swipeOrder = [];
-  STATE.swipeIndex = 0;
-  STATE.error = null;
-  loadAll();
+  cClear();
+  STATE.students = []; STATE.swipeOrder = []; STATE.swipeIndex = 0;
+  STATE.leaderboard = null; STATE.error = null;
+  STATE.loading = true; STATE.loadingStart = Date.now(); STATE.status = 'CONNECTING...';
+  render();
+  boot();
 }
 
 // ---------- ROSTER ----------
 function renderRoster(el) {
   if (!STATE.students.length) {
-    el.innerHTML = `<div class="empty">NO STUDENTS FOUND.<br><br>Add rows to the <b>Student</b> tab.</div>`;
+    el.innerHTML = `<div class="empty">NO STUDENTS FOUND.</div>`;
     return;
   }
-
   const q = STATE.rosterQuery.trim().toLowerCase();
   const filtered = q
     ? STATE.students.filter(s => s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q))
     : STATE.students;
 
   const total = filtered.length;
-  const pageSize = STATE.rosterPageSize;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const totalPages = Math.max(1, Math.ceil(total / STATE.rosterPageSize));
   if (STATE.rosterPage >= totalPages) STATE.rosterPage = totalPages - 1;
-  const start = STATE.rosterPage * pageSize;
-  const pageItems = filtered.slice(start, start + pageSize);
+  const start = STATE.rosterPage * STATE.rosterPageSize;
+  const items = filtered.slice(start, start + STATE.rosterPageSize);
 
   const badge = STATE.fromCache ? '<span class="cache-badge">CACHED</span>' : '';
 
   let html = `
     <div style="margin-bottom:12px;">
-      <input class="pixel-input" id="rosterSearch"
-             placeholder="SEARCH NAME OR ROLL..."
-             value="${esc(STATE.rosterQuery)}"
-             oninput="onRosterSearch(this.value)">
+      <input class="pixel-input" id="rosterSearch" placeholder="SEARCH NAME OR ROLL..."
+             value="${esc(STATE.rosterQuery)}" oninput="onRosterSearch(this.value)">
     </div>
     <div style="display:flex;justify-content:space-between;font-size:7px;color:var(--dim);margin-bottom:10px;">
       <span>● ${total} RECORD${total !== 1 ? 'S' : ''} ${badge}</span>
       <span>PAGE ${STATE.rosterPage + 1} / ${totalPages}</span>
-    </div>
-  `;
+    </div>`;
 
-  if (!pageItems.length) {
+  if (!items.length) {
     html += `<div class="empty">NO MATCHES FOR "${esc(STATE.rosterQuery)}"</div>`;
     el.innerHTML = html;
     return;
   }
 
-  pageItems.forEach(s => {
+  items.forEach(s => {
     const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
     html += `
       <div class="roster-item" onclick="openDetail('${s.roll}')">
@@ -505,10 +470,7 @@ function renderRoster(el) {
           <span class="name">${esc(s.name)}</span>
         </div>
         <div class="right">
-          <div class="kk-mini">
-            <span class="kk-kiss">K:${s.kisses}</span>
-            <span class="kk-kick">X:${s.kicks}</span>
-          </div>
+          <div class="kk-mini">♥${s.kisses} ✖${s.kicks}</div>
           <div class="rating-badge ${cls}">${s.rating.toFixed(2)}</div>
         </div>
       </div>`;
@@ -523,7 +485,6 @@ function renderRoster(el) {
                 onclick="rosterPage(1)">NEXT →</button>
       </div>`;
   }
-
   el.innerHTML = html;
 }
 
@@ -543,12 +504,70 @@ function onRosterSearch(val) {
     }
   }, 120);
 }
+function rosterPage(d) { STATE.rosterPage += d; render(); window.scrollTo({top:0,behavior:'smooth'}); }
 
-function rosterPage(dir) {
-  STATE.rosterPage += dir;
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+// ---------- LEADERBOARD ----------
+function renderLeaderboard(el) {
+  const lb = STATE.leaderboard;
+  if (!lb) {
+    el.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING LEADERBOARD...</div>`;
+    // silent fetch
+    api('leaderboard').then(x => { if (x && !x.error) { STATE.leaderboard = x; cWrite('leader', x); render(); } }).catch(()=>{});
+    return;
+  }
+
+  const tabs = [
+    { k: 'topRated',   label: 'TOP RATED' },
+    { k: 'mostEval',   label: 'MOST RATED' },
+    { k: 'mostKissed', label: 'MOST KISSED' },
+    { k: 'mostKicked', label: 'MOST KICKED' }
+  ];
+
+  let html = `
+    <div class="lb-tabs">
+      ${tabs.map(t => `<button class="${STATE.lbTab === t.k ? 'active' : ''}" onclick="setLbTab('${t.k}')">${t.label}</button>`).join('')}
+    </div>
+    <div style="font-size:7px;color:var(--dim);margin-bottom:12px;text-align:center;">
+      ${lb.total || 0} TOTAL SUBJECTS ON RECORD
+    </div>
+  `;
+
+  const list = lb[STATE.lbTab] || [];
+  if (!list.length) {
+    html += `<div class="empty">NOTHING HERE YET.<br>Submit some evaluations to populate the board.</div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  list.forEach((s, i) => {
+    const rank = i + 1;
+    const rankCls = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+    let valueHtml;
+    if (STATE.lbTab === 'topRated') {
+      const c = s.rating > 3 ? 'pos' : s.rating < 2 ? 'neg' : 'mid';
+      valueHtml = `<span class="lb-value ${c}">${s.rating.toFixed(2)}</span>`;
+    } else if (STATE.lbTab === 'mostEval') {
+      valueHtml = `<span class="lb-value mid">${s.evalCount}×</span>`;
+    } else if (STATE.lbTab === 'mostKissed') {
+      valueHtml = `<span class="lb-value kiss">♥ ${s.kisses}</span>`;
+    } else {
+      valueHtml = `<span class="lb-value kick">✖ ${s.kicks}</span>`;
+    }
+
+    html += `
+      <div class="lb-row" onclick="openDetail('${s.roll}')">
+        <div class="lb-rank ${rankCls}">#${rank}</div>
+        <div class="lb-name">
+          <span class="lb-roll">${esc(s.roll)}</span>${esc(s.name)}
+        </div>
+        ${valueHtml}
+      </div>`;
+  });
+
+  el.innerHTML = html;
 }
+
+function setLbTab(k) { STATE.lbTab = k; render(); }
 
 // ---------- DETAIL ----------
 async function openDetail(roll) {
@@ -557,16 +576,14 @@ async function openDetail(roll) {
   STATE.detailError = null;
   render();
 
-  // instant from cache
-  const cached = cacheRead('detail_' + roll, CACHE_DETAIL_TTL);
+  const cached = cRead('detail_' + roll, TTL_DETAIL);
   if (cached && cached.student) {
     STATE.currentDetail = cached;
     render();
-    // refresh in background
     api('detail', { roll }).then(fresh => {
       if (fresh && fresh.student) {
         STATE.currentDetail = fresh;
-        cacheWrite('detail_' + roll, fresh);
+        cWrite('detail_' + roll, fresh);
         render();
       }
     }).catch(() => {});
@@ -574,10 +591,10 @@ async function openDetail(roll) {
   }
 
   try {
-    const detail = await api('detail', { roll });
-    if (!detail || detail.error) throw new Error(detail?.error || 'No data');
-    STATE.currentDetail = detail;
-    cacheWrite('detail_' + roll, detail);
+    const d = await api('detail', { roll });
+    if (!d || d.error) throw new Error(d?.error || 'No data');
+    STATE.currentDetail = d;
+    cWrite('detail_' + roll, d);
   } catch (err) {
     STATE.detailError = err.message || String(err);
   }
@@ -596,13 +613,12 @@ function renderDetail(el) {
     el.innerHTML = `
       <button class="pixel-btn" onclick="closeDetail()" style="margin-bottom:12px;">← BACK</button>
       <div class="pixel-box" style="text-align:center;padding:30px;">
-        <div style="font-size:12px;color:var(--red);margin-bottom:12px;">⚠ COULD NOT LOAD FILE</div>
-        <div style="font-size:8px;color:var(--text);margin-bottom:16px;line-height:2;word-break:break-word;">${esc(STATE.detailError)}</div>
+        <div style="font-size:12px;color:var(--red);margin-bottom:12px;">⚠ COULD NOT LOAD</div>
+        <div style="font-size:8px;color:var(--text);margin-bottom:16px;line-height:2;">${esc(STATE.detailError)}</div>
         <button class="pixel-btn green" onclick="openDetail('${STATE.currentStudent}')">▶ RETRY</button>
       </div>`;
     return;
   }
-
   if (!STATE.currentDetail) {
     el.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING FILE...</div>`;
     return;
@@ -611,17 +627,26 @@ function renderDetail(el) {
   const { student: s, entries, lore } = STATE.currentDetail;
   const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
 
+  // formula breakdown — shows avg positive and avg negative
+  const pos = s.positive ?? ((s.personality + s.cool + s.helpfulness) / 3);
+  const neg = s.negative ?? 0;
+
   el.innerHTML = `
-    <button class="pixel-btn" onclick="closeDetail()" style="margin-bottom:12px;">← BACK TO ROSTER</button>
+    <button class="pixel-btn" onclick="closeDetail()" style="margin-bottom:12px;">← BACK</button>
 
     <div class="pixel-box detail-header">
       <div class="big-roll">${esc(s.roll)}</div>
       <div class="big-name">${esc(s.name)}</div>
       <div class="big-score ${cls}">${s.rating.toFixed(2)}</div>
-      <div style="font-size:8px;color:var(--dim);">
-        ${s.evalCount} EVAL${s.evalCount !== 1 ? 'S' : ''} &nbsp;|&nbsp;
-        <span style="color:var(--pink)">KISS ${s.kisses}</span> &nbsp;
-        <span style="color:var(--orange)">KICK ${s.kicks}</span>
+      <div class="score-formula">
+        <span class="pos">+${pos.toFixed(2)} positive</span>
+        −
+        <span class="neg">${neg.toFixed(2)} negative</span>
+        =
+        <span class="${cls}">${s.rating.toFixed(2)}</span>
+      </div>
+      <div style="font-size:7px;color:var(--dim);margin-top:8px;">
+        ${s.evalCount} EVALUATION${s.evalCount !== 1 ? 'S' : ''}
       </div>
     </div>
 
@@ -649,21 +674,23 @@ function renderDetail(el) {
       </div>
     </div>
 
-    <div class="section-title">► LORE LOG (${lore.length})</div>
+    <div class="section-title">► LORE (${lore.length})</div>
     <div style="margin-bottom:10px;">
       <textarea class="pixel-textarea" id="loreInput" placeholder="Drop some lore..."></textarea>
       <div style="margin-top:8px;">
         <button class="pixel-btn cyan wide" onclick="addLore('${s.roll}','${esc(s.name)}')">+ ADD LORE</button>
       </div>
     </div>
-    <div id="loreList">
-      ${lore.length ? lore.map(loreItem).join('') : '<div class="empty">NO LORE YET. BE THE FIRST.</div>'}
+    <div>${lore.length ? lore.map(loreItem).join('') : '<div class="empty">NO LORE YET.</div>'}</div>
+
+    <div class="section-title">► QUICK REACTIONS</div>
+    <div class="kisskick-row">
+      <button class="kiss-btn" onclick="sendKiss('${s.roll}')">♥ KISS (${s.kisses})</button>
+      <button class="kick-btn" onclick="sendKick('${s.roll}')">✖ KICK (${s.kicks})</button>
     </div>
 
-    <div class="section-title">► ENTRY HISTORY (${entries.length})</div>
-    <div>
-      ${entries.length ? entries.map(entryItem).join('') : '<div class="empty">NO EVALUATIONS YET.</div>'}
-    </div>
+    <div class="section-title" style="margin-top:18px;">► ENTRY HISTORY (${entries.length})</div>
+    <div>${entries.length ? entries.map(entryItem).join('') : '<div class="empty">NO EVALUATIONS YET.</div>'}</div>
   `;
 
   document.querySelectorAll('.star-input').forEach(inp => {
@@ -697,7 +724,7 @@ function criteriaRow(label, key, positive) {
     <div class="criterion-row ${positive ? 'positive' : 'negative'}">
       <div class="cr-label">
         <span>${positive ? '▲' : '▼'} ${label.toUpperCase()}</span>
-        <span class="cr-hint">${positive ? '1-5 STARS' : '1=0 · 2=-0.5 · 3=-1 · 4=-2 · 5=-3'}</span>
+        <span class="cr-hint">${positive ? '1-5 STARS' : '1→0  2→−0.5  3→−1  4→−2  5→−3'}</span>
       </div>
       <div class="star-input" data-target="${key}">
         <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span>
@@ -706,13 +733,11 @@ function criteriaRow(label, key, positive) {
     </div>`;
 }
 
-function stars(value, color) {
-  const full = Math.round(value);
-  let out = '';
-  for (let i = 1; i <= 5; i++) {
-    out += `<span style="color:${i <= full ? color : '#333'}">★</span>`;
-  }
-  return out;
+function stars(v, color) {
+  const f = Math.round(v);
+  let o = '';
+  for (let i = 1; i <= 5; i++) o += `<span style="color:${i <= f ? color : '#333'}">★</span>`;
+  return o;
 }
 
 function entryItem(e) {
@@ -742,8 +767,8 @@ function loreItem(l) {
       <div class="lore-meta">
         <span>${formatDate(l.id)}</span>
         <div class="lore-vote-btns">
-          <button class="kiss-btn" onclick="voteLore('${l.id}','kiss')">♥ KISS ${l.kiss}</button>
-          <button class="kick-btn" onclick="voteLore('${l.id}','kick')">✖ KICK ${l.kick}</button>
+          <button class="kiss-btn" onclick="voteLore('${l.id}','kiss')">♥ ${l.kiss}</button>
+          <button class="kick-btn" onclick="voteLore('${l.id}','kick')">✖ ${l.kick}</button>
         </div>
       </div>
     </div>`;
@@ -755,28 +780,45 @@ async function submitEval(roll) {
   if (!form) return;
   const student = STATE.students.find(x => x.roll === roll);
   const data = {};
-  form.querySelectorAll('.star-input').forEach(inp => {
-    data[inp.dataset.target] = inp.dataset.value || 3;
-  });
+  form.querySelectorAll('.star-input').forEach(inp => { data[inp.dataset.target] = inp.dataset.value || 3; });
   data.roll = roll;
   data.name = student ? student.name : '';
   data.lore = document.getElementById('evalLore').value.trim();
 
   try {
-    const res = await api('submitEval', data);
+    const res = await api('submiteval', data, 20000);
     if (res.error) throw new Error(res.error);
-    toast('SUBMITTED — SCORE: ' + res.score);
-    // invalidate caches
-    cacheClear();
-    const d = await api('detail', { roll });
-    STATE.currentDetail = d;
-    cacheWrite('detail_' + roll, d);
-    api('all').then(list => {
-      if (Array.isArray(list)) {
-        STATE.students = list;
-        cacheWrite('all', list);
+    toast(`SUBMITTED — SCORE: ${res.score}`);
+
+    // PATCH local state with the updated student (no refetch!)
+    if (res.updated) {
+      const idx = STATE.students.findIndex(s => s.roll === roll);
+      if (idx >= 0) STATE.students[idx] = res.updated;
+      STATE.swipeOrder = STATE.swipeOrder.map(s => s.roll === roll ? res.updated : s);
+
+      // update the detail view's student entry
+      if (STATE.currentDetail) {
+        STATE.currentDetail.student = res.updated;
+        const newEntry = {
+          time: new Date(),
+          personality: Number(data.personality),
+          cool: Number(data.cool),
+          helpfulness: Number(data.helpfulness),
+          pettiness: Number(data.pettiness),
+          hate: Number(data.hate),
+          annoying: Number(data.annoying),
+          score: res.score,
+          lore: data.lore
+        };
+        STATE.currentDetail.entries = [newEntry, ...STATE.currentDetail.entries];
       }
-    }).catch(() => {});
+      cWrite('roster', STATE.students);
+      if (STATE.currentDetail) cWrite('detail_' + roll, STATE.currentDetail);
+    }
+
+    // invalidate leaderboard so it refreshes next visit
+    try { localStorage.removeItem(CK + 'leader'); } catch(_){}
+
     render();
   } catch (err) {
     toast('FAILED: ' + err.message, true);
@@ -791,14 +833,12 @@ async function addLore(roll, name) {
     if (res.error) throw new Error(res.error);
     document.getElementById('loreInput').value = '';
     toast('LORE ADDED');
-    cacheClear();
+    try { localStorage.removeItem(CK + 'detail_' + roll); } catch(_){}
     const d = await api('detail', { roll });
     STATE.currentDetail = d;
-    cacheWrite('detail_' + roll, d);
+    cWrite('detail_' + roll, d);
     render();
-  } catch (err) {
-    toast('FAILED: ' + err.message, true);
-  }
+  } catch (err) { toast('FAILED: ' + err.message, true); }
 }
 
 async function voteLore(loreId, vote) {
@@ -807,20 +847,20 @@ async function voteLore(loreId, vote) {
     if (res.error) throw new Error(res.error);
     toast(vote === 'kiss' ? '♥ KISSED' : '✖ KICKED');
     const roll = STATE.currentStudent;
-    cacheClear();
+    try { localStorage.removeItem(CK + 'detail_' + roll); } catch(_){}
     const d = await api('detail', { roll });
     STATE.currentDetail = d;
-    cacheWrite('detail_' + roll, d);
+    cWrite('detail_' + roll, d);
     render();
-  } catch (err) {
-    toast('FAILED: ' + err.message, true);
-  }
+  } catch (err) { toast('FAILED: ' + err.message, true); }
 }
 
 async function sendKiss(roll) {
   const s = STATE.students.find(x => x.roll === roll);
   if (s) s.kisses++;
-  cacheWrite('all', STATE.students);
+  if (STATE.currentDetail?.student?.roll === roll) STATE.currentDetail.student.kisses++;
+  cWrite('roster', STATE.students);
+  render();
   try { await api('kiss', { roll }); toast('♥ KISS SENT'); }
   catch { toast('NOT SAVED', true); }
 }
@@ -828,7 +868,9 @@ async function sendKiss(roll) {
 async function sendKick(roll) {
   const s = STATE.students.find(x => x.roll === roll);
   if (s) s.kicks++;
-  cacheWrite('all', STATE.students);
+  if (STATE.currentDetail?.student?.roll === roll) STATE.currentDetail.student.kicks++;
+  cWrite('roster', STATE.students);
+  render();
   try { await api('kick', { roll }); toast('✖ KICK SENT'); }
   catch { toast('NOT SAVED', true); }
 }
@@ -836,23 +878,20 @@ async function sendKick(roll) {
 // ---------- SWIPE ----------
 function renderSwipe(el) {
   if (!STATE.swipeOrder.length) {
-    el.innerHTML = `<div class="empty">NO PROFILES TO SWIPE.<br><br>Load the roster first.</div>`;
+    el.innerHTML = `<div class="empty">NO PROFILES TO SWIPE.</div>`;
     return;
   }
-
   const total = STATE.swipeOrder.length;
   const idx = STATE.swipeIndex;
-
   if (idx >= total) {
     el.innerHTML = `
       <div class="pixel-box" style="text-align:center;padding:40px;">
         <div style="font-size:14px;color:var(--green);margin-bottom:12px;">DECK CLEARED</div>
-        <div style="font-size:8px;color:var(--dim);margin-bottom:20px;">You went through all ${total} profiles.</div>
+        <div style="font-size:8px;color:var(--dim);margin-bottom:20px;">You saw all ${total} profiles.</div>
         <button class="pixel-btn green wide" onclick="resetSwipe()">▶ RESHUFFLE</button>
       </div>`;
     return;
   }
-
   const s = STATE.swipeOrder[idx];
   const cls = s.rating > 3 ? 'var(--green)' : s.rating < 2 ? 'var(--red)' : 'var(--yellow)';
   const pct = Math.round((idx / total) * 100);
@@ -860,8 +899,7 @@ function renderSwipe(el) {
   el.innerHTML = `
     <div style="margin-bottom:10px;">
       <div style="display:flex;justify-content:space-between;font-size:7px;color:var(--dim);margin-bottom:6px;">
-        <span>CARD ${idx + 1} / ${total}</span>
-        <span>${pct}%</span>
+        <span>CARD ${idx + 1} / ${total}</span><span>${pct}%</span>
       </div>
       <div style="height:8px;background:var(--surface2);border:2px solid var(--border);">
         <div style="height:100%;width:${pct}%;background:var(--green);"></div>
@@ -876,8 +914,7 @@ function renderSwipe(el) {
         <div class="sc-roll">${esc(s.roll)}</div>
         <div class="sc-score" style="color:${cls}">${s.rating.toFixed(2)}</div>
         <div class="sc-kk">
-          <span style="color:var(--pink)">♥ ${s.kisses}</span>
-          <span style="color:var(--orange)">✖ ${s.kicks}</span>
+          <span>♥ ${s.kisses}</span><span>✖ ${s.kicks}</span>
         </div>
         <div class="sc-criteria">
           <div class="sc-crit" style="color:var(--green)"><span>PERSONALITY</span><span>${s.personality.toFixed(1)}</span></div>
@@ -899,13 +936,10 @@ function renderSwipe(el) {
     </div>
 
     <div style="display:flex;gap:8px;margin-top:10px;">
-      <button class="pixel-btn" style="flex:1;" ${idx === 0 ? 'disabled' : ''}
-              onclick="prevSwipe()">← PREV</button>
-      <button class="pixel-btn" style="flex:1;" ${idx >= total - 1 ? 'disabled' : ''}
-              onclick="nextSwipe()">NEXT →</button>
+      <button class="pixel-btn" style="flex:1;" ${idx === 0 ? 'disabled' : ''} onclick="prevSwipe()">← PREV</button>
+      <button class="pixel-btn" style="flex:1;" ${idx >= total - 1 ? 'disabled' : ''} onclick="nextSwipe()">NEXT →</button>
     </div>
   `;
-
   initSwipeDrag();
 }
 
@@ -914,41 +948,37 @@ function initSwipeDrag() {
   if (!card) return;
   const kissOv = document.getElementById('overlayKiss');
   const kickOv = document.getElementById('overlayKick');
-  let startX = 0, currentX = 0, dragging = false;
+  let sx = 0, cx = 0, drag = false;
 
   card.addEventListener('pointerdown', e => {
     if (e.target.closest('button')) return;
-    startX = e.clientX; currentX = 0; dragging = true;
+    sx = e.clientX; cx = 0; drag = true;
     card.style.transition = 'none';
-    try { card.setPointerCapture(e.pointerId); } catch (_) {}
+    try { card.setPointerCapture(e.pointerId); } catch(_){}
   });
-
   card.addEventListener('pointermove', e => {
-    if (!dragging) return;
-    currentX = e.clientX - startX;
-    const rot = currentX * 0.06;
-    card.style.transform = `translateX(${currentX}px) rotate(${rot}deg)`;
-    const pct = Math.min(Math.abs(currentX) / 120, 1);
-    if (currentX > 0) { kissOv.style.opacity = pct; kickOv.style.opacity = 0; }
-    else              { kickOv.style.opacity = pct; kissOv.style.opacity = 0; }
+    if (!drag) return;
+    cx = e.clientX - sx;
+    card.style.transform = `translateX(${cx}px) rotate(${cx * 0.06}deg)`;
+    const p = Math.min(Math.abs(cx) / 120, 1);
+    if (cx > 0) { kissOv.style.opacity = p; kickOv.style.opacity = 0; }
+    else        { kickOv.style.opacity = p; kissOv.style.opacity = 0; }
   });
-
-  function endDrag() {
-    if (!dragging) return;
-    dragging = false;
-    if (currentX > 100)       doSwipe('kiss');
-    else if (currentX < -100) doSwipe('kick');
+  function end() {
+    if (!drag) return;
+    drag = false;
+    if (cx > 100)       doSwipe('kiss');
+    else if (cx < -100) doSwipe('kick');
     else {
       card.style.transition = 'transform 0.2s';
       card.style.transform = '';
       kissOv.style.opacity = 0; kickOv.style.opacity = 0;
     }
-    currentX = 0;
+    cx = 0;
   }
-
-  card.addEventListener('pointerup', endDrag);
-  card.addEventListener('pointercancel', endDrag);
-  card.addEventListener('pointerleave', endDrag);
+  card.addEventListener('pointerup', end);
+  card.addEventListener('pointercancel', end);
+  card.addEventListener('pointerleave', end);
 }
 
 function doSwipe(direction) {
@@ -958,32 +988,23 @@ function doSwipe(direction) {
   else if (direction === 'kick') sendKick(s.roll);
   animateOut(direction, () => { STATE.swipeIndex++; render(); });
 }
-
-function skipSwipe() {
-  animateOut('skip', () => { STATE.swipeIndex++; render(); });
-}
-
+function skipSwipe() { animateOut('skip', () => { STATE.swipeIndex++; render(); }); }
 function prevSwipe() { if (STATE.swipeIndex > 0) { STATE.swipeIndex--; render(); } }
 function nextSwipe() { if (STATE.swipeIndex < STATE.swipeOrder.length - 1) { STATE.swipeIndex++; render(); } }
+function resetSwipe() { STATE.swipeOrder = shuffle([...STATE.students]); STATE.swipeIndex = 0; render(); }
 
-function resetSwipe() {
-  STATE.swipeOrder = shuffle([...STATE.students]);
-  STATE.swipeIndex = 0;
-  render();
-}
-
-function animateOut(direction, cb) {
-  const card = document.getElementById('swipeCard');
-  if (!card) { cb(); return; }
-  card.style.transition = 'transform 0.3s, opacity 0.3s';
-  if (direction === 'kiss')      card.style.transform = 'translateX(400px) rotate(30deg)';
-  else if (direction === 'kick') card.style.transform = 'translateX(-400px) rotate(-30deg)';
-  else                           card.style.transform = 'translateY(-400px)';
-  card.style.opacity = '0';
+function animateOut(d, cb) {
+  const c = document.getElementById('swipeCard');
+  if (!c) { cb(); return; }
+  c.style.transition = 'transform 0.3s, opacity 0.3s';
+  if (d === 'kiss')      c.style.transform = 'translateX(400px) rotate(30deg)';
+  else if (d === 'kick') c.style.transform = 'translateX(-400px) rotate(-30deg)';
+  else                   c.style.transform = 'translateY(-400px)';
+  c.style.opacity = '0';
   setTimeout(cb, 320);
 }
 
-// ---------- UTILITIES ----------
+// ---------- UTILS ----------
 function formatDate(v) {
   if (!v) return '—';
   try {
@@ -992,16 +1013,14 @@ function formatDate(v) {
     return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   } catch { return String(v).slice(0, 16); }
 }
-
-function esc(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 let toastTimer;
-function toast(msg, isError) {
+function toast(msg, isErr) {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = isError ? 'error show' : 'show';
+  t.className = isErr ? 'error show' : 'show';
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { t.className = ''; }, 2500);
 }
