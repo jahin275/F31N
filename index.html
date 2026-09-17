@@ -84,7 +84,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   .rating-badge{font-size:11px;min-width:58px;padding:5px 8px;border-width:2px}
   .kk-mini{font-size:6px}
 }
-/* roster sort bar */
 .sort-bar{display:flex;gap:6px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
 .sort-bar .sort-label{font-size:8px;color:var(--dim);letter-spacing:1px;padding:0 4px}
 .sort-bar .sort-btn{font-family:inherit;font-size:8px;padding:8px 10px;min-height:36px;
@@ -263,10 +262,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 #toast.error{background:var(--red);color:#fff}
 @media (min-width:641px){ #toast{bottom:calc(24px + var(--sab))} }
-.loading{text-align:center;padding:60px 20px;color:var(--dim);font-size:11px}
+.loading{text-align:center;padding:40px 20px;color:var(--dim);font-size:11px}
 .loading .blink{animation:blink .8s infinite}
 @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 .empty{text-align:center;padding:40px 20px;color:var(--dim);font-size:10px;line-height:2}
+/* -------- Flappy game -------- */
+.flappy-wrap{margin:18px auto 0;width:300px;max-width:92%;position:relative}
+#flappyCanvas{display:block;width:100%;height:auto;background:#05050f;
+  border:3px solid var(--border);box-shadow:5px 5px 0 var(--black);
+  touch-action:none;cursor:pointer;image-rendering:pixelated;image-rendering:crisp-edges}
+.flappy-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  font-size:7px;color:var(--green);letter-spacing:1px;animation:blink 1.2s infinite;
+  pointer-events:none;text-shadow:1px 1px 0 var(--black)}
+.flappy-label{font-size:7px;color:var(--dim);letter-spacing:2px;margin-top:8px;text-align:center}
 @media (max-width:520px){
   .header{padding:12px 0 12px;margin-bottom:14px}
   .header h1{font-size:18px;letter-spacing:2px}
@@ -301,11 +309,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
 <script>
 // ============================================================
-// F31N FILES — Frontend v8 (roster sorting)
+// F31N FILES — Frontend v8 (perf + flappy bird)
 // ============================================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbxYQgcFPxAj1U1Hsi53Y9Ylueg5xLSIu-RSW6qApv8yx-jGAxXbagaFW8wdMhzlhEY1NQ/exec';
 
-const CK = 'f31n_';
+const CK = 'f31n_v8_';
 const TTL_ROSTER = 30 * 1000;
 
 let STATE = {
@@ -414,13 +422,17 @@ function patchStudent(updated) {
   if (!updated || !updated.roll) return;
   const roll = updated.roll;
   const i = STATE.students.findIndex(s => s.roll === roll);
-  if (i >= 0) STATE.students[i] = { ...STATE.students[i], ...updated };
+  if (i >= 0) STATE.students[i] = Object.assign({}, STATE.students[i], updated);
   else STATE.students.push(updated);
 
-  STATE.swipeOrder = STATE.swipeOrder.map(s => s.roll === roll ? { ...s, ...updated } : s);
-
+  for (let j = 0; j < STATE.swipeOrder.length; j++) {
+    if (STATE.swipeOrder[j].roll === roll) {
+      STATE.swipeOrder[j] = Object.assign({}, STATE.swipeOrder[j], updated);
+      break;
+    }
+  }
   if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
-    STATE.currentDetail.student = { ...STATE.currentDetail.student, ...updated };
+    STATE.currentDetail.student = Object.assign({}, STATE.currentDetail.student, updated);
     cWrite('detail_' + roll, STATE.currentDetail);
   }
   cWrite('roster', STATE.students);
@@ -432,7 +444,7 @@ async function boot() {
 
   if (Array.isArray(cachedRoster) && cachedRoster.length) {
     STATE.students = cachedRoster;
-    STATE.swipeOrder = shuffle([...cachedRoster]);
+    STATE.swipeOrder = shuffle(cachedRoster.slice());
     STATE.swipeIndex = 0;
     STATE.loading = false;
     STATE.fromCache = true;
@@ -463,7 +475,7 @@ async function loadRoster() {
     if (data && data.error) throw new Error(data.error);
     if (!Array.isArray(data)) throw new Error('Bad payload');
     STATE.students = data;
-    STATE.swipeOrder = shuffle([...data]);
+    STATE.swipeOrder = shuffle(data.slice());
     STATE.swipeIndex = 0;
     STATE.fromCache = false;
     STATE.error = null;
@@ -487,13 +499,14 @@ async function backgroundRefresh() {
       api('alllore').catch(() => null)
     ]);
     if (Array.isArray(roster) && roster.length) {
-      const byRoll = {}; roster.forEach(s => byRoll[s.roll] = s);
+      const byRoll = Object.create(null);
+      for (const s of roster) byRoll[s.roll] = s;
       const seen = new Set();
       const newOrder = [];
-      STATE.swipeOrder.forEach(s => {
+      for (const s of STATE.swipeOrder) {
         if (byRoll[s.roll]) { newOrder.push(byRoll[s.roll]); seen.add(s.roll); }
-      });
-      roster.forEach(s => { if (!seen.has(s.roll)) newOrder.push(s); });
+      }
+      for (const s of roster) { if (!seen.has(s.roll)) newOrder.push(s); }
       STATE.swipeOrder = newOrder;
       STATE.students = roster;
       STATE.fromCache = false;
@@ -517,33 +530,232 @@ function renderSync() {
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
   }
   return arr;
 }
 
-// ---------- RENDER ----------
+// ============================================================
+// FLAPPY BIRD (loading screen minigame)
+// ============================================================
+const FLAPPY = {
+  raf: null,
+  running: false,
+  canvas: null,
+  ctx: null,
+  W: 300, H: 180,
+  bird: { x: 60, y: 90, vy: 0, r: 7 },
+  pipes: [],
+  frame: 0,
+  lastSpawn: 0,
+  score: 0,
+  best: 0,
+  started: false,
+  // tuning
+  gravity: 0.45,
+  jump: -6.2,
+  gap: 62,
+  pipeW: 30,
+  speed: 1.9,
+  spawnEvery: 78,
+  minTop: 22,
+  safePad: 22
+};
+
+function flappyStart() {
+  const canvas = document.getElementById('flappyCanvas');
+  if (!canvas) return;
+  FLAPPY.canvas = canvas;
+  FLAPPY.ctx = canvas.getContext('2d', { alpha: false });
+  flappyReset();
+  FLAPPY.frame = 0;
+  FLAPPY.best = FLAPPY.best || 0;
+  FLAPPY.running = true;
+  canvas.addEventListener('pointerdown', flappyFlap);
+  canvas.addEventListener('touchstart', flappyTouchStart, { passive: false });
+  FLAPPY.raf = requestAnimationFrame(flappyLoop);
+}
+
+function flappyStop() {
+  if (!FLAPPY.running) return;
+  FLAPPY.running = false;
+  if (FLAPPY.raf) cancelAnimationFrame(FLAPPY.raf);
+  FLAPPY.raf = null;
+  const c = FLAPPY.canvas;
+  if (c) {
+    c.removeEventListener('pointerdown', flappyFlap);
+    c.removeEventListener('touchstart', flappyTouchStart);
+  }
+  FLAPPY.canvas = null;
+  FLAPPY.ctx = null;
+}
+
+function flappyTouchStart(e) {
+  e.preventDefault();
+  flappyFlap();
+}
+
+function flappyReset() {
+  FLAPPY.bird.x = 60;
+  FLAPPY.bird.y = 90;
+  FLAPPY.bird.vy = 0;
+  FLAPPY.pipes.length = 0;
+  FLAPPY.score = 0;
+  FLAPPY.started = false;
+  FLAPPY.lastSpawn = FLAPPY.frame;
+  const hint = document.getElementById('flappyHint');
+  if (hint) hint.style.display = '';
+}
+
+function flappyFlap() {
+  if (!FLAPPY.running) return;
+  if (!FLAPPY.started) {
+    FLAPPY.started = true;
+    FLAPPY.lastSpawn = FLAPPY.frame;
+    const hint = document.getElementById('flappyHint');
+    if (hint) hint.style.display = 'none';
+  }
+  FLAPPY.bird.vy = FLAPPY.jump;
+  haptic(6);
+}
+
+function flappyLoop() {
+  if (!FLAPPY.running) return;
+  const ctx = FLAPPY.ctx;
+  if (!ctx) return;
+  const W = FLAPPY.W, H = FLAPPY.H;
+  const b = FLAPPY.bird;
+
+  if (FLAPPY.started) {
+    b.vy += FLAPPY.gravity;
+    b.y += b.vy;
+
+    if (FLAPPY.frame - FLAPPY.lastSpawn >= FLAPPY.spawnEvery) {
+      FLAPPY.lastSpawn = FLAPPY.frame;
+      const minT = FLAPPY.minTop;
+      const maxT = H - FLAPPY.gap - FLAPPY.safePad;
+      const top = minT + Math.random() * (maxT - minT);
+      FLAPPY.pipes.push({ x: W, top: top, scored: false });
+    }
+
+    const pipes = FLAPPY.pipes;
+    for (let i = pipes.length - 1; i >= 0; i--) {
+      const p = pipes[i];
+      p.x -= FLAPPY.speed;
+      if (!p.scored && p.x + FLAPPY.pipeW < b.x) {
+        p.scored = true;
+        FLAPPY.score++;
+        if (FLAPPY.score > FLAPPY.best) FLAPPY.best = FLAPPY.score;
+      }
+      if (p.x + FLAPPY.pipeW < 0) pipes.splice(i, 1);
+    }
+
+    // collision
+    let dead = false;
+    if (b.y - b.r < 0 || b.y + b.r > H) dead = true;
+    else {
+      for (let i = 0; i < pipes.length; i++) {
+        const p = pipes[i];
+        if (b.x + b.r > p.x && b.x - b.r < p.x + FLAPPY.pipeW) {
+          if (b.y - b.r < p.top || b.y + b.r > p.top + FLAPPY.gap) { dead = true; break; }
+        }
+      }
+    }
+    if (dead) {
+      haptic([20, 40, 20]);
+      flappyReset();
+    }
+  }
+
+  // ---- draw ----
+  ctx.fillStyle = '#05050f';
+  ctx.fillRect(0, 0, W, H);
+
+  // parallax dots
+  ctx.fillStyle = 'rgba(57,255,20,0.22)';
+  const off = (FLAPPY.frame * 0.5) % W;
+  for (let i = 0; i < 12; i++) {
+    const x = (i * 37 + 11 - off + W) % W;
+    const y = (i * 29 + 7) % H;
+    ctx.fillRect(x | 0, y | 0, 1, 1);
+  }
+
+  // pipes
+  ctx.fillStyle = '#39ff14';
+  for (let i = 0; i < FLAPPY.pipes.length; i++) {
+    const p = FLAPPY.pipes[i];
+    const px = p.x | 0;
+    const top = p.top | 0;
+    const bot = (p.top + FLAPPY.gap) | 0;
+    ctx.fillRect(px, 0, FLAPPY.pipeW, top);
+    ctx.fillRect(px, bot, FLAPPY.pipeW, H - bot);
+    // pixel shine
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.fillRect(px + 3, 0, 3, top);
+    ctx.fillRect(px + 3, bot, 3, H - bot);
+    ctx.fillStyle = '#39ff14';
+  }
+
+  // bird (pixel block)
+  ctx.fillStyle = '#ffd700';
+  ctx.fillRect((b.x - b.r) | 0, (b.y - b.r) | 0, b.r * 2, b.r * 2);
+  ctx.fillStyle = '#ff3131';
+  ctx.fillRect((b.x + 2) | 0, (b.y - 3) | 0, 3, 3);
+
+  // scoreboard
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('SCORE ' + FLAPPY.score, 6, 14);
+  ctx.textAlign = 'right';
+  ctx.fillText('BEST ' + FLAPPY.best, W - 6, 14);
+
+  if (!FLAPPY.started) {
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#39ff14';
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('TAP TO FLAP', W / 2, H / 2 + 5);
+  }
+
+  FLAPPY.frame++;
+  FLAPPY.raf = requestAnimationFrame(flappyLoop);
+}
+
+// ============================================================
+// RENDER (rAF-batched)
+// ============================================================
+let _renderQueued = false;
+let _loadTickTimer = null;
+
 function render() {
-  document.querySelectorAll('#nav button').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === STATE.currentTab);
-  });
+  if (_renderQueued) return;
+  _renderQueued = true;
+  requestAnimationFrame(_doRenderRaf);
+}
+function _doRenderRaf() {
+  _renderQueued = false;
+  _doRender();
+}
+
+function _doRender() {
+  // nav state
+  const navBtns = document.querySelectorAll('#nav button');
+  for (let i = 0; i < navBtns.length; i++) {
+    navBtns[i].classList.toggle('active', navBtns[i].dataset.tab === STATE.currentTab);
+  }
+
   const content = document.getElementById('content');
 
   if (STATE.loading) {
-    const secs = STATE.loadingStart ? Math.floor((Date.now() - STATE.loadingStart) / 1000) : 0;
-    content.innerHTML = `
-      <div class="loading">
-        <div><span class="blink">▮</span> ${STATE.status || 'LOADING...'}</div>
-        <div style="margin-top:16px;font-size:10px;color:var(--yellow);">${secs}s</div>
-        <div style="margin-top:16px;font-size:8px;color:var(--dim);line-height:2;">
-          First load can take 15–25s (cold start).<br>
-          After that, everything is cached and instant.
-        </div>
-      </div>`;
-    clearTimeout(window._tick);
-    window._tick = setTimeout(render, 1000);
+    renderLoading(content);
     return;
   }
+  // Leaving loading: stop the minigame & tick timer
+  if (_loadTickTimer) { clearInterval(_loadTickTimer); _loadTickTimer = null; }
+  flappyStop();
+  content.dataset.mode = '';
 
   if (STATE.error && !STATE.students.length) {
     content.innerHTML = `
@@ -567,6 +779,46 @@ function render() {
   } else if (STATE.currentTab === 'swipe') {
     renderSwipe(content);
   }
+}
+
+function renderLoading(el) {
+  // If already showing the game, only refresh text (don't nuke canvas)
+  if (el.dataset.mode === 'loading' && el.querySelector('#flappyCanvas')) {
+    const s = document.getElementById('loadStatus');
+    if (s) s.textContent = STATE.status || 'LOADING...';
+    return;
+  }
+  el.dataset.mode = 'loading';
+  el.innerHTML = `
+    <div class="loading">
+      <div><span class="blink">▮</span> <span id="loadStatus">${esc(STATE.status || 'LOADING...')}</span></div>
+      <div style="margin-top:10px;font-size:10px;color:var(--yellow);" id="loadSecs">0s</div>
+      <div class="flappy-wrap">
+        <canvas id="flappyCanvas" width="300" height="180"></canvas>
+        <div class="flappy-hint" id="flappyHint">TAP TO FLAP</div>
+      </div>
+      <div class="flappy-label">► F31N BIRD — v1.0 ◄</div>
+      <div style="margin-top:14px;font-size:8px;color:var(--dim);line-height:2;">
+        First load can take 15–25s (cold start).<br>
+        After that, everything is cached and instant.
+      </div>
+    </div>`;
+  flappyStart();
+  startLoadTick();
+}
+
+function startLoadTick() {
+  if (_loadTickTimer) clearInterval(_loadTickTimer);
+  _loadTickTimer = setInterval(() => {
+    const el = document.getElementById('loadSecs');
+    if (!el || !STATE.loading) {
+      clearInterval(_loadTickTimer);
+      _loadTickTimer = null;
+      return;
+    }
+    const secs = STATE.loadingStart ? Math.floor((Date.now() - STATE.loadingStart) / 1000) : 0;
+    el.textContent = secs + 's';
+  }, 500);
 }
 
 function hardReset() {
@@ -602,7 +854,6 @@ function renderRoster(el) {
     ? STATE.students.filter(s => s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q))
     : STATE.students.slice();
 
-  // sort
   filtered = sortRoster(filtered, STATE.rosterSort);
 
   const total = filtered.length;
@@ -636,7 +887,8 @@ function renderRoster(el) {
     return;
   }
 
-  items.forEach(s => {
+  for (let i = 0; i < items.length; i++) {
+    const s = items[i];
     const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
     html += `
       <div class="roster-item" onclick="openDetail('${s.roll}')">
@@ -649,7 +901,7 @@ function renderRoster(el) {
           <div class="rating-badge ${cls}">${s.rating.toFixed(2)}</div>
         </div>
       </div>`;
-  });
+  }
 
   if (totalPages > 1) {
     html += `
@@ -684,15 +936,15 @@ function sortRoster(arr, mode) {
 }
 
 function compareRolls(a, b) {
-  const parse = s => {
-    const m = String(s).match(/^(\d+)-(\d+)$/);
-    if (!m) return [Infinity, 0, String(s)];
-    return [Number(m[1]), Number(m[2]), String(s)];
-  };
-  const A = parse(a), B = parse(b);
-  if (A[0] !== B[0]) return A[0] - B[0];
-  if (A[1] !== B[1]) return A[1] - B[1];
-  return A[2].localeCompare(B[2]);
+  const pa = parseRoll(a), pb = parseRoll(b);
+  if (pa[0] !== pb[0]) return pa[0] - pb[0];
+  if (pa[1] !== pb[1]) return pa[1] - pb[1];
+  return pa[2].localeCompare(pb[2]);
+}
+function parseRoll(s) {
+  const m = String(s).match(/^(\d+)-(\d+)$/);
+  if (!m) return [Infinity, 0, String(s)];
+  return [Number(m[1]), Number(m[2]), String(s)];
 }
 
 let _searchTimer;
@@ -715,7 +967,7 @@ function rosterPage(d) {
   haptic(10);
   STATE.rosterPage += d;
   render();
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ---------- LORE FEED ----------
@@ -729,9 +981,11 @@ function loadLore() {
 }
 
 function renderLore(el) {
-  const rollOpts = STATE.students.map(s =>
-    `<option value="${esc(s.roll)}" ${STATE.loreComposerRoll === s.roll ? 'selected' : ''}>${esc(s.roll)} — ${esc(s.name)}</option>`
-  ).join('');
+  let rollOpts = '';
+  for (let i = 0; i < STATE.students.length; i++) {
+    const s = STATE.students[i];
+    rollOpts += `<option value="${esc(s.roll)}" ${STATE.loreComposerRoll === s.roll ? 'selected' : ''}>${esc(s.roll)} — ${esc(s.name)}</option>`;
+  }
 
   let html = `
     <div class="lore-composer">
@@ -753,7 +1007,8 @@ function renderLore(el) {
   if (!STATE.loreFeed.length) {
     html += `<div class="empty">NO LORE POSTS YET.<br><br>Be the first to drop one.</div>`;
   } else {
-    STATE.loreFeed.forEach((l, i) => {
+    for (let i = 0; i < STATE.loreFeed.length; i++) {
+      const l = STATE.loreFeed[i];
       const scoreCls = l.score > 0 ? 'pos' : l.score < 0 ? 'neg' : 'zero';
       const rankCls = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
       const scoreTxt = l.score > 0 ? '+' + l.score : String(l.score);
@@ -773,7 +1028,7 @@ function renderLore(el) {
             </div>
           </div>
         </div>`;
-    });
+    }
   }
 
   html += `</div>`;
@@ -912,7 +1167,8 @@ function renderLeaderboard(el) {
     return;
   }
 
-  list.forEach((s, i) => {
+  for (let i = 0; i < list.length; i++) {
+    const s = list[i];
     const rank = i + 1;
     const rankCls = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
     let valueHtml;
@@ -933,7 +1189,7 @@ function renderLeaderboard(el) {
         <div class="lb-name"><span class="lb-roll">${esc(s.roll)}</span>${esc(s.name)}</div>
         ${valueHtml}
       </div>`;
-  });
+  }
 
   el.innerHTML = html;
 }
@@ -950,7 +1206,7 @@ async function openDetail(roll) {
 
   try {
     const d = await api('detail', { roll });
-    if (!d || d.error) throw new Error(d?.error || 'No data');
+    if (!d || d.error) throw new Error((d && d.error) || 'No data');
     STATE.currentDetail = d;
     cWrite('detail_' + roll, d);
   } catch (err) {
@@ -983,10 +1239,25 @@ function renderDetail(el) {
     return;
   }
 
-  const { student: s, entries, lore } = STATE.currentDetail;
+  const s = STATE.currentDetail.student;
+  const entries = STATE.currentDetail.entries;
+  const lore = STATE.currentDetail.lore;
   const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
-  const pos = s.positive ?? ((s.personality + s.cool + s.helpfulness) / 3);
-  const neg = s.negative ?? 0;
+  const pos = (s.positive !== undefined) ? s.positive : ((s.personality + s.cool + s.helpfulness) / 3);
+  const neg = (s.negative !== undefined) ? s.negative : 0;
+
+  let loreHtml;
+  if (lore.length) {
+    loreHtml = lore.map(loreItem).join('');
+  } else {
+    loreHtml = '<div class="empty">NO LORE YET.</div>';
+  }
+  let entriesHtml;
+  if (entries.length) {
+    entriesHtml = entries.map(entryItem).join('');
+  } else {
+    entriesHtml = '<div class="empty">NO EVALUATIONS YET.</div>';
+  }
 
   el.innerHTML = `
     <button class="pixel-btn wide" onclick="closeDetail()" style="margin-bottom:12px;">← BACK</button>
@@ -1038,7 +1309,7 @@ function renderDetail(el) {
         <button class="pixel-btn cyan wide" onclick="addLore('${s.roll}','${esc(s.name)}')">+ ADD LORE</button>
       </div>
     </div>
-    <div>${lore.length ? lore.map(loreItem).join('') : '<div class="empty">NO LORE YET.</div>'}</div>
+    <div>${loreHtml}</div>
 
     <div class="section-title">► QUICK REACTIONS</div>
     <div class="kisskick-row">
@@ -1047,39 +1318,33 @@ function renderDetail(el) {
     </div>
 
     <div class="section-title" style="margin-top:18px;">► ENTRY HISTORY (${entries.length})</div>
-    <div>${entries.length ? entries.map(entryItem).join('') : '<div class="empty">NO EVALUATIONS YET.</div>'}</div>
+    <div>${entriesHtml}</div>
   `;
 
-  document.querySelectorAll('.star-input').forEach(inp => {
-    inp.querySelectorAll('span').forEach(star => {
-      star.addEventListener('click', () => {
-        const val = parseInt(star.dataset.val);
-        inp.dataset.value = val;
-        inp.querySelectorAll('span').forEach(s2 => {
-          s2.classList.toggle('on', parseInt(s2.dataset.val) <= val);
-        });
-        haptic(8);
-        updateEvalButtonState();
-      });
-    });
-    inp.dataset.value = 0;
-  });
-
+  // init stars data
+  const inputs = el.querySelectorAll('.star-input');
+  for (let i = 0; i < inputs.length; i++) inputs[i].dataset.value = '0';
   updateEvalButtonState();
 }
 
+// Cached ref for eval button
+let _evalBtn = null;
+
 function updateEvalButtonState() {
   const form = document.getElementById('evalForm');
-  if (!form) return;
-  const btn = form.querySelector('button.green');
-  if (!btn) return;
+  if (!form) { _evalBtn = null; return; }
+  if (!_evalBtn || !form.contains(_evalBtn)) {
+    _evalBtn = form.querySelector('button.green');
+  }
+  if (!_evalBtn) return;
   let allSet = true;
-  form.querySelectorAll('.star-input').forEach(inp => {
-    const v = parseInt(inp.dataset.value || '0');
-    if (!v || v < 1 || v > 5) allSet = false;
-  });
-  btn.disabled = !allSet;
-  btn.textContent = allSet ? '▶ SUBMIT EVALUATION' : '⚠ SET ALL 6 CRITERIA';
+  const inputs = form.querySelectorAll('.star-input');
+  for (let i = 0; i < inputs.length; i++) {
+    const v = parseInt(inputs[i].dataset.value || '0', 10);
+    if (!v || v < 1 || v > 5) { allSet = false; break; }
+  }
+  _evalBtn.disabled = !allSet;
+  _evalBtn.textContent = allSet ? '▶ SUBMIT EVALUATION' : '⚠ SET ALL 6 CRITERIA';
 }
 
 function critCard(label, value, positive) {
@@ -1153,11 +1418,12 @@ async function submitEval(roll) {
 
   const data = {};
   let allSet = true;
-  form.querySelectorAll('.star-input').forEach(inp => {
-    const v = parseInt(inp.dataset.value || '0');
+  const inputs = form.querySelectorAll('.star-input');
+  for (let i = 0; i < inputs.length; i++) {
+    const v = parseInt(inputs[i].dataset.value || '0', 10);
     if (!v || v < 1 || v > 5) allSet = false;
-    data[inp.dataset.target] = v;
-  });
+    data[inputs[i].dataset.target] = v;
+  }
   if (!allSet) { toast('SET ALL 6 CRITERIA FIRST', true); haptic(30); return; }
 
   const student = STATE.students.find(x => x.roll === roll);
@@ -1280,7 +1546,9 @@ async function sendKiss(roll) {
   const s = STATE.students.find(x => x.roll === roll);
   const prevKiss = s ? s.kisses : 0;
   if (s) s.kisses++;
-  if (STATE.currentDetail?.student?.roll === roll) STATE.currentDetail.student.kisses++;
+  if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
+    STATE.currentDetail.student.kisses++;
+  }
   render();
 
   try {
@@ -1288,7 +1556,9 @@ async function sendKiss(roll) {
     if (res.updated) patchStudent(res.updated);
     else if (s && typeof res.kisses === 'number') {
       s.kisses = res.kisses;
-      if (STATE.currentDetail?.student?.roll === roll) STATE.currentDetail.student.kisses = res.kisses;
+      if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
+        STATE.currentDetail.student.kisses = res.kisses;
+      }
     }
     cWrite('roster', STATE.students);
     toast('♥ KISS SENT');
@@ -1299,7 +1569,9 @@ async function sendKiss(roll) {
     render();
   } catch {
     if (s) s.kisses = prevKiss;
-    if (STATE.currentDetail?.student?.roll === roll) STATE.currentDetail.student.kisses = prevKiss;
+    if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
+      STATE.currentDetail.student.kisses = prevKiss;
+    }
     cWrite('roster', STATE.students);
     render();
     toast('NOT SAVED — TRY AGAIN', true);
@@ -1312,7 +1584,9 @@ async function sendKick(roll) {
   const s = STATE.students.find(x => x.roll === roll);
   const prevKick = s ? s.kicks : 0;
   if (s) s.kicks++;
-  if (STATE.currentDetail?.student?.roll === roll) STATE.currentDetail.student.kicks++;
+  if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
+    STATE.currentDetail.student.kicks++;
+  }
   render();
 
   try {
@@ -1320,7 +1594,9 @@ async function sendKick(roll) {
     if (res.updated) patchStudent(res.updated);
     else if (s && typeof res.kicks === 'number') {
       s.kicks = res.kicks;
-      if (STATE.currentDetail?.student?.roll === roll) STATE.currentDetail.student.kicks = res.kicks;
+      if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
+        STATE.currentDetail.student.kicks = res.kicks;
+      }
     }
     cWrite('roster', STATE.students);
     toast('✖ KICK SENT');
@@ -1331,7 +1607,9 @@ async function sendKick(roll) {
     render();
   } catch {
     if (s) s.kicks = prevKick;
-    if (STATE.currentDetail?.student?.roll === roll) STATE.currentDetail.student.kicks = prevKick;
+    if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
+      STATE.currentDetail.student.kicks = prevKick;
+    }
     cWrite('roster', STATE.students);
     render();
     toast('NOT SAVED — TRY AGAIN', true);
@@ -1410,19 +1688,28 @@ function initSwipeDrag() {
   if (!card) return;
   const kissOv = document.getElementById('overlayKiss');
   const kickOv = document.getElementById('overlayKick');
-  let sx = 0, cx = 0, drag = false, startY = 0, lockedAxis = null;
 
-  function begin(x, y) { sx = x; startY = y; cx = 0; drag = true; lockedAxis = null; card.style.transition = 'none'; }
+  let sx = 0, sy = 0, cx = 0;
+  let drag = false;
+  let lockedAxis = null;
+  let activeId = null;
+
+  function begin(x, y, id) {
+    sx = x; sy = y; cx = 0;
+    drag = true; lockedAxis = null; activeId = id;
+    card.style.transition = 'none';
+  }
   function move(x, y, ev) {
     if (!drag) return;
-    const dx = x - sx, dy = y - startY;
-    if (lockedAxis === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+    const dx = x - sx, dy = y - sy;
+    if (lockedAxis === null) {
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
       lockedAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
     }
     if (lockedAxis === 'y') return;
     if (ev && ev.cancelable) ev.preventDefault();
     cx = dx;
-    card.style.transform = `translateX(${cx}px) rotate(${cx * 0.05}deg)`;
+    card.style.transform = `translate3d(${cx}px,0,0) rotate(${cx * 0.05}deg)`;
     const p = Math.min(Math.abs(cx) / 110, 1);
     if (cx > 0) { kissOv.style.opacity = p; kickOv.style.opacity = 0; }
     else        { kickOv.style.opacity = p; kissOv.style.opacity = 0; }
@@ -1433,6 +1720,7 @@ function initSwipeDrag() {
     const wasX = lockedAxis === 'x';
     const d = cx;
     lockedAxis = null;
+    activeId = null;
     if (wasX && d > 90) { haptic(15); doSwipe('kiss'); }
     else if (wasX && d < -90) { haptic(15); doSwipe('kick'); }
     else {
@@ -1442,26 +1730,36 @@ function initSwipeDrag() {
     }
     cx = 0;
   }
-  card.addEventListener('pointerdown', e => {
-    if (e.target.closest('button')) return;
-    begin(e.clientX, e.clientY);
-    try { card.setPointerCapture(e.pointerId); } catch(_){}
-  });
-  card.addEventListener('pointermove', e => move(e.clientX, e.clientY, e), { passive: false });
-  card.addEventListener('pointerup', end);
-  card.addEventListener('pointercancel', end);
-  card.addEventListener('pointerleave', end);
-  card.addEventListener('touchstart', e => {
-    if (e.target.closest('button')) return;
-    if (e.touches.length !== 1) return;
-    begin(e.touches[0].clientX, e.touches[0].clientY);
-  }, { passive: true });
-  card.addEventListener('touchmove', e => {
-    if (!drag || e.touches.length !== 1) return;
-    move(e.touches[0].clientX, e.touches[0].clientY, e);
-  }, { passive: false });
-  card.addEventListener('touchend', end, { passive: true });
-  card.addEventListener('touchcancel', end, { passive: true });
+
+  if (window.PointerEvent) {
+    card.addEventListener('pointerdown', e => {
+      if (e.target.closest('button')) return;
+      begin(e.clientX, e.clientY, e.pointerId);
+      try { card.setPointerCapture(e.pointerId); } catch(_){}
+    });
+    card.addEventListener('pointermove', e => move(e.clientX, e.clientY, e), { passive: false });
+    card.addEventListener('pointerup', end);
+    card.addEventListener('pointercancel', end);
+    card.addEventListener('pointerleave', end);
+  } else {
+    card.addEventListener('touchstart', e => {
+      if (e.target.closest('button')) return;
+      if (e.touches.length !== 1) return;
+      begin(e.touches[0].clientX, e.touches[0].clientY, null);
+    }, { passive: true });
+    card.addEventListener('touchmove', e => {
+      if (!drag || e.touches.length !== 1) return;
+      move(e.touches[0].clientX, e.touches[0].clientY, e);
+    }, { passive: false });
+    card.addEventListener('touchend', end, { passive: true });
+    card.addEventListener('touchcancel', end, { passive: true });
+    card.addEventListener('mousedown', e => {
+      if (e.target.closest('button')) return;
+      begin(e.clientX, e.clientY, null);
+    });
+    window.addEventListener('mousemove', e => { if (drag) move(e.clientX, e.clientY, e); });
+    window.addEventListener('mouseup', end);
+  }
 }
 
 function doSwipe(direction) {
@@ -1474,15 +1772,15 @@ function doSwipe(direction) {
 function skipSwipe() { haptic(8); animateOut('skip', () => { STATE.swipeIndex++; render(); }); }
 function prevSwipe() { haptic(8); if (STATE.swipeIndex > 0) { STATE.swipeIndex--; render(); } }
 function nextSwipe() { haptic(8); if (STATE.swipeIndex < STATE.swipeOrder.length - 1) { STATE.swipeIndex++; render(); } }
-function resetSwipe() { haptic(15); STATE.swipeOrder = shuffle([...STATE.students]); STATE.swipeIndex = 0; render(); }
+function resetSwipe() { haptic(15); STATE.swipeOrder = shuffle(STATE.students.slice()); STATE.swipeIndex = 0; render(); }
 
 function animateOut(d, cb) {
   const c = document.getElementById('swipeCard');
   if (!c) { cb(); return; }
   c.style.transition = 'transform 0.3s ease-out, opacity 0.3s';
-  if (d === 'kiss')      c.style.transform = 'translateX(420px) rotate(30deg)';
-  else if (d === 'kick') c.style.transform = 'translateX(-420px) rotate(-30deg)';
-  else                   c.style.transform = 'translateY(-420px)';
+  if (d === 'kiss')      c.style.transform = 'translate3d(420px,0,0) rotate(30deg)';
+  else if (d === 'kick') c.style.transform = 'translate3d(-420px,0,0) rotate(-30deg)';
+  else                   c.style.transform = 'translate3d(0,-420px,0)';
   c.style.opacity = '0';
   setTimeout(cb, 320);
 }
@@ -1508,7 +1806,24 @@ function toast(msg, isErr) {
   toastTimer = setTimeout(() => { t.className = ''; }, 4000);
 }
 
-// ---------- EVENTS ----------
+// ---------- EVENT DELEGATION ----------
+// Star inputs (attached once, works for all re-renders)
+const contentEl = document.getElementById('content');
+contentEl.addEventListener('click', e => {
+  const star = e.target.closest('.star-input > span');
+  if (!star) return;
+  const inp = star.closest('.star-input');
+  const val = parseInt(star.dataset.val, 10);
+  if (!val) return;
+  inp.dataset.value = val;
+  const kids = inp.children;
+  for (let i = 0; i < kids.length; i++) {
+    kids[i].classList.toggle('on', parseInt(kids[i].dataset.val, 10) <= val);
+  }
+  haptic(8);
+  updateEvalButtonState();
+});
+
 document.getElementById('nav').addEventListener('click', e => {
   if (e.target.tagName === 'BUTTON') {
     haptic(10);
