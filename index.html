@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>F31N FILES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   F31N FILES — Pixel Arcade Theme
+   ============================================================ */
+:root {
+  --bg:        #0a0a1a;
+  --surface:   #12122a;
+  --surface2:  #1a1a3a;
+  --border:    #2a2a5a;
+  --green:     #39ff14;
+  --pink:      #ff2d95;
+  --cyan:      #00f0ff;
+  --yellow:    #ffd700;
+  --red:       #ff3131;
+  --orange:    #ff8c00;
+  --text:      #e0e0ff;
+  --dim:       #6666aa;
+  --black:     #000000;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+}
+
+/* CRT scanlines */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.12) 0px,
+    rgba(0,0,0,0.12) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Subtle pixel grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(57,255,20,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57,255,20,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+#app {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 12px 80px;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+  text-align: center;
+  padding: 24px 0 16px;
+  border-bottom: 3px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 22px;
+  color: var(--green);
+  text-shadow: 3px 3px 0 var(--black), 0 0 20px rgba(57,255,20,0.4);
+  letter-spacing: 4px;
+  animation: flicker 3s infinite;
+}
+
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.7; }
+  97% { opacity: 1; }
+  98% { opacity: 0.8; }
+}
+
+.header .sub {
+  font-size: 7px;
+  color: var(--dim);
+  margin-top: 8px;
+  letter-spacing: 2px;
+}
+
+/* ---------- NAV TABS ---------- */
+.nav {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.nav button {
+  font-family: inherit;
+  font-size: 8px;
+  padding: 10px 14px;
+  background: var(--surface);
+  color: var(--dim);
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0 var(--black);
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: none;
+  flex: 1;
+  min-width: 90px;
+}
+
+.nav button:hover { background: var(--surface2); color: var(--text); }
+.nav button.active {
+  background: var(--green);
+  color: var(--black);
+  border-color: var(--green);
+  box-shadow: 4px 4px 0 var(--black), 0 0 12px rgba(57,255,20,0.5);
+}
+
+/* ---------- PIXEL BOX ---------- */
+.pixel-box {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  box-shadow: 6px 6px 0 var(--black);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+/* ---------- ROSTER LIST ---------- */
+.roster-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0 var(--black);
+  cursor: pointer;
+  transition: none;
+  gap: 10px;
+}
+
+.roster-item:hover {
+  background: var(--surface2);
+  border-color: var(--green);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--black);
+}
+
+.roster-item .left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.roster-item .roll {
+  font-size: 8px;
+  color: var(--cyan);
+  background: rgba(0,240,255,0.1);
+  padding: 4px 8px;
+  border: 2px solid rgba(0,240,255,0.3);
+  white-space: nowrap;
+}
+
+.roster-item .name {
+  font-size: 10px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.roster-item .right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.rating-badge {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 6px 10px;
+  border: 3px solid;
+  min-width: 60px;
+  text-align: center;
+}
+
+.rating-pos { color: var(--green); border-color: var(--green); background: rgba(57,255,20,0.08); }
+.rating-neg { color: var(--red);   border-color: var(--red);   background: rgba(255,49,49,0.08); }
+.rating-mid { color: var(--yellow);border-color: var(--yellow);background: rgba(255,215,0,0.08); }
+
+.kk-mini {
+  display: flex;
+  gap: 4px;
+  font-size: 8px;
+}
+
+.kk-mini span {
+  padding: 3px 6px;
+  border: 2px solid var(--border);
+}
+
+.kk-kiss { color: var(--pink); border-color: rgba(255,45,149,0.4) !important; }
+.kk-kick { color: var(--orange); border-color: rgba(255,140,0,0.4) !important; }
+
+/* ---------- DETAIL VIEW ---------- */
+.detail-header {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+
+.detail-header .big-name {
+  font-size: 16px;
+  color: var(--green);
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 0 var(--black);
+}
+
+.detail-header .big-roll {
+  font-size: 10px;
+  color: var(--cyan);
+  margin-bottom: 14px;
+}
+
+.detail-header .big-score {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* criteria grid */
+.criteria-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.criteria-card {
+  padding: 12px;
+  border: 3px solid var(--border);
+  background: var(--surface);
+  text-align: center;
+}
+
+.criteria-card.positive { border-color: rgba(57,255,20,0.4); }
+.criteria-card.negative { border-color: rgba(255,49,49,0.4); }
+
+.criteria-card .label {
+  font-size: 7px;
+  color: var(--dim);
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.criteria-card .value {
+  font-size: 18px;
+}
+
+.criteria-card.positive .value { color: var(--green); }
+.criteria-card.negative .value { color: var(--red); }
+
+/* star display */
+.stars-display {
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+/* section title */
+.section-title {
+  font-size: 10px;
+  color: var(--yellow);
+  padding: 8px 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+
+/* ---------- EVALUATION FORM ---------- */
+.eval-section { margin-bottom: 18px; }
+
+.criterion-row {
+  margin-bottom: 14px;
+  padding: 10px;
+  border: 3px solid var(--border);
+  background: var(--surface);
+}
+
+.criterion-row.positive { border-left: 6px solid var(--green); }
+.criterion-row.negative { border-left: 6px solid var(--red); }
+
+.criterion-row .cr-label {
+  font-size: 8px;
+  margin-bottom: 8px;
+  color: var(--text);
+  display: flex;
+  justify-content: space-between;
+}
+
+.criterion-row .cr-label .cr-hint {
+  font-size: 6px;
+  color: var(--dim);
+}
+
+.star-input {
+  display: flex;
+  gap: 6px;
+}
+
+.star-input span {
+  font-size: 22px;
+  color: #333;
+  cursor: pointer;
+  transition: none;
+  user-select: none;
+  line-height: 1;
+}
+
+.star-input span.on { color: var(--yellow); text-shadow: 0 0 8px rgba(255,215,0,0.6); }
+.star-input span:hover { transform: scale(1.2); }
+
+/* ---------- BUTTONS ---------- */
+.pixel-btn {
+  font-family: inherit;
+  font-size: 9px;
+  padding: 12px 18px;
+  background: var(--surface2);
+  color: var(--text);
+  border: 3px solid var(--border);
+  box-shadow: 5px 5px 0 var(--black);
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: none;
+  display: inline-block;
+}
+
+.pixel-btn:hover { background: var(--border); }
+.pixel-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--black);
+}
+
+.pixel-btn.green { background: var(--green); color: var(--black); border-color: var(--green); }
+.pixel-btn.pink  { background: var(--pink);  color: #fff; border-color: var(--pink); }
+.pixel-btn.cyan  { background: var(--cyan);  color: var(--black); border-color: var(--cyan); }
+.pixel-btn.red   { background: var(--red);   color: #fff; border-color: var(--red); }
+.pixel-btn.yellow{ background: var(--yellow);color: var(--black); border-color: var(--yellow); }
+.pixel-btn.wide  { width: 100%; text-align: center; }
+
+/* ---------- TEXT INPUT ---------- */
+.pixel-input, .pixel-textarea {
+  font-family: inherit;
+  font-size: 9px;
+  width: 100%;
+  padding: 12px;
+  background: var(--bg);
+  color: var(--text);
+  border: 3px solid var(--border);
+  outline: none;
+  resize: vertical;
+}
+
+.pixel-textarea { min-height: 70px; }
+.pixel-input:focus, .pixel-textarea:focus { border-color: var(--green); }
+
+/* ---------- ENTRY LOG ---------- */
+.entry-item {
+  padding: 10px;
+  border: 2px solid var(--border);
+  margin-bottom: 8px;
+  background: var(--surface);
+  font-size: 8px;
+}
+
+.entry-item .entry-top {
+  display: flex;
+  justify-content: space-between;
+  color: var(--dim);
+  font-size: 7px;
+  margin-bottom: 6px;
+}
+
+.entry-item .entry-scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 7px;
+}
+
+.entry-item .entry-scores span {
+  padding: 2px 6px;
+  border: 2px solid var(--border);
+}
+
+/* ---------- LORE ---------- */
+.lore-item {
+  padding: 12px;
+  border: 3px solid var(--border);
+  margin-bottom: 10px;
+  background: var(--surface);
+}
+
+.lore-item .lore-text {
+  font-size: 9px;
+  margin-bottom: 8px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.lore-item .lore-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 7px;
+  color: var(--dim);
+}
+
+.lore-vote-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.lore-vote-btns button {
+  font-family: inherit;
+  font-size: 7px;
+  padding: 4px 8px;
+  border: 2px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.lore-vote-btns button:hover { background: var(--border); }
+.lore-vote-btns .kiss-btn { color: var(--pink); border-color: rgba(255,45,149,0.5); }
+.lore-vote-btns .kick-btn { color: var(--orange); border-color: rgba(255,140,0,0.5); }
+
+/* ---------- SWIPE DECK ---------- */
+.swipe-container {
+  position: relative;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.swipe-card {
+  position: absolute;
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border: 4px solid var(--border);
+  box-shadow: 8px 8px 0 var(--black);
+  padding: 22px;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  will-change: transform;
+}
+
+.swipe-card:active { cursor: grabbing; }
+
+.swipe-card .sc-name {
+  font-size: 16px;
+  color: var(--green);
+  margin-bottom: 6px;
+  text-shadow: 2px 2px 0 var(--black);
+}
+
+.swipe-card .sc-roll {
+  font-size: 9px;
+  color: var(--cyan);
+  margin-bottom: 14px;
+}
+
+.swipe-card .sc-score {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 12px 0;
+}
+
+.swipe-card .sc-kk {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 12px 0;
+  font-size: 10px;
+}
+
+.swipe-card .sc-criteria {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 14px;
+  text-align: left;
+}
+
+.swipe-card .sc-criteria .sc-crit {
+  font-size: 7px;
+  padding: 6px 8px;
+  border: 2px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.swipe-overlay {
+  position: absolute;
+  top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: 4px solid;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  letter-spacing: 4px;
+}
+
+.swipe-overlay.kiss { right: 20px; color: var(--pink); border-color: var(--pink); transform: rotate(12deg); }
+.swipe-overlay.kick { left: 20px; color: var(--orange); border-color: var(--orange); transform: rotate(-12deg); }
+
+.swipe-hint {
+  text-align: center;
+  font-size: 7px;
+  color: var(--dim);
+  margin-top: 12px;
+}
+
+.swipe-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.swipe-actions button {
+  font-family: inherit;
+  font-size: 10px;
+  padding: 14px 22px;
+  border: 3px solid;
+  box-shadow: 5px 5px 0 var(--black);
+  cursor: pointer;
+  letter-spacing: 2px;
+}
+
+.swipe-actions button:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--black); }
+
+/* ---------- TOAST ---------- */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--green);
+  color: var(--black);
+  font-size: 9px;
+  padding: 14px 24px;
+  border: 3px solid var(--black);
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
+  z-index: 10000;
+  opacity: 0;
+  transition: all 0.2s;
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
+}
+
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+#toast.error { background: var(--red); color: #fff; }
+
+/* ---------- LOADING ---------- */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--dim);
+  font-size: 10px;
+}
+
+.loading .blink { animation: blink 0.8s infinite; }
+@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+/* ---------- EMPTY ---------- */
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--dim);
+  font-size: 9px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 500px) {
+  .header h1 { font-size: 16px; letter-spacing: 2px; }
+  .criteria-grid { grid-template-columns: 1fr; }
+  .roster-item .name { font-size: 8px; }
+  .swipe-card { max-width: 92%; padding: 16px; }
+  .swipe-card .sc-name { font-size: 13px; }
+  .swipe-card .sc-score { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>F31N FILES</h1>
+    <div class="sub">// CLASSIFIED // RATE // KISS // KICK //</div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav" id="nav">
+    <button data-tab="roster" class="active">ROSTER</button>
+    <button data-tab="swipe">SWIPE</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="content"></div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// F31N FILES — Frontend Logic
+// ============================================================
+
+const API_URL = 'https://script.google.com/macros/s/AKfycbxYQgcFPxAj1U1Hsi53Y9Ylueg5xLSIu-RSW6qApv8yx-jGAxXbagaFW8wdMhzlhEY1NQ/exec';
+
+// ---------- STATE ----------
+let STATE = {
+  students: [],
+  currentTab: 'roster',
+  currentStudent: null,
+  currentDetail: null,
+  swipeIndex: 0,
+  swipeOrder: [],
+  loading: true,
+  demoMode: false
+};
+
+// ---------- DEMO DATA (fallback if API fails) ----------
+const DEMO_STUDENTS = [
+  { roll: '30-153', name: 'MILON DAS',       rating: 3.5, kisses: 12, kicks: 3, evalCount: 5, personality: 4, cool: 3.8, helpfulness: 4.2, pettiness: 2, hate: 1.5, annoying: 2.5, loreCount: 2 },
+  { roll: '30-182', name: 'MEHRIN CHOWDHURY',rating: 4.1, kisses: 20, kicks: 1, evalCount: 7, personality: 4.5, cool: 4.2, helpfulness: 4.8, pettiness: 1.2, hate: 1, annoying: 1.5, loreCount: 3 },
+  { roll: '31-001', name: 'SUZANA TASNIM RUHI', rating: 2.8, kisses: 5, kicks: 8, evalCount: 4, personality: 3.5, cool: 3, helpfulness: 3.2, pettiness: 3.5, hate: 3, annoying: 3.8, loreCount: 1 },
+  { roll: '31-002', name: 'SHAMA MAHJABIN',  rating: 3.9, kisses: 15, kicks: 2, evalCount: 6, personality: 4.2, cool: 4, helpfulness: 4.5, pettiness: 1.8, hate: 1.5, annoying: 2, loreCount: 2 },
+  { roll: '31-003', name: 'RAWNAK JAHAN',    rating: 3.2, kisses: 8, kicks: 4, evalCount: 3, personality: 3.8, cool: 3.5, helpfulness: 3.6, pettiness: 2.5, hate: 2, annoying: 3, loreCount: 1 }
+];
+
+// ---------- API ----------
+async function api(action, params = {}) {
+  try {
+    const url = new URL(API_URL);
+    url.searchParams.set('action', action);
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+    });
+    const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch (err) {
+    console.warn('API error:', err);
+    throw err;
+  }
+}
+
+async function loadAll() {
+  STATE.loading = true;
+  render();
+  try {
+    const data = await api('all');
+    if (data.error) throw new Error(data.error);
+    STATE.students = data;
+    STATE.demoMode = false;
+  } catch (err) {
+    console.warn('Falling back to demo data:', err);
+    STATE.students = DEMO_STUDENTS;
+    STATE.demoMode = true;
+    toast('DEMO MODE — API unreachable', true);
+  }
+  STATE.loading = false;
+  STATE.swipeOrder = [...STATE.students].sort(() => Math.random() - 0.5);
+  STATE.swipeIndex = 0;
+  render();
+}
+
+async function loadDetail(roll) {
+  try {
+    const data = await api('detail', { roll });
+    if (data.error) throw new Error(data.error);
+    return data;
+  } catch (err) {
+    // demo detail
+    const s = STATE.students.find(x => x.roll === roll);
+    if (!s) return null;
+    return {
+      student: s,
+      entries: [
+        { time: new Date().toISOString(), personality: 4, cool: 3, helpfulness: 5, pettiness: 2, hate: 1, annoying: 2, score: 3.83, lore: 'Demo entry' }
+      ],
+      lore: [
+        { id: 'demo1', roll, name: s.name, text: 'This is a demo lore entry. Deploy the Apps Script to enable real data.', kiss: 3, kick: 0 }
+      ]
+    };
+  }
+}
+
+// ---------- RENDER ----------
+function render() {
+  const nav = document.getElementById('nav');
+  nav.querySelectorAll('button').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === STATE.currentTab);
+  });
+
+  const content = document.getElementById('content');
+
+  if (STATE.loading) {
+    content.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING DATA...</div>`;
+    return;
+  }
+
+  if (STATE.currentTab === 'roster') {
+    if (STATE.currentStudent) renderDetail(content);
+    else renderRoster(content);
+  } else if (STATE.currentTab === 'swipe') {
+    renderSwipe(content);
+  }
+}
+
+// ---------- ROSTER ----------
+function renderRoster(el) {
+  if (!STATE.students.length) {
+    el.innerHTML = `<div class="empty">NO STUDENTS FOUND<br><br>Add rows to the "Students" sheet.</div>`;
+    return;
+  }
+
+  let html = `<div style="margin-bottom:12px;font-size:7px;color:var(--dim);text-align:center;">
+    ${STATE.demoMode ? '⚠ DEMO MODE' : '● LIVE DATA'} — ${STATE.students.length} RECORDS
+  </div>`;
+
+  STATE.students.forEach(s => {
+    const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
+    html += `
+      <div class="roster-item" onclick="openDetail('${s.roll}')">
+        <div class="left">
+          <span class="roll">${s.roll}</span>
+          <span class="name">${s.name}</span>
+        </div>
+        <div class="right">
+          <div class="kk-mini">
+            <span class="kk-kiss">K:${s.kisses}</span>
+            <span class="kk-kick">X:${s.kicks}</span>
+          </div>
+          <div class="rating-badge ${cls}">${s.rating.toFixed(2)}</div>
+        </div>
+      </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+// ---------- DETAIL ----------
+async function openDetail(roll) {
+  STATE.currentStudent = roll;
+  STATE.currentDetail = null;
+  render();
+  const detail = await loadDetail(roll);
+  STATE.currentDetail = detail;
+  render();
+}
+
+function closeDetail() {
+  STATE.currentStudent = null;
+  STATE.currentDetail = null;
+  render();
+}
+
+function renderDetail(el) {
+  if (!STATE.currentDetail) {
+    el.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING FILE...</div>`;
+    return;
+  }
+
+  const { student: s, entries, lore } = STATE.currentDetail;
+  const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
+
+  let html = `
+    <button class="pixel-btn" onclick="closeDetail()" style="margin-bottom:12px;">← BACK TO ROSTER</button>
+
+    <div class="pixel-box detail-header">
+      <div class="big-roll">${s.roll}</div>
+      <div class="big-name">${s.name}</div>
+      <div class="big-score ${cls}">${s.rating.toFixed(2)}</div>
+      <div style="font-size:8px;color:var(--dim);">
+        ${s.evalCount} EVAL${s.evalCount !== 1 ? 'S' : ''} &nbsp;|&nbsp;
+        <span style="color:var(--pink)">KISS ${s.kisses}</span> &nbsp;
+        <span style="color:var(--orange)">KICK ${s.kicks}</span>
+      </div>
+    </div>
+
+    <div class="section-title">► STAT BREAKDOWN</div>
+    <div class="criteria-grid">
+      <div class="criteria-card positive">
+        <div class="label">PERSONALITY</div>
+        <div class="value">${s.personality.toFixed(1)}</div>
+        <div class="stars-display">${stars(s.personality, 'var(--green)')}</div>
+      </div>
+      <div class="criteria-card positive">
+        <div class="label">COOL</div>
+        <div class="value">${s.cool.toFixed(1)}</div>
+        <div class="stars-display">${stars(s.cool, 'var(--green)')}</div>
+      </div>
+      <div class="criteria-card positive">
+        <div class="label">HELPFULNESS</div>
+        <div class="value">${s.helpfulness.toFixed(1)}</div>
+        <div class="stars-display">${stars(s.helpfulness, 'var(--green)')}</div>
+      </div>
+      <div class="criteria-card negative">
+        <div class="label">PETTINESS</div>
+        <div class="value">${s.pettiness.toFixed(1)}</div>
+        <div class="stars-display">${stars(s.pettiness, 'var(--red)')}</div>
+      </div>
+      <div class="criteria-card negative">
+        <div class="label">HATE</div>
+        <div class="value">${s.hate.toFixed(1)}</div>
+        <div class="stars-display">${stars(s.hate, 'var(--red)')}</div>
+      </div>
+      <div class="criteria-card negative">
+        <div class="label">ANNOYING</div>
+        <div class="value">${s.annoying.toFixed(1)}</div>
+        <div class="stars-display">${stars(s.annoying, 'var(--red)')}</div>
+      </div>
+    </div>
+
+    <div class="section-title">► SUBMIT EVALUATION</div>
+    <div class="eval-section" id="evalForm">
+      ${criteriaRow('Personality', 'personality', true)}
+      ${criteriaRow('Cool', 'cool', true)}
+      ${criteriaRow('Helpfulness', 'helpfulness', true)}
+      ${criteriaRow('Pettiness', 'pettiness', false)}
+      ${criteriaRow('Hate', 'hate', false)}
+      ${criteriaRow('Annoying', 'annoying', false)}
+      <textarea class="pixel-textarea" id="evalLore" placeholder="Optional lore / comment..."></textarea>
+      <div style="margin-top:10px;">
+        <button class="pixel-btn green wide" onclick="submitEval('${s.roll}','${s.name}')">▶ SUBMIT EVALUATION</button>
+      </div>
+    </div>
+
+    <div class="section-title">► LORE LOG (${lore.length})</div>
+    <div style="margin-bottom:10px;">
+      <textarea class="pixel-textarea" id="loreInput" placeholder="Drop some lore..."></textarea>
+      <div style="margin-top:8px;">
+        <button class="pixel-btn cyan wide" onclick="addLore('${s.roll}','${s.name}')">+ ADD LORE</button>
+      </div>
+    </div>
+    <div id="loreList">
+      ${lore.length ? lore.map(l => loreItem(l)).join('') : '<div class="empty">NO LORE YET. BE THE FIRST.</div>'}
+    </div>
+
+    <div class="section-title">► ENTRY HISTORY (${entries.length})</div>
+    <div>
+      ${entries.length ? entries.map(e => entryItem(e)).join('') : '<div class="empty">NO EVALUATIONS YET.</div>'}
+    </div>
+  `;
+
+  el.innerHTML = html;
+
+  // initialize star inputs
+  document.querySelectorAll('.star-input').forEach(inp => {
+    const target = inp.dataset.target;
+    inp.querySelectorAll('span').forEach(star => {
+      star.addEventListener('click', () => {
+        const val = parseInt(star.dataset.val);
+        inp.dataset.value = val;
+        inp.querySelectorAll('span').forEach(s => {
+          s.classList.toggle('on', parseInt(s.dataset.val) <= val);
+        });
+      });
+    });
+    // default to 3
+    inp.dataset.value = 3;
+    inp.querySelectorAll('span').forEach(s => {
+      if (parseInt(s.dataset.val) <= 3) s.classList.add('on');
+    });
+  });
+}
+
+function criteriaRow(label, key, positive) {
+  return `
+    <div class="criterion-row ${positive ? 'positive' : 'negative'}">
+      <div class="cr-label">
+        <span>${positive ? '▲' : '▼'} ${label.toUpperCase()}</span>
+        <span class="cr-hint">${positive ? '1-5 STARS' : '1=NO DEDUCT, 5=-3'}</span>
+      </div>
+      <div class="star-input" data-target="${key}">
+        <span data-val="1">★</span>
+        <span data-val="2">★</span>
+        <span data-val="3">★</span>
+        <span data-val="4">★</span>
+        <span data-val="5">★</span>
+      </div>
+    </div>
+  `;
+}
+
+function stars(value, color) {
+  const full = Math.round(value);
+  let out = '';
+  for (let i = 1; i <= 5; i++) {
+    out += `<span style="color:${i <= full ? color : '#333'}">★</span>`;
+  }
+  return out;
+}
+
+function entryItem(e) {
+  const cls = e.score > 3 ? 'var(--green)' : e.score < 2 ? 'var(--red)' : 'var(--yellow)';
+  return `
+    <div class="entry-item">
+      <div class="entry-top">
+        <span>${formatDate(e.time)}</span>
+        <span style="color:${cls};font-size:10px;">SCORE: ${e.score.toFixed(2)}</span>
+      </div>
+      <div class="entry-scores">
+        <span style="color:var(--green)">P:${e.personality}</span>
+        <span style="color:var(--green)">C:${e.cool}</span>
+        <span style="color:var(--green)">H:${e.helpfulness}</span>
+        <span style="color:var(--red)">Pe:${e.pettiness}</span>
+        <span style="color:var(--red)">Ha:${e.hate}</span>
+        <span style="color:var(--red)">An:${e.annoying}</span>
+      </div>
+      ${e.lore ? `<div style="margin-top:6px;color:var(--dim);font-size:7px;">"${esc(e.lore)}"</div>` : ''}
+    </div>
+  `;
+}
+
+function loreItem(l) {
+  return `
+    <div class="lore-item">
+      <div class="lore-text">"${esc(l.text)}"</div>
+      <div class="lore-meta">
+        <span>${formatDate(l.id)}</span>
+        <div class="lore-vote-btns">
+          <button class="kiss-btn" onclick="voteLore('${l.id}','kiss')">♥ KISS ${l.kiss}</button>
+          <button class="kick-btn" onclick="voteLore('${l.id}','kick')">✖ KICK ${l.kick}</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---------- ACTIONS ----------
+async function submitEval(roll, name) {
+  const form = document.getElementById('evalForm');
+  const data = {};
+  form.querySelectorAll('.star-input').forEach(inp => {
+    data[inp.dataset.target] = inp.dataset.value || 3;
+  });
+  data.roll = roll;
+  data.name = name;
+  data.lore = document.getElementById('evalLore').value.trim();
+
+  try {
+    const res = await api('submitEval', data);
+    if (res.error) throw new Error(res.error);
+    toast('EVALUATION SUBMITTED — SCORE: ' + res.score);
+    // refresh detail
+    const d = await loadDetail(roll);
+    STATE.currentDetail = d;
+    // also refresh list in background
+    api('all').then(list => { STATE.students = list; }).catch(() => {});
+    render();
+  } catch (err) {
+    toast('FAILED: ' + err.message, true);
+  }
+}
+
+async function addLore(roll, name) {
+  const text = document.getElementById('loreInput').value.trim();
+  if (!text) { toast('WRITE SOMETHING FIRST', true); return; }
+  try {
+    const res = await api('addLore', { roll, name, text });
+    if (res.error) throw new Error(res.error);
+    document.getElementById('loreInput').value = '';
+    toast('LORE ADDED');
+    const d = await loadDetail(roll);
+    STATE.currentDetail = d;
+    render();
+  } catch (err) {
+    toast('FAILED: ' + err.message, true);
+  }
+}
+
+async function voteLore(loreId, vote) {
+  try {
+    const res = await api('voteLore', { loreId, vote });
+    if (res.error) throw new Error(res.error);
+    toast(vote === 'kiss' ? '♥ KISSED' : '✖ KICKED');
+    const d = await loadDetail(STATE.currentStudent);
+    STATE.currentDetail = d;
+    render();
+  } catch (err) {
+    toast('FAILED: ' + err.message, true);
+  }
+}
+
+async function sendKiss(roll) {
+  try {
+    await api('kiss', { roll });
+    toast('♥ KISS SENT TO ' + roll);
+    const s = STATE.students.find(x => x.roll === roll);
+    if (s) s.kisses++;
+  } catch (err) { toast('FAILED', true); }
+}
+
+async function sendKick(roll) {
+  try {
+    await api('kick', { roll });
+    toast('✖ KICK SENT TO ' + roll);
+    const s = STATE.students.find(x => x.roll === roll);
+    if (s) s.kicks++;
+  } catch (err) { toast('FAILED', true); }
+}
+
+// ---------- SWIPE ----------
+function renderSwipe(el) {
+  if (!STATE.swipeOrder.length) {
+    el.innerHTML = `<div class="empty">NO PROFILES TO SWIPE.</div>`;
+    return;
+  }
+
+  if (STATE.swipeIndex >= STATE.swipeOrder.length) {
+    el.innerHTML = `
+      <div class="pixel-box" style="text-align:center;padding:40px;">
+        <div style="font-size:14px;color:var(--green);margin-bottom:12px;">DECK CLEARED</div>
+        <div style="font-size:8px;color:var(--dim);margin-bottom:20px;">You went through everyone.</div>
+        <button class="pixel-btn green" onclick="resetSwipe()">▶ RESHUFFLE</button>
+      </div>`;
+    return;
+  }
+
+  const s = STATE.swipeOrder[STATE.swipeIndex];
+  const cls = s.rating > 3 ? 'var(--green)' : s.rating < 2 ? 'var(--red)' : 'var(--yellow)';
+
+  el.innerHTML = `
+    <div class="swipe-container" id="swipeContainer">
+      <div class="swipe-overlay kiss" id="overlayKiss">KISS</div>
+      <div class="swipe-overlay kick" id="overlayKick">KICK</div>
+      <div class="swipe-card" id="swipeCard">
+        <div class="sc-name">${s.name}</div>
+        <div class="sc-roll">${s.roll}</div>
+        <div class="sc-score" style="color:${cls}">${s.rating.toFixed(2)}</div>
+        <div class="sc-kk">
+          <span style="color:var(--pink)">♥ ${s.kisses}</span>
+          <span style="color:var(--orange)">✖ ${s.kicks}</span>
+        </div>
+        <div class="sc-criteria">
+          <div class="sc-crit" style="color:var(--green)"><span>PERSONALITY</span><span>${s.personality.toFixed(1)}</span></div>
+          <div class="sc-crit" style="color:var(--green)"><span>COOL</span><span>${s.cool.toFixed(1)}</span></div>
+          <div class="sc-crit" style="color:var(--green)"><span>HELPFULNESS</span><span>${s.helpfulness.toFixed(1)}</span></div>
+          <div class="sc-crit" style="color:var(--red)"><span>PETTINESS</span><span>${s.pettiness.toFixed(1)}</span></div>
+          <div class="sc-crit" style="color:var(--red)"><span>HATE</span><span>${s.hate.toFixed(1)}</span></div>
+          <div class="sc-crit" style="color:var(--red)"><span>ANNOYING</span><span>${s.annoying.toFixed(1)}</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="swipe-hint">DRAG CARD OR USE BUTTONS</div>
+    <div class="swipe-actions">
+      <button class="pixel-btn pink" onclick="doSwipe('kiss')">♥ KISS</button>
+      <button class="pixel-btn yellow" onclick="skipSwipe()">SKIP</button>
+      <button class="pixel-btn red" onclick="doSwipe('kick')">✖ KICK</button>
+    </div>
+  `;
+
+  initSwipeDrag(s.roll);
+}
+
+function initSwipeDrag(roll) {
+  const card = document.getElementById('swipeCard');
+  if (!card) return;
+  const kissOv = document.getElementById('overlayKiss');
+  const kickOv = document.getElementById('overlayKick');
+  let startX = 0, currentX = 0, dragging = false;
+
+  card.addEventListener('pointerdown', e => {
+    startX = e.clientX;
+    dragging = true;
+    card.setPointerCapture(e.pointerId);
+    card.style.transition = 'none';
+  });
+
+  card.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    currentX = e.clientX - startX;
+    const rot = currentX * 0.06;
+    card.style.transform = `translateX(${currentX}px) rotate(${rot}deg)`;
+    const pct = Math.min(Math.abs(currentX) / 120, 1);
+    if (currentX > 0) {
+      kissOv.style.opacity = pct;
+      kickOv.style.opacity = 0;
+    } else {
+      kickOv.style.opacity = pct;
+      kissOv.style.opacity = 0;
+    }
+  });
+
+  card.addEventListener('pointerup', e => {
+    if (!dragging) return;
+    dragging = false;
+    if (currentX > 100) {
+      doSwipe('kiss', roll);
+    } else if (currentX < -100) {
+      doSwipe('kick', roll);
+    } else {
+      card.style.transition = 'transform 0.2s';
+      card.style.transform = '';
+      kissOv.style.opacity = 0;
+      kickOv.style.opacity = 0;
+    }
+    currentX = 0;
+  });
+
+  card.addEventListener('pointercancel', () => {
+    dragging = false;
+    card.style.transform = '';
+    kissOv.style.opacity = 0;
+    kickOv.style.opacity = 0;
+  });
+}
+
+function doSwipe(direction, roll) {
+  const s = STATE.swipeOrder[STATE.swipeIndex];
+  if (!s) return;
+  if (direction === 'kiss') sendKiss(s.roll);
+  else if (direction === 'kick') sendKick(s.roll);
+  animateOut(direction, () => {
+    STATE.swipeIndex++;
+    render();
+  });
+}
+
+function skipSwipe() {
+  animateOut('skip', () => {
+    STATE.swipeIndex++;
+    render();
+  });
+}
+
+function animateOut(direction, cb) {
+  const card = document.getElementById('swipeCard');
+  if (!card) { cb(); return; }
+  card.style.transition = 'transform 0.3s, opacity 0.3s';
+  if (direction === 'kiss') {
+    card.style.transform = 'translateX(400px) rotate(30deg)';
+    card.style.opacity = '0';
+  } else if (direction === 'kick') {
+    card.style.transform = 'translateX(-400px) rotate(-30deg)';
+    card.style.opacity = '0';
+  } else {
+    card.style.transform = 'translateY(-400px)';
+    card.style.opacity = '0';
+  }
+  setTimeout(cb, 320);
+}
+
+function resetSwipe() {
+  STATE.swipeOrder = [...STATE.students].sort(() => Math.random() - 0.5);
+  STATE.swipeIndex = 0;
+  render();
+}
+
+// ---------- UTILITIES ----------
+function formatDate(v) {
+  if (!v) return '—';
+  try {
+    const d = new Date(v);
+    if (isNaN(d.getTime())) return String(v).slice(0, 16);
+    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch { return String(v).slice(0, 16); }
+}
+
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let toastTimer;
+function toast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = isError ? 'error show' : 'show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = ''; }, 2500);
+}
+
+// ---------- NAV EVENTS ----------
+document.getElementById('nav').addEventListener('click', e => {
+  if (e.target.tagName === 'BUTTON') {
+    STATE.currentTab = e.target.dataset.tab;
+    STATE.currentStudent = null;
+    STATE.currentDetail = null;
+    render();
+  }
+});
+
+// ---------- INIT ----------
+loadAll();
+</script>
+</body>
+</html>
