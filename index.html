@@ -84,6 +84,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   .rating-badge{font-size:11px;min-width:58px;padding:5px 8px;border-width:2px}
   .kk-mini{font-size:6px}
 }
+/* roster sort bar */
+.sort-bar{display:flex;gap:6px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.sort-bar .sort-label{font-size:8px;color:var(--dim);letter-spacing:1px;padding:0 4px}
+.sort-bar .sort-btn{font-family:inherit;font-size:8px;padding:8px 10px;min-height:36px;
+  background:var(--surface);color:var(--dim);border:2px solid var(--border);
+  box-shadow:2px 2px 0 var(--black);cursor:pointer;letter-spacing:1px;
+  touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.sort-bar .sort-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
+.sort-bar .sort-btn.active{background:var(--cyan);color:var(--black);border-color:var(--cyan)}
+@media (max-width:520px){
+  .sort-bar .sort-btn{flex:1;font-size:7px;padding:8px 4px;min-width:0}
+  .sort-bar .sort-label{display:none}
+}
 .detail-header{text-align:center;padding:20px 14px;margin-bottom:14px}
 .detail-header .big-name{font-size:16px;color:var(--green);margin-bottom:8px;text-shadow:2px 2px 0 var(--black);word-break:break-word}
 .detail-header .big-roll{font-size:10px;color:var(--cyan);margin-bottom:14px}
@@ -288,14 +301,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
 <script>
 // ============================================================
-// F31N FILES — Frontend v7 (always fresh, server-authoritative)
+// F31N FILES — Frontend v8 (roster sorting)
 // ============================================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbxYQgcFPxAj1U1Hsi53Y9Ylueg5xLSIu-RSW6qApv8yx-jGAxXbagaFW8wdMhzlhEY1NQ/exec';
 
 const CK = 'f31n_';
-// Short TTLs — always revalidate from server
-const TTL_ROSTER = 30 * 1000;      // 30s only, for instant boot feel
-// No TTL for lore or leaderboard — always fetch
+const TTL_ROSTER = 30 * 1000;
 
 let STATE = {
   students: [],
@@ -317,10 +328,11 @@ let STATE = {
   swipeIndex: 0,
   rosterPage: 0,
   rosterPageSize: 30,
-  rosterQuery: ''
+  rosterQuery: '',
+  rosterSort: 'roll'
 };
 
-// ---------- LOCAL CACHE (roster only, short-lived) ----------
+// ---------- LOCAL CACHE (roster only) ----------
 function cWrite(key, data) {
   try { localStorage.setItem(CK + key, JSON.stringify({ t: Date.now(), d: data })); } catch(_){}
 }
@@ -393,14 +405,11 @@ function hideOverlay() {
   const ov = document.getElementById('submitOverlay');
   if (ov) ov.classList.remove('show');
 }
-
 function haptic(ms) {
   try { if (navigator.vibrate) navigator.vibrate(ms || 15); } catch(_){}
 }
 
-// ============================================================
-// STUDENT PATCH — single source of truth for updating any student
-// ============================================================
+// ---------- STUDENT PATCH ----------
 function patchStudent(updated) {
   if (!updated || !updated.roll) return;
   const roll = updated.roll;
@@ -408,21 +417,16 @@ function patchStudent(updated) {
   if (i >= 0) STATE.students[i] = { ...STATE.students[i], ...updated };
   else STATE.students.push(updated);
 
-  // swipe deck
   STATE.swipeOrder = STATE.swipeOrder.map(s => s.roll === roll ? { ...s, ...updated } : s);
 
-  // current detail
   if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
     STATE.currentDetail.student = { ...STATE.currentDetail.student, ...updated };
     cWrite('detail_' + roll, STATE.currentDetail);
   }
-
   cWrite('roster', STATE.students);
 }
 
-// ============================================================
-// BOOT
-// ============================================================
+// ---------- BOOT ----------
 async function boot() {
   const cachedRoster = cRead('roster', TTL_ROSTER);
 
@@ -518,9 +522,7 @@ function shuffle(arr) {
   return arr;
 }
 
-// ============================================================
-// RENDER
-// ============================================================
+// ---------- RENDER ----------
 function render() {
   document.querySelectorAll('#nav button').forEach(b => {
     b.classList.toggle('active', b.dataset.tab === STATE.currentTab);
@@ -589,18 +591,19 @@ function goHome() {
   backgroundRefresh();
 }
 
-// ============================================================
-// ROSTER
-// ============================================================
+// ---------- ROSTER ----------
 function renderRoster(el) {
   if (!STATE.students.length) {
     el.innerHTML = `<div class="empty">NO STUDENTS FOUND.</div>`;
     return;
   }
   const q = STATE.rosterQuery.trim().toLowerCase();
-  const filtered = q
+  let filtered = q
     ? STATE.students.filter(s => s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q))
-    : STATE.students;
+    : STATE.students.slice();
+
+  // sort
+  filtered = sortRoster(filtered, STATE.rosterSort);
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / STATE.rosterPageSize));
@@ -611,10 +614,16 @@ function renderRoster(el) {
   const badge = STATE.fromCache ? '<span class="cache-badge">CACHED</span>' : '';
 
   let html = `
-    <div style="margin-bottom:12px;">
+    <div style="margin-bottom:10px;">
       <input class="pixel-input" id="rosterSearch" type="search" placeholder="SEARCH NAME OR ROLL..."
              value="${esc(STATE.rosterQuery)}" oninput="onRosterSearch(this.value)"
              autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+    </div>
+    <div class="sort-bar">
+      <span class="sort-label">SORT:</span>
+      <button class="sort-btn ${STATE.rosterSort === 'roll' ? 'active' : ''}" onclick="setRosterSort('roll')">ROLL ↑</button>
+      <button class="sort-btn ${STATE.rosterSort === 'name' ? 'active' : ''}" onclick="setRosterSort('name')">NAME A-Z</button>
+      <button class="sort-btn ${STATE.rosterSort === 'rating' ? 'active' : ''}" onclick="setRosterSort('rating')">RATING ↓</button>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--dim);margin-bottom:10px;">
       <span>● ${total} RECORD${total !== 1 ? 'S' : ''} ${badge}</span>
@@ -654,6 +663,38 @@ function renderRoster(el) {
   el.innerHTML = html;
 }
 
+function setRosterSort(mode) {
+  if (STATE.rosterSort === mode) return;
+  haptic(10);
+  STATE.rosterSort = mode;
+  STATE.rosterPage = 0;
+  render();
+}
+
+function sortRoster(arr, mode) {
+  const copy = arr.slice();
+  if (mode === 'name') {
+    copy.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+  } else if (mode === 'rating') {
+    copy.sort((a, b) => b.rating - a.rating);
+  } else {
+    copy.sort((a, b) => compareRolls(a.roll, b.roll));
+  }
+  return copy;
+}
+
+function compareRolls(a, b) {
+  const parse = s => {
+    const m = String(s).match(/^(\d+)-(\d+)$/);
+    if (!m) return [Infinity, 0, String(s)];
+    return [Number(m[1]), Number(m[2]), String(s)];
+  };
+  const A = parse(a), B = parse(b);
+  if (A[0] !== B[0]) return A[0] - B[0];
+  if (A[1] !== B[1]) return A[1] - B[1];
+  return A[2].localeCompare(B[2]);
+}
+
 let _searchTimer;
 function onRosterSearch(val) {
   STATE.rosterQuery = val;
@@ -677,11 +718,8 @@ function rosterPage(d) {
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ============================================================
-// LORE FEED — renders ALL posts, always fresh
-// ============================================================
+// ---------- LORE FEED ----------
 function loadLore() {
-  // no cache — always fetch
   api('alllore').then(data => {
     if (Array.isArray(data)) {
       STATE.loreFeed = data;
@@ -715,7 +753,6 @@ function renderLore(el) {
   if (!STATE.loreFeed.length) {
     html += `<div class="empty">NO LORE POSTS YET.<br><br>Be the first to drop one.</div>`;
   } else {
-    // render ALL — no slicing
     STATE.loreFeed.forEach((l, i) => {
       const scoreCls = l.score > 0 ? 'pos' : l.score < 0 ? 'neg' : 'zero';
       const rankCls = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
@@ -768,21 +805,18 @@ async function submitLorePost() {
 
     document.getElementById('loreComposerText').value = '';
 
-    // prepend new post at top
     const newPost = {
       id: res.id, roll: res.roll, name: res.name, text: res.text,
       kiss: 0, kick: 0, score: 0
     };
     STATE.loreFeed = [newPost, ...STATE.loreFeed];
 
-    // patch student with server-returned full object (updates loreCount)
     if (res.updated) patchStudent(res.updated);
 
     toast('LORE POSTED');
     haptic([15, 30, 15]);
     render();
 
-    // silent refresh of leaderboard next visit
     api('leaderboard').then(x => { if (x && !x.error) STATE.leaderboard = x; }).catch(() => {});
   } catch (err) {
     hideOverlay();
@@ -793,11 +827,8 @@ async function submitLorePost() {
   }
 }
 
-// Vote lore — uses server-returned totals (never stuck)
 async function voteLoreFeed(loreId, vote) {
   haptic(10);
-
-  // 1) optimistic local bump
   const post = STATE.loreFeed.find(p => p.id === loreId);
   const prev = post ? { kiss: post.kiss, kick: post.kick, score: post.score } : null;
   if (post) {
@@ -810,7 +841,6 @@ async function voteLoreFeed(loreId, vote) {
 
   try {
     const res = await apiWrite('voteLore', { loreId, vote }, 2);
-    // 2) authoritative — overwrite with server values
     if (post && typeof res.kiss === 'number' && typeof res.kick === 'number') {
       post.kiss = res.kiss;
       post.kick = res.kick;
@@ -820,7 +850,6 @@ async function voteLoreFeed(loreId, vote) {
     }
     toast(vote === 'kiss' ? '♥ KISSED' : '✖ KICKED');
   } catch (err) {
-    // 3) rollback
     if (post && prev) {
       post.kiss = prev.kiss;
       post.kick = prev.kick;
@@ -838,9 +867,7 @@ function openDetailFromLore(roll) {
   openDetail(roll);
 }
 
-// ============================================================
-// LEADERBOARD — always fresh, never cached
-// ============================================================
+// ---------- LEADERBOARD ----------
 function loadLeaderboard(force) {
   if (force) STATE.leaderboard = null;
   api('leaderboard').then(x => {
@@ -853,8 +880,6 @@ function loadLeaderboard(force) {
 
 function renderLeaderboard(el) {
   const lb = STATE.leaderboard;
-
-  // if we don't have it yet, fetch fresh
   if (!lb) {
     el.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING BOARD...</div>`;
     loadLeaderboard(false);
@@ -915,9 +940,7 @@ function renderLeaderboard(el) {
 
 function setLbTab(k) { haptic(10); STATE.lbTab = k; render(); }
 
-// ============================================================
-// DETAIL
-// ============================================================
+// ---------- DETAIL ----------
 async function openDetail(roll) {
   STATE.currentStudent = roll;
   STATE.currentDetail = null;
@@ -1123,9 +1146,7 @@ function loreItem(l) {
     </div>`;
 }
 
-// ============================================================
-// ACTIONS
-// ============================================================
+// ---------- ACTIONS ----------
 async function submitEval(roll) {
   const form = document.getElementById('evalForm');
   if (!form) return;
@@ -1160,11 +1181,8 @@ async function submitEval(roll) {
     if (res.updated) {
       const prev = STATE.students.find(s => s.roll === roll);
       oldRating = prev ? prev.rating : null;
-
-      // AUTHORITATIVE patch — server owns the truth
       patchStudent(res.updated);
 
-      // add entry to current detail
       if (STATE.currentDetail) {
         const newEntry = {
           time: new Date(),
@@ -1182,7 +1200,6 @@ async function submitEval(roll) {
       }
     }
 
-    // invalidate leaderboard — refresh silently
     STATE.leaderboard = null;
     loadLeaderboard(false);
 
@@ -1224,14 +1241,12 @@ async function addLore(roll, name) {
 
     if (res.updated) patchStudent(res.updated);
     else {
-      // reload detail to be safe
       const d = await api('detail', { roll });
       STATE.currentDetail = d;
       cWrite('detail_' + roll, d);
     }
 
     render();
-    // refresh lore feed in background
     loadLore();
   } catch (err) {
     hideOverlay();
@@ -1240,7 +1255,6 @@ async function addLore(roll, name) {
   }
 }
 
-// Detail-view lore vote — use server totals
 async function voteLore(loreId, vote) {
   haptic(10);
   try {
@@ -1248,7 +1262,6 @@ async function voteLore(loreId, vote) {
     toast(vote === 'kiss' ? '♥ KISSED' : '✖ KICKED');
     const roll = STATE.currentStudent;
 
-    // update local lore list in current detail
     if (STATE.currentDetail && Array.isArray(STATE.currentDetail.lore)) {
       const item = STATE.currentDetail.lore.find(l => l.id === loreId);
       if (item) {
@@ -1258,16 +1271,12 @@ async function voteLore(loreId, vote) {
       cWrite('detail_' + roll, STATE.currentDetail);
       render();
     }
-    // also refresh the global lore feed silently
     loadLore();
   } catch (err) { toast('FAILED: ' + err.message, true); }
 }
 
-// Kiss/kick — use server-returned totals (never stuck)
 async function sendKiss(roll) {
   haptic(12);
-
-  // optimistic bump
   const s = STATE.students.find(x => x.roll === roll);
   const prevKiss = s ? s.kisses : 0;
   if (s) s.kisses++;
@@ -1276,8 +1285,6 @@ async function sendKiss(roll) {
 
   try {
     const res = await apiWrite('kiss', { roll }, 2);
-
-    // AUTHORITATIVE — use exact server values
     if (res.updated) patchStudent(res.updated);
     else if (s && typeof res.kisses === 'number') {
       s.kisses = res.kisses;
@@ -1287,7 +1294,6 @@ async function sendKiss(roll) {
     toast('♥ KISS SENT');
     haptic([15, 30, 15]);
 
-    // refresh leaderboard silently
     STATE.leaderboard = null;
     loadLeaderboard(false);
     render();
@@ -1333,9 +1339,7 @@ async function sendKick(roll) {
   }
 }
 
-// ============================================================
-// SWIPE
-// ============================================================
+// ---------- SWIPE ----------
 function renderSwipe(el) {
   if (!STATE.swipeOrder.length) {
     el.innerHTML = `<div class="empty">NO PROFILES TO SWIPE.</div>`;
@@ -1483,9 +1487,7 @@ function animateOut(d, cb) {
   setTimeout(cb, 320);
 }
 
-// ============================================================
-// UTILS
-// ============================================================
+// ---------- UTILS ----------
 function formatDate(v) {
   if (!v) return '—';
   try {
@@ -1506,9 +1508,7 @@ function toast(msg, isErr) {
   toastTimer = setTimeout(() => { t.className = ''; }, 4000);
 }
 
-// ============================================================
-// EVENTS
-// ============================================================
+// ---------- EVENTS ----------
 document.getElementById('nav').addEventListener('click', e => {
   if (e.target.tagName === 'BUTTON') {
     haptic(10);
@@ -1525,13 +1525,9 @@ document.getElementById('nav').addEventListener('click', e => {
       loadLeaderboard(false);
       return;
     }
-    if (tab === 'lore') {
-      loadLore();
-    }
-    if (tab === 'roster' && !STATE.students.length) {
-      loadRoster();
-      return;
-    }
+    if (tab === 'lore') loadLore();
+    if (tab === 'roster' && !STATE.students.length) { loadRoster(); return; }
+
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
