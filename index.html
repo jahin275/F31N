@@ -246,7 +246,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   box-shadow:5px 5px 0 var(--black);cursor:pointer;letter-spacing:2px;touch-action:manipulation;flex:1}
 .swipe-actions button:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--black)}
 #submitOverlay{position:fixed;inset:0;background:rgba(10,10,26,.94);display:none;
-  align-items:center;justify-content:center;z-index:9998;flex-direction:column;gap:20px;
+  align-items:center;justify-content:center;z-index:9998;flex-direction:column;gap:16px;
   padding:var(--sat) var(--sar) var(--sab) var(--sal)}
 #submitOverlay.show{display:flex}
 #submitOverlay .ovr-title{font-size:13px;color:var(--green);letter-spacing:3px;animation:blink 1s infinite;text-align:center}
@@ -262,19 +262,24 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 #toast.error{background:var(--red);color:#fff}
 @media (min-width:641px){ #toast{bottom:calc(24px + var(--sab))} }
-.loading{text-align:center;padding:40px 20px;color:var(--dim);font-size:11px}
+.loading{text-align:center;padding:32px 20px;color:var(--dim);font-size:11px}
 .loading .blink{animation:blink .8s infinite}
 @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 .empty{text-align:center;padding:40px 20px;color:var(--dim);font-size:10px;line-height:2}
-/* -------- Flappy game -------- */
-.flappy-wrap{margin:18px auto 0;width:300px;max-width:92%;position:relative}
-#flappyCanvas{display:block;width:100%;height:auto;background:#05050f;
+
+/* -------- Flappy canvas (shared) -------- */
+.flappy-wrap{margin:16px auto 0;width:280px;max-width:92%;position:relative}
+.flappy-wrap canvas{display:block;width:100%;height:auto;background:#05050f;
   border:3px solid var(--border);box-shadow:5px 5px 0 var(--black);
   touch-action:none;cursor:pointer;image-rendering:pixelated;image-rendering:crisp-edges}
 .flappy-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
   font-size:7px;color:var(--green);letter-spacing:1px;animation:blink 1.2s infinite;
   pointer-events:none;text-shadow:1px 1px 0 var(--black)}
 .flappy-label{font-size:7px;color:var(--dim);letter-spacing:2px;margin-top:8px;text-align:center}
+/* Overlay variant (smaller canvas) */
+#submitOverlay .flappy-wrap{width:220px;margin:4px auto 0}
+#submitOverlay .flappy-wrap canvas{box-shadow:4px 4px 0 var(--black)}
+
 @media (max-width:520px){
   .header{padding:12px 0 12px;margin-bottom:14px}
   .header h1{font-size:18px;letter-spacing:2px}
@@ -304,12 +309,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 <div id="submitOverlay">
   <div class="ovr-title">◤ PROCESSING EVALUATION ◢</div>
   <div class="ovr-bar"><div></div></div>
+  <div class="flappy-wrap">
+    <canvas class="flappy-canvas" id="overlayFlappy" width="220" height="130"></canvas>
+  </div>
   <div class="ovr-sub">UPLOADING AND RECALCULATING RATING...</div>
 </div>
 
 <script>
 // ============================================================
-// F31N FILES — Frontend v8 (perf + flappy bird)
+// F31N FILES — Frontend v9 (flappy everywhere)
 // ============================================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbxYQgcFPxAj1U1Hsi53Y9Ylueg5xLSIu-RSW6qApv8yx-jGAxXbagaFW8wdMhzlhEY1NQ/exec';
 
@@ -340,7 +348,7 @@ let STATE = {
   rosterSort: 'roll'
 };
 
-// ---------- LOCAL CACHE (roster only) ----------
+// ---------- LOCAL CACHE ----------
 function cWrite(key, data) {
   try { localStorage.setItem(CK + key, JSON.stringify({ t: Date.now(), d: data })); } catch(_){}
 }
@@ -408,10 +416,15 @@ function showOverlay(title, sub) {
   if (title) ov.querySelector('.ovr-title').textContent = title;
   if (sub) ov.querySelector('.ovr-sub').textContent = sub;
   ov.classList.add('show');
+  const canvas = ov.querySelector('.flappy-canvas');
+  if (canvas) startGameOn(canvas);
 }
 function hideOverlay() {
   const ov = document.getElementById('submitOverlay');
-  if (ov) ov.classList.remove('show');
+  if (!ov) return;
+  const canvas = ov.querySelector('.flappy-canvas');
+  if (canvas) stopGameOn(canvas);
+  ov.classList.remove('show');
 }
 function haptic(ms) {
   try { if (navigator.vibrate) navigator.vibrate(ms || 15); } catch(_){}
@@ -436,6 +449,231 @@ function patchStudent(updated) {
     cWrite('detail_' + roll, STATE.currentDetail);
   }
   cWrite('roster', STATE.students);
+}
+
+// ============================================================
+// FLAPPY BIRD — instance factory
+// ============================================================
+function createFlappy(canvas, hintEl) {
+  const W = canvas.width;
+  const H = canvas.height;
+  const ctx = canvas.getContext('2d', { alpha: false });
+
+  const GRAVITY   = 0.45;
+  const JUMP      = -6.2;
+  const GAP       = Math.max(50, Math.round(H * 0.36));
+  const PIPE_W    = 28;
+  const SPEED     = 1.9;
+  const SPAWN     = 76;
+  const MIN_TOP   = 20;
+  const SAFE_PAD  = 18;
+
+  const bird = { x: 58, y: H / 2, vy: 0, r: 6 };
+
+  let pipes = [];
+  let frame = 0;
+  let lastSpawn = 0;
+  let score = 0;
+  let best = 0;
+  let started = false;
+  let raf = null;
+  let running = false;
+
+  function reset() {
+    bird.x = 58;
+    bird.y = H / 2;
+    bird.vy = 0;
+    pipes.length = 0;
+    score = 0;
+    started = false;
+    lastSpawn = frame;
+    if (hintEl) hintEl.style.display = '';
+  }
+
+  function flap() {
+    if (!running) return;
+    if (!started) {
+      started = true;
+      lastSpawn = frame;
+      if (hintEl) hintEl.style.display = 'none';
+    }
+    bird.vy = JUMP;
+    haptic(5);
+  }
+
+  function onPointer(e) {
+    if (e && e.cancelable) e.preventDefault();
+    flap();
+  }
+
+  function loop() {
+    if (!running) return;
+
+    if (started) {
+      bird.vy += GRAVITY;
+      bird.y  += bird.vy;
+
+      if (frame - lastSpawn >= SPAWN) {
+        lastSpawn = frame;
+        const minT = MIN_TOP;
+        const maxT = H - GAP - SAFE_PAD;
+        const top  = minT + Math.random() * (maxT - minT);
+        pipes.push({ x: W, top: top, scored: false });
+      }
+
+      for (let i = pipes.length - 1; i >= 0; i--) {
+        const p = pipes[i];
+        p.x -= SPEED;
+        if (!p.scored && p.x + PIPE_W < bird.x) {
+          p.scored = true;
+          score++;
+          if (score > best) best = score;
+        }
+        if (p.x + PIPE_W < 0) pipes.splice(i, 1);
+      }
+
+      let dead = false;
+      if (bird.y - bird.r < 0 || bird.y + bird.r > H) dead = true;
+      else {
+        for (let j = 0; j < pipes.length; j++) {
+          const p = pipes[j];
+          if (bird.x + bird.r > p.x && bird.x - bird.r < p.x + PIPE_W) {
+            if (bird.y - bird.r < p.top || bird.y + bird.r > p.top + GAP) {
+              dead = true; break;
+            }
+          }
+        }
+      }
+      if (dead) {
+        haptic([18, 36, 18]);
+        reset();
+      }
+    }
+
+    // --- draw ---
+    ctx.fillStyle = '#05050f';
+    ctx.fillRect(0, 0, W, H);
+
+    // parallax stars
+    ctx.fillStyle = 'rgba(57,255,20,0.22)';
+    const off = (frame * 0.5) % W;
+    for (let i = 0; i < 10; i++) {
+      const x = (i * 41 + 11 - off + W) % W;
+      const y = (i * 23 + 7) % H;
+      ctx.fillRect(x | 0, y | 0, 1, 1);
+    }
+
+    // pipes
+    for (let i = 0; i < pipes.length; i++) {
+      const p = pipes[i];
+      const px = p.x | 0;
+      const top = p.top | 0;
+      const bot = (p.top + GAP) | 0;
+      ctx.fillStyle = '#39ff14';
+      ctx.fillRect(px, 0, PIPE_W, top);
+      ctx.fillRect(px, bot, PIPE_W, H - bot);
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.fillRect(px + 3, 0, 3, top);
+      ctx.fillRect(px + 3, bot, 3, H - bot);
+    }
+
+    // bird
+    ctx.fillStyle = '#ffd700';
+    ctx.fillRect((bird.x - bird.r) | 0, (bird.y - bird.r) | 0, bird.r * 2, bird.r * 2);
+    ctx.fillStyle = '#ff3131';
+    ctx.fillRect((bird.x + 2) | 0, (bird.y - 2) | 0, 3, 3);
+
+    // scoreboard
+    ctx.font = '9px monospace';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    ctx.fillText('SCORE ' + score, 6, 12);
+    ctx.textAlign = 'right';
+    ctx.fillText('BEST ' + best, W - 6, 12);
+
+    if (!started) {
+      ctx.fillStyle = 'rgba(0,0,0,0.55)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#39ff14';
+      ctx.font = 'bold 11px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('TAP TO FLAP', W / 2, H / 2 + 4);
+    }
+
+    frame++;
+    raf = requestAnimationFrame(loop);
+  }
+
+  function start() {
+    if (running) return;
+    running = true;
+    reset();
+    frame = 0;
+    if (window.PointerEvent) {
+      canvas.addEventListener('pointerdown', onPointer);
+    } else {
+      canvas.addEventListener('touchstart', onPointer, { passive: false });
+      canvas.addEventListener('mousedown', onPointer);
+    }
+    raf = requestAnimationFrame(loop);
+  }
+
+  function stop() {
+    if (!running) return;
+    running = false;
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+    if (window.PointerEvent) {
+      canvas.removeEventListener('pointerdown', onPointer);
+    } else {
+      canvas.removeEventListener('touchstart', onPointer);
+      canvas.removeEventListener('mousedown', onPointer);
+    }
+  }
+
+  return { start: start, stop: stop };
+}
+
+// Game registry — keyed on the canvas element itself
+function startGameOn(canvas) {
+  if (!canvas) return;
+  if (canvas._f31nGame) return;
+  const wrap = canvas.parentElement;
+  const hint = wrap ? wrap.querySelector('.flappy-hint') : null;
+  const game = createFlappy(canvas, hint);
+  canvas._f31nGame = game;
+  game.start();
+}
+function stopGameOn(canvas) {
+  if (!canvas || !canvas._f31nGame) return;
+  canvas._f31nGame.stop();
+  canvas._f31nGame = null;
+}
+// Stop every game inside the main content area (never touches the overlay)
+function stopContentGames() {
+  const all = document.querySelectorAll('#content canvas.flappy-canvas');
+  for (let i = 0; i < all.length; i++) stopGameOn(all[i]);
+}
+
+// Build a flappy-loading block for insertion into #content
+let _flappyIdSeq = 0;
+function flappyLoadingBlock(msg) {
+  const id = 'flappyInline' + (++_flappyIdSeq);
+  return {
+    id: id,
+    html: `
+      <div class="loading">
+        <div><span class="blink">▮</span> ${msg}</div>
+        <div class="flappy-wrap">
+          <canvas class="flappy-canvas" id="${id}" width="280" height="160"></canvas>
+          <div class="flappy-hint">TAP TO FLAP</div>
+        </div>
+      </div>`
+  };
+}
+function mountFlappyBlock(el, block) {
+  el.innerHTML = block.html;
+  startGameOn(document.getElementById(block.id));
 }
 
 // ---------- BOOT ----------
@@ -536,194 +774,6 @@ function shuffle(arr) {
 }
 
 // ============================================================
-// FLAPPY BIRD (loading screen minigame)
-// ============================================================
-const FLAPPY = {
-  raf: null,
-  running: false,
-  canvas: null,
-  ctx: null,
-  W: 300, H: 180,
-  bird: { x: 60, y: 90, vy: 0, r: 7 },
-  pipes: [],
-  frame: 0,
-  lastSpawn: 0,
-  score: 0,
-  best: 0,
-  started: false,
-  // tuning
-  gravity: 0.45,
-  jump: -6.2,
-  gap: 62,
-  pipeW: 30,
-  speed: 1.9,
-  spawnEvery: 78,
-  minTop: 22,
-  safePad: 22
-};
-
-function flappyStart() {
-  const canvas = document.getElementById('flappyCanvas');
-  if (!canvas) return;
-  FLAPPY.canvas = canvas;
-  FLAPPY.ctx = canvas.getContext('2d', { alpha: false });
-  flappyReset();
-  FLAPPY.frame = 0;
-  FLAPPY.best = FLAPPY.best || 0;
-  FLAPPY.running = true;
-  canvas.addEventListener('pointerdown', flappyFlap);
-  canvas.addEventListener('touchstart', flappyTouchStart, { passive: false });
-  FLAPPY.raf = requestAnimationFrame(flappyLoop);
-}
-
-function flappyStop() {
-  if (!FLAPPY.running) return;
-  FLAPPY.running = false;
-  if (FLAPPY.raf) cancelAnimationFrame(FLAPPY.raf);
-  FLAPPY.raf = null;
-  const c = FLAPPY.canvas;
-  if (c) {
-    c.removeEventListener('pointerdown', flappyFlap);
-    c.removeEventListener('touchstart', flappyTouchStart);
-  }
-  FLAPPY.canvas = null;
-  FLAPPY.ctx = null;
-}
-
-function flappyTouchStart(e) {
-  e.preventDefault();
-  flappyFlap();
-}
-
-function flappyReset() {
-  FLAPPY.bird.x = 60;
-  FLAPPY.bird.y = 90;
-  FLAPPY.bird.vy = 0;
-  FLAPPY.pipes.length = 0;
-  FLAPPY.score = 0;
-  FLAPPY.started = false;
-  FLAPPY.lastSpawn = FLAPPY.frame;
-  const hint = document.getElementById('flappyHint');
-  if (hint) hint.style.display = '';
-}
-
-function flappyFlap() {
-  if (!FLAPPY.running) return;
-  if (!FLAPPY.started) {
-    FLAPPY.started = true;
-    FLAPPY.lastSpawn = FLAPPY.frame;
-    const hint = document.getElementById('flappyHint');
-    if (hint) hint.style.display = 'none';
-  }
-  FLAPPY.bird.vy = FLAPPY.jump;
-  haptic(6);
-}
-
-function flappyLoop() {
-  if (!FLAPPY.running) return;
-  const ctx = FLAPPY.ctx;
-  if (!ctx) return;
-  const W = FLAPPY.W, H = FLAPPY.H;
-  const b = FLAPPY.bird;
-
-  if (FLAPPY.started) {
-    b.vy += FLAPPY.gravity;
-    b.y += b.vy;
-
-    if (FLAPPY.frame - FLAPPY.lastSpawn >= FLAPPY.spawnEvery) {
-      FLAPPY.lastSpawn = FLAPPY.frame;
-      const minT = FLAPPY.minTop;
-      const maxT = H - FLAPPY.gap - FLAPPY.safePad;
-      const top = minT + Math.random() * (maxT - minT);
-      FLAPPY.pipes.push({ x: W, top: top, scored: false });
-    }
-
-    const pipes = FLAPPY.pipes;
-    for (let i = pipes.length - 1; i >= 0; i--) {
-      const p = pipes[i];
-      p.x -= FLAPPY.speed;
-      if (!p.scored && p.x + FLAPPY.pipeW < b.x) {
-        p.scored = true;
-        FLAPPY.score++;
-        if (FLAPPY.score > FLAPPY.best) FLAPPY.best = FLAPPY.score;
-      }
-      if (p.x + FLAPPY.pipeW < 0) pipes.splice(i, 1);
-    }
-
-    // collision
-    let dead = false;
-    if (b.y - b.r < 0 || b.y + b.r > H) dead = true;
-    else {
-      for (let i = 0; i < pipes.length; i++) {
-        const p = pipes[i];
-        if (b.x + b.r > p.x && b.x - b.r < p.x + FLAPPY.pipeW) {
-          if (b.y - b.r < p.top || b.y + b.r > p.top + FLAPPY.gap) { dead = true; break; }
-        }
-      }
-    }
-    if (dead) {
-      haptic([20, 40, 20]);
-      flappyReset();
-    }
-  }
-
-  // ---- draw ----
-  ctx.fillStyle = '#05050f';
-  ctx.fillRect(0, 0, W, H);
-
-  // parallax dots
-  ctx.fillStyle = 'rgba(57,255,20,0.22)';
-  const off = (FLAPPY.frame * 0.5) % W;
-  for (let i = 0; i < 12; i++) {
-    const x = (i * 37 + 11 - off + W) % W;
-    const y = (i * 29 + 7) % H;
-    ctx.fillRect(x | 0, y | 0, 1, 1);
-  }
-
-  // pipes
-  ctx.fillStyle = '#39ff14';
-  for (let i = 0; i < FLAPPY.pipes.length; i++) {
-    const p = FLAPPY.pipes[i];
-    const px = p.x | 0;
-    const top = p.top | 0;
-    const bot = (p.top + FLAPPY.gap) | 0;
-    ctx.fillRect(px, 0, FLAPPY.pipeW, top);
-    ctx.fillRect(px, bot, FLAPPY.pipeW, H - bot);
-    // pixel shine
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    ctx.fillRect(px + 3, 0, 3, top);
-    ctx.fillRect(px + 3, bot, 3, H - bot);
-    ctx.fillStyle = '#39ff14';
-  }
-
-  // bird (pixel block)
-  ctx.fillStyle = '#ffd700';
-  ctx.fillRect((b.x - b.r) | 0, (b.y - b.r) | 0, b.r * 2, b.r * 2);
-  ctx.fillStyle = '#ff3131';
-  ctx.fillRect((b.x + 2) | 0, (b.y - 3) | 0, 3, 3);
-
-  // scoreboard
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '10px monospace';
-  ctx.textAlign = 'left';
-  ctx.fillText('SCORE ' + FLAPPY.score, 6, 14);
-  ctx.textAlign = 'right';
-  ctx.fillText('BEST ' + FLAPPY.best, W - 6, 14);
-
-  if (!FLAPPY.started) {
-    ctx.fillStyle = 'rgba(0,0,0,0.55)';
-    ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#39ff14';
-    ctx.font = 'bold 14px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('TAP TO FLAP', W / 2, H / 2 + 5);
-  }
-
-  FLAPPY.frame++;
-  FLAPPY.raf = requestAnimationFrame(flappyLoop);
-}
-
-// ============================================================
 // RENDER (rAF-batched)
 // ============================================================
 let _renderQueued = false;
@@ -740,7 +790,6 @@ function _doRenderRaf() {
 }
 
 function _doRender() {
-  // nav state
   const navBtns = document.querySelectorAll('#nav button');
   for (let i = 0; i < navBtns.length; i++) {
     navBtns[i].classList.toggle('active', navBtns[i].dataset.tab === STATE.currentTab);
@@ -752,20 +801,10 @@ function _doRender() {
     renderLoading(content);
     return;
   }
-  // Leaving loading: stop the minigame & tick timer
   if (_loadTickTimer) { clearInterval(_loadTickTimer); _loadTickTimer = null; }
-  flappyStop();
-  content.dataset.mode = '';
 
   if (STATE.error && !STATE.students.length) {
-    content.innerHTML = `
-      <div class="pixel-box" style="text-align:center;padding:30px;">
-        <div style="font-size:14px;color:var(--red);margin-bottom:12px;">⚠ CONNECTION FAILED</div>
-        <div style="font-size:9px;color:var(--text);margin-bottom:16px;line-height:2;word-break:break-word;">${esc(STATE.error)}</div>
-        <button class="pixel-btn green wide" onclick="loadRoster()">▶ RETRY</button>
-        <div style="height:10px"></div>
-        <button class="pixel-btn wide" onclick="hardReset()">↻ CLEAR CACHE</button>
-      </div>`;
+    renderError(content);
     return;
   }
 
@@ -781,20 +820,22 @@ function _doRender() {
   }
 }
 
+// ---------- LOADING (boot) ----------
 function renderLoading(el) {
-  // If already showing the game, only refresh text (don't nuke canvas)
+  // Reuse existing canvas to avoid killing the running game
   if (el.dataset.mode === 'loading' && el.querySelector('#flappyCanvas')) {
     const s = document.getElementById('loadStatus');
     if (s) s.textContent = STATE.status || 'LOADING...';
     return;
   }
+  stopContentGames();
   el.dataset.mode = 'loading';
   el.innerHTML = `
     <div class="loading">
       <div><span class="blink">▮</span> <span id="loadStatus">${esc(STATE.status || 'LOADING...')}</span></div>
       <div style="margin-top:10px;font-size:10px;color:var(--yellow);" id="loadSecs">0s</div>
       <div class="flappy-wrap">
-        <canvas id="flappyCanvas" width="300" height="180"></canvas>
+        <canvas class="flappy-canvas" id="flappyCanvas" width="300" height="180"></canvas>
         <div class="flappy-hint" id="flappyHint">TAP TO FLAP</div>
       </div>
       <div class="flappy-label">► F31N BIRD — v1.0 ◄</div>
@@ -803,7 +844,7 @@ function renderLoading(el) {
         After that, everything is cached and instant.
       </div>
     </div>`;
-  flappyStart();
+  startGameOn(document.getElementById('flappyCanvas'));
   startLoadTick();
 }
 
@@ -819,6 +860,23 @@ function startLoadTick() {
     const secs = STATE.loadingStart ? Math.floor((Date.now() - STATE.loadingStart) / 1000) : 0;
     el.textContent = secs + 's';
   }, 500);
+}
+
+// ---------- ERROR SCREEN ----------
+function renderError(el) {
+  stopContentGames();
+  el.dataset.mode = 'error';
+  const block = flappyLoadingBlock('CONNECTION FAILED');
+  el.innerHTML = `
+    <div class="pixel-box" style="text-align:center;padding:24px;">
+      <div style="font-size:14px;color:var(--red);margin-bottom:12px;">⚠ CONNECTION FAILED</div>
+      <div style="font-size:9px;color:var(--text);margin-bottom:16px;line-height:2;word-break:break-word;">${esc(STATE.error)}</div>
+      <button class="pixel-btn green wide" onclick="loadRoster()">▶ RETRY</button>
+      <div style="height:10px"></div>
+      <button class="pixel-btn wide" onclick="hardReset()">↻ CLEAR CACHE</button>
+    </div>
+    ${block.html}`;
+  startGameOn(document.getElementById(block.id));
 }
 
 function hardReset() {
@@ -845,6 +903,9 @@ function goHome() {
 
 // ---------- ROSTER ----------
 function renderRoster(el) {
+  stopContentGames();
+  el.dataset.mode = 'roster';
+
   if (!STATE.students.length) {
     el.innerHTML = `<div class="empty">NO STUDENTS FOUND.</div>`;
     return;
@@ -981,6 +1042,9 @@ function loadLore() {
 }
 
 function renderLore(el) {
+  stopContentGames();
+  el.dataset.mode = 'lore';
+
   let rollOpts = '';
   for (let i = 0; i < STATE.students.length; i++) {
     const s = STATE.students[i];
@@ -1053,7 +1117,6 @@ async function submitLorePost() {
   const t0 = Date.now();
   try {
     const res = await apiWrite('addlore', { roll, name, text }, 2);
-
     const elapsed = Date.now() - t0;
     if (elapsed < 600) await new Promise(r => setTimeout(r, 600 - elapsed));
     hideOverlay();
@@ -1134,12 +1197,17 @@ function loadLeaderboard(force) {
 }
 
 function renderLeaderboard(el) {
+  stopContentGames();
+
   const lb = STATE.leaderboard;
   if (!lb) {
-    el.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING BOARD...</div>`;
+    el.dataset.mode = 'leaderboard-loading';
+    const block = flappyLoadingBlock('LOADING BOARD...');
+    mountFlappyBlock(el, block);
     loadLeaderboard(false);
     return;
   }
+  el.dataset.mode = 'leaderboard';
 
   const tabs = [
     { k: 'topRated',   label: 'TOP' },
@@ -1224,7 +1292,10 @@ function closeDetail() {
 }
 
 function renderDetail(el) {
+  stopContentGames();
+
   if (STATE.detailError) {
+    el.dataset.mode = 'detail-error';
     el.innerHTML = `
       <button class="pixel-btn wide" onclick="closeDetail()" style="margin-bottom:12px;">← BACK</button>
       <div class="pixel-box" style="text-align:center;padding:30px;">
@@ -1235,9 +1306,12 @@ function renderDetail(el) {
     return;
   }
   if (!STATE.currentDetail) {
-    el.innerHTML = `<div class="loading"><span class="blink">▮</span> LOADING FILE...</div>`;
+    el.dataset.mode = 'detail-loading';
+    const block = flappyLoadingBlock('LOADING FILE...');
+    mountFlappyBlock(el, block);
     return;
   }
+  el.dataset.mode = 'detail';
 
   const s = STATE.currentDetail.student;
   const entries = STATE.currentDetail.entries;
@@ -1246,18 +1320,8 @@ function renderDetail(el) {
   const pos = (s.positive !== undefined) ? s.positive : ((s.personality + s.cool + s.helpfulness) / 3);
   const neg = (s.negative !== undefined) ? s.negative : 0;
 
-  let loreHtml;
-  if (lore.length) {
-    loreHtml = lore.map(loreItem).join('');
-  } else {
-    loreHtml = '<div class="empty">NO LORE YET.</div>';
-  }
-  let entriesHtml;
-  if (entries.length) {
-    entriesHtml = entries.map(entryItem).join('');
-  } else {
-    entriesHtml = '<div class="empty">NO EVALUATIONS YET.</div>';
-  }
+  let loreHtml = lore.length ? lore.map(loreItem).join('') : '<div class="empty">NO LORE YET.</div>';
+  let entriesHtml = entries.length ? entries.map(entryItem).join('') : '<div class="empty">NO EVALUATIONS YET.</div>';
 
   el.innerHTML = `
     <button class="pixel-btn wide" onclick="closeDetail()" style="margin-bottom:12px;">← BACK</button>
@@ -1321,15 +1385,13 @@ function renderDetail(el) {
     <div>${entriesHtml}</div>
   `;
 
-  // init stars data
   const inputs = el.querySelectorAll('.star-input');
   for (let i = 0; i < inputs.length; i++) inputs[i].dataset.value = '0';
+  _evalBtn = null;
   updateEvalButtonState();
 }
 
-// Cached ref for eval button
 let _evalBtn = null;
-
 function updateEvalButtonState() {
   const form = document.getElementById('evalForm');
   if (!form) { _evalBtn = null; return; }
@@ -1468,7 +1530,6 @@ async function submitEval(roll) {
 
     STATE.leaderboard = null;
     loadLeaderboard(false);
-
     render();
 
     const bigScore = document.querySelector('.big-score');
@@ -1619,6 +1680,9 @@ async function sendKick(roll) {
 
 // ---------- SWIPE ----------
 function renderSwipe(el) {
+  stopContentGames();
+  el.dataset.mode = 'swipe';
+
   if (!STATE.swipeOrder.length) {
     el.innerHTML = `<div class="empty">NO PROFILES TO SWIPE.</div>`;
     return;
@@ -1692,11 +1756,10 @@ function initSwipeDrag() {
   let sx = 0, sy = 0, cx = 0;
   let drag = false;
   let lockedAxis = null;
-  let activeId = null;
 
-  function begin(x, y, id) {
+  function begin(x, y) {
     sx = x; sy = y; cx = 0;
-    drag = true; lockedAxis = null; activeId = id;
+    drag = true; lockedAxis = null;
     card.style.transition = 'none';
   }
   function move(x, y, ev) {
@@ -1720,7 +1783,6 @@ function initSwipeDrag() {
     const wasX = lockedAxis === 'x';
     const d = cx;
     lockedAxis = null;
-    activeId = null;
     if (wasX && d > 90) { haptic(15); doSwipe('kiss'); }
     else if (wasX && d < -90) { haptic(15); doSwipe('kick'); }
     else {
@@ -1734,7 +1796,7 @@ function initSwipeDrag() {
   if (window.PointerEvent) {
     card.addEventListener('pointerdown', e => {
       if (e.target.closest('button')) return;
-      begin(e.clientX, e.clientY, e.pointerId);
+      begin(e.clientX, e.clientY);
       try { card.setPointerCapture(e.pointerId); } catch(_){}
     });
     card.addEventListener('pointermove', e => move(e.clientX, e.clientY, e), { passive: false });
@@ -1745,7 +1807,7 @@ function initSwipeDrag() {
     card.addEventListener('touchstart', e => {
       if (e.target.closest('button')) return;
       if (e.touches.length !== 1) return;
-      begin(e.touches[0].clientX, e.touches[0].clientY, null);
+      begin(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: true });
     card.addEventListener('touchmove', e => {
       if (!drag || e.touches.length !== 1) return;
@@ -1753,12 +1815,6 @@ function initSwipeDrag() {
     }, { passive: false });
     card.addEventListener('touchend', end, { passive: true });
     card.addEventListener('touchcancel', end, { passive: true });
-    card.addEventListener('mousedown', e => {
-      if (e.target.closest('button')) return;
-      begin(e.clientX, e.clientY, null);
-    });
-    window.addEventListener('mousemove', e => { if (drag) move(e.clientX, e.clientY, e); });
-    window.addEventListener('mouseup', end);
   }
 }
 
@@ -1807,7 +1863,6 @@ function toast(msg, isErr) {
 }
 
 // ---------- EVENT DELEGATION ----------
-// Star inputs (attached once, works for all re-renders)
 const contentEl = document.getElementById('content');
 contentEl.addEventListener('click', e => {
   const star = e.target.closest('.star-input > span');
