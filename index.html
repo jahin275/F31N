@@ -50,6 +50,33 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .section-title{font-size:10px;color:var(--yellow);letter-spacing:2px;
   padding-bottom:10px;border-bottom:2px solid var(--border);margin-bottom:14px}
 
+/* ---------- FINAL PROFILE ---------- */
+.profile-box{text-align:center}
+.profile-title{font-size:10px;color:var(--yellow);letter-spacing:2px;
+  padding-bottom:10px;border-bottom:2px solid var(--border);margin-bottom:16px}
+.profile-rating{font-size:36px;font-weight:bold;line-height:1;margin:6px 0 8px;
+  color:var(--yellow);text-shadow:2px 2px 0 var(--black),0 0 22px rgba(255,215,0,.35)}
+.profile-rating-lbl{font-size:7px;color:var(--dim);letter-spacing:3px;margin-bottom:18px}
+.profile-totals{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.profile-totals .pt{border:3px solid var(--border);background:var(--surface2);padding:14px 8px}
+.profile-totals .pt .ico{display:block;font-size:20px;line-height:1;margin-bottom:8px}
+.profile-totals .pt .num{display:block;font-size:20px;font-weight:bold;line-height:1;margin-bottom:8px}
+.profile-totals .pt .lbl{display:block;font-size:7px;color:var(--dim);letter-spacing:1px}
+.profile-totals .pt.kiss{border-color:rgba(255,45,149,.45)}
+.profile-totals .pt.kiss .ico,.profile-totals .pt.kiss .num{color:var(--pink)}
+.profile-totals .pt.kick{border-color:rgba(255,140,0,.45)}
+.profile-totals .pt.kick .ico,.profile-totals .pt.kick .num{color:var(--orange)}
+.profile-crits{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.profile-crits .pc{display:flex;justify-content:space-between;align-items:center;
+  font-size:8px;padding:10px;border:2px solid var(--border);background:var(--bg);letter-spacing:1px}
+.profile-crits .pc .pc-lbl{color:var(--dim)}
+.profile-crits .pc .pc-val{font-weight:bold}
+.profile-crits .pc.pos{border-color:rgba(57,255,20,.35)}
+.profile-crits .pc.pos .pc-val{color:var(--green)}
+.profile-crits .pc.neg{border-color:rgba(255,49,49,.35)}
+.profile-crits .pc.neg .pc-val{color:var(--red)}
+@media (max-width:420px){ .profile-crits{grid-template-columns:1fr} }
+
 /* ---------- FAREWELL ---------- */
 .farewell{text-align:center}
 .fw-big{font-size:13px;color:var(--green);line-height:2.1;margin-bottom:16px;
@@ -145,6 +172,35 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <div class="header">
     <h1>F31N FILES</h1>
     <div class="sub">// END OF TRANSMISSION //</div>
+  </div>
+
+  <!-- ================= FINAL PROFILE ================= -->
+  <div class="pixel-box profile-box">
+    <div class="profile-title">► FINAL PROFILE — F31N</div>
+    <div class="profile-rating">2.50</div>
+    <div class="profile-rating-lbl">FINAL RATING</div>
+
+    <div class="profile-totals">
+      <div class="pt kiss">
+        <span class="ico">♥</span>
+        <span class="num">3078</span>
+        <span class="lbl">TOTAL KISSES</span>
+      </div>
+      <div class="pt kick">
+        <span class="ico">✖</span>
+        <span class="num">3218</span>
+        <span class="lbl">TOTAL KICKS</span>
+      </div>
+    </div>
+
+    <div class="profile-crits">
+      <div class="pc pos"><span class="pc-lbl">PERSONALITY</span><span class="pc-val">3.57</span></div>
+      <div class="pc pos"><span class="pc-lbl">COOL</span><span class="pc-val">3.44</span></div>
+      <div class="pc pos"><span class="pc-lbl">HELPFUL</span><span class="pc-val">3.50</span></div>
+      <div class="pc neg"><span class="pc-lbl">PETTY</span><span class="pc-val">2.43</span></div>
+      <div class="pc neg"><span class="pc-lbl">HATE</span><span class="pc-val">2.35</span></div>
+      <div class="pc neg"><span class="pc-lbl">ANNOY</span><span class="pc-val">2.47</span></div>
+    </div>
   </div>
 
   <!-- ================= FAREWELL ================= -->
@@ -310,7 +366,6 @@ async function vote(type) {
 
   const kissEl = $('kissCount'), kickEl = $('kickCount');
 
-  // optimistic
   if (type === 'kiss') {
     STATE.kiss++;
     if (kissEl) { kissEl.textContent = STATE.kiss; bumpEl(kissEl); }
@@ -385,8 +440,8 @@ function updateMsgCount() {
   const canvas = document.getElementById('flappy');
   if (!canvas) return;
   const ctx = canvas.getContext('2d', { alpha: false });
-  const W = canvas.width;    // 320
-  const H = canvas.height;   // 200
+  const W = canvas.width;
+  const H = canvas.height;
 
   const GROUND_H = 20;
   const PLAY_H   = H - GROUND_H;
@@ -420,7 +475,6 @@ function updateMsgCount() {
   let state = 'ready';
   let running = false, raf = null, lastTs = 0;
 
-  // ---------- AUDIO ----------
   let actx = null;
   function beep(freq, dur, type, vol) {
     if (muted) return;
@@ -444,7 +498,6 @@ function updateMsgCount() {
     } catch (_) {}
   }
 
-  // ---------- WORLD GEN ----------
   function initStars() {
     stars = [];
     for (let i = 0; i < 46; i++) {
@@ -468,7 +521,6 @@ function updateMsgCount() {
     cityW = x;
   }
 
-  // ---------- PARTICLES ----------
   function burst(x, y, color, count) {
     for (let i = 0; i < count; i++) {
       particles.push({
@@ -483,7 +535,6 @@ function updateMsgCount() {
     }
   }
 
-  // ---------- RESET ----------
   function reset() {
     bird = { x: BIRD_X, y: PLAY_H / 2, vy: 0, rot: 0 };
     pipes = [];
@@ -505,7 +556,6 @@ function updateMsgCount() {
     try { localStorage.setItem(BEST_KEY, String(best)); } catch (_) {}
   }
 
-  // ---------- INPUT ----------
   function flap() {
     if (state === 'ready') {
       state = 'playing';
@@ -533,7 +583,6 @@ function updateMsgCount() {
     flap();
   }
 
-  // ---------- DIE ----------
   function die() {
     state = 'dead';
     deadAt = performance.now();
@@ -547,7 +596,6 @@ function updateMsgCount() {
     haptic([20, 40, 20]);
   }
 
-  // ---------- UPDATE ----------
   function update(k) {
     frame += k;
     const speed = Math.min(BASE_SPEED + score * 0.035, 3.2);
@@ -587,7 +635,6 @@ function updateMsgCount() {
       return;
     }
 
-    // ---- playing ----
     bird.vy += GRAVITY * k;
     bird.y += bird.vy * k;
     bird.rot = Math.max(-0.45, Math.min(1.15, bird.vy * 0.075));
@@ -616,7 +663,6 @@ function updateMsgCount() {
       if (p.x + PIPE_W < -12) pipes.splice(i, 1);
     }
 
-    // collisions
     if (bird.y - BIRD_R < 0) { bird.y = BIRD_R; bird.vy = 0; }
     if (bird.y + BIRD_R > PLAY_H) { die(); return; }
 
@@ -631,7 +677,6 @@ function updateMsgCount() {
     }
   }
 
-  // ---------- DRAW ----------
   function drawCity() {
     const off = scroll * 0.35;
     for (let rep = 0; rep < 2; rep++) {
@@ -691,7 +736,6 @@ function updateMsgCount() {
     ctx.translate(x, y);
     ctx.rotate(bird.rot);
 
-    // body
     ctx.fillStyle = '#ffd700';
     ctx.fillRect(-7, -6, 14, 12);
     ctx.fillStyle = '#ffb300';
@@ -699,7 +743,6 @@ function updateMsgCount() {
     ctx.fillStyle = '#fff3b0';
     ctx.fillRect(-7, -6, 14, 2);
 
-    // wing
     let wingY = 1;
     if (state === 'playing') wingY = (Math.sin(frame * 0.38) > 0) ? -3 : 2;
     else if (state === 'dead') wingY = 3;
@@ -708,13 +751,11 @@ function updateMsgCount() {
     ctx.fillStyle = 'rgba(0,0,0,0.18)';
     ctx.fillRect(-5, wingY + 1, 8, 2);
 
-    // eye
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(2, -4, 4, 4);
     ctx.fillStyle = '#000000';
     ctx.fillRect(4, -3, 2, 2);
 
-    // beak
     ctx.fillStyle = '#ff6b00';
     ctx.fillRect(6, 0, 4, 3);
     ctx.fillStyle = '#d94f00';
@@ -781,11 +822,9 @@ function updateMsgCount() {
       ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
     }
 
-    // sky
     ctx.fillStyle = '#05050f';
     ctx.fillRect(-14, -14, W + 28, H + 28);
 
-    // stars
     for (let i = 0; i < stars.length; i++) {
       const s = stars[i];
       ctx.fillStyle = (i % 7 === 0) ? 'rgba(0,240,255,0.35)' : 'rgba(57,255,20,0.28)';
@@ -800,7 +839,6 @@ function updateMsgCount() {
 
     ctx.restore();
 
-    // in-canvas score
     ctx.textAlign = 'left';
     ctx.font = 'bold 11px monospace';
     ctx.fillStyle = 'rgba(224,224,255,0.85)';
@@ -818,7 +856,6 @@ function updateMsgCount() {
     }
   }
 
-  // ---------- LOOP ----------
   function loop(ts) {
     if (!running) return;
     if (!lastTs) lastTs = ts;
@@ -833,7 +870,6 @@ function updateMsgCount() {
     raf = requestAnimationFrame(loop);
   }
 
-  // ---------- START / STOP ----------
   function start() {
     if (running) return;
     running = true;
@@ -863,7 +899,6 @@ function updateMsgCount() {
     }
   }
 
-  // ---------- SOUND TOGGLE ----------
   function renderSoundBtn() {
     if (!soundBtn) return;
     soundBtn.textContent = muted ? '♪ OFF' : '♪ ON';
@@ -881,7 +916,6 @@ function updateMsgCount() {
   }
   renderSoundBtn();
 
-  // ---------- KEYBOARD ----------
   document.addEventListener('keydown', function (e) {
     const tag = (e.target && e.target.tagName) || '';
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
@@ -891,7 +925,6 @@ function updateMsgCount() {
     }
   });
 
-  // ---------- VISIBILITY ----------
   document.addEventListener('visibilitychange', function () {
     lastTs = 0;
   });
@@ -916,7 +949,6 @@ document.addEventListener('DOMContentLoaded', function () {
   loadStats();
 });
 
-// fallback if DOMContentLoaded already fired
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   setTimeout(function () {
     if (STATE.loaded === false && $('kissCount') && $('kissCount').textContent === '—') {
