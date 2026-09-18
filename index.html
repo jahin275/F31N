@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0a0a1a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>F31N FILES</title>
+<title>F31N FILES — END OF TRANSMISSION</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -32,473 +32,500 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background-image:linear-gradient(rgba(57,255,20,.03) 1px,transparent 1px),
   linear-gradient(90deg,rgba(57,255,20,.03) 1px,transparent 1px);background-size:32px 32px}
-#app{position:relative;z-index:1;max-width:900px;margin:0 auto;
-  padding:calc(12px + var(--sat)) calc(12px + var(--sar)) calc(90px + var(--sab)) calc(12px + var(--sal))}
-.header{text-align:center;padding:18px 0 14px;border-bottom:3px solid var(--border);margin-bottom:16px;position:relative}
-.header h1{font-size:22px;color:var(--green);text-shadow:3px 3px 0 var(--black),0 0 20px rgba(57,255,20,.4);
-  letter-spacing:4px;animation:flicker 3s infinite;cursor:pointer;user-select:none;-webkit-user-select:none}
-.header h1:active{transform:translate(2px,2px)}
-@keyframes flicker{0%,95%,100%{opacity:1}96%{opacity:.7}97%{opacity:1}98%{opacity:.8}}
-.header .sub{font-size:8px;color:var(--dim);margin-top:8px;letter-spacing:2px}
-.sync-dot{position:absolute;top:12px;right:0;font-size:8px;color:var(--yellow);display:flex;align-items:center;gap:6px}
-.sync-dot::before{content:'';width:8px;height:8px;background:var(--yellow);border-radius:50%;animation:syncpulse .8s infinite}
-@keyframes syncpulse{0%,100%{opacity:1}50%{opacity:.3}}
-.nav{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.nav button{font-family:inherit;font-size:9px;padding:14px 12px;min-height:48px;background:var(--surface);
-  color:var(--dim);border:3px solid var(--border);box-shadow:4px 4px 0 var(--black);cursor:pointer;
-  letter-spacing:1px;flex:1;min-width:70px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.nav button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--black)}
-.nav button.active{background:var(--green);color:var(--black);border-color:var(--green);
-  box-shadow:4px 4px 0 var(--black),0 0 12px rgba(57,255,20,.5)}
-@media (max-width:640px){
-  .nav{position:fixed;bottom:0;left:0;right:0;margin:0;
-    padding:8px calc(8px + var(--sar)) calc(8px + var(--sab)) calc(8px + var(--sal));
-    background:rgba(10,10,26,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-    border-top:3px solid var(--border);z-index:500;gap:4px;flex-wrap:nowrap}
-  .nav button{font-size:8px;padding:12px 4px;min-height:56px;border-width:2px;
-    box-shadow:3px 3px 0 var(--black);min-width:0;letter-spacing:0}
-}
-.pixel-box{background:var(--surface);border:3px solid var(--border);box-shadow:6px 6px 0 var(--black);padding:16px;margin-bottom:14px}
-@media (max-width:520px){ .pixel-box{box-shadow:4px 4px 0 var(--black);padding:12px} }
-.cache-badge{display:inline-block;font-size:7px;padding:3px 8px;margin-left:8px;
-  background:rgba(255,215,0,.15);color:var(--yellow);border:2px solid rgba(255,215,0,.4);vertical-align:middle}
-.roster-item{display:flex;align-items:center;justify-content:space-between;padding:14px;min-height:60px;
-  margin-bottom:8px;background:var(--surface);border:3px solid var(--border);box-shadow:4px 4px 0 var(--black);
-  cursor:pointer;gap:10px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.roster-item:active{background:var(--surface2);border-color:var(--green);
-  transform:translate(2px,2px);box-shadow:2px 2px 0 var(--black)}
-.roster-item .left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
-.roster-item .roll{font-size:8px;color:var(--cyan);background:rgba(0,240,255,.1);
-  padding:5px 8px;border:2px solid rgba(0,240,255,.3);white-space:nowrap;flex-shrink:0}
-.roster-item .name{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.roster-item .right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.rating-badge{font-size:13px;font-weight:bold;padding:6px 10px;border:3px solid;min-width:64px;text-align:center}
-.rating-pos{color:var(--green);border-color:var(--green);background:rgba(57,255,20,.08)}
-.rating-neg{color:var(--red);border-color:var(--red);background:rgba(255,49,49,.08)}
-.rating-mid{color:var(--yellow);border-color:var(--yellow);background:rgba(255,215,0,.08)}
-.kk-mini{font-size:7px;color:var(--dim)}
-@media (max-width:520px){
-  .roster-item{padding:12px}
-  .roster-item .name{font-size:10px}
-  .roster-item .roll{font-size:7px;padding:4px 6px}
-  .rating-badge{font-size:11px;min-width:58px;padding:5px 8px;border-width:2px}
-  .kk-mini{font-size:6px}
-}
-.sort-bar{display:flex;gap:6px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
-.sort-bar .sort-label{font-size:8px;color:var(--dim);letter-spacing:1px;padding:0 4px}
-.sort-bar .sort-btn{font-family:inherit;font-size:8px;padding:8px 10px;min-height:36px;
-  background:var(--surface);color:var(--dim);border:2px solid var(--border);
-  box-shadow:2px 2px 0 var(--black);cursor:pointer;letter-spacing:1px;
-  touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.sort-bar .sort-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--black)}
-.sort-bar .sort-btn.active{background:var(--cyan);color:var(--black);border-color:var(--cyan)}
-@media (max-width:520px){
-  .sort-bar .sort-btn{flex:1;font-size:7px;padding:8px 4px;min-width:0}
-  .sort-bar .sort-label{display:none}
-}
-.detail-header{text-align:center;padding:20px 14px;margin-bottom:14px}
-.detail-header .big-name{font-size:16px;color:var(--green);margin-bottom:8px;text-shadow:2px 2px 0 var(--black);word-break:break-word}
-.detail-header .big-roll{font-size:10px;color:var(--cyan);margin-bottom:14px}
-.detail-header .big-score{font-size:32px;font-weight:bold;margin:10px 0;display:inline-block;text-shadow:2px 2px 0 var(--black)}
-.score-formula{font-size:8px;color:var(--dim);margin-top:8px;line-height:2}
-.score-formula .pos{color:var(--green)}
-.score-formula .neg{color:var(--red)}
-@keyframes scorePop{0%{transform:scale(1)}40%{transform:scale(1.35);text-shadow:3px 3px 0 var(--black),0 0 24px rgba(57,255,20,.9)}100%{transform:scale(1)}}
-.big-score.updated{animation:scorePop .7s ease-out}
-.criteria-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-@media (max-width:400px){ .criteria-grid{grid-template-columns:1fr} }
-.criteria-card{padding:14px 10px;border:3px solid var(--border);background:var(--surface);text-align:center}
-.criteria-card.positive{border-color:rgba(57,255,20,.4)}
-.criteria-card.negative{border-color:rgba(255,49,49,.4)}
-.criteria-card .label{font-size:8px;color:var(--dim);margin-bottom:6px;letter-spacing:1px}
-.criteria-card .value{font-size:20px}
-.criteria-card.positive .value{color:var(--green)}
-.criteria-card.negative .value{color:var(--red)}
-.stars-display{font-size:13px;letter-spacing:2px;margin-top:4px}
-.section-title{font-size:11px;color:var(--yellow);padding:10px 0;border-bottom:2px solid var(--border);margin-bottom:12px;letter-spacing:2px}
-.eval-section{margin-bottom:18px}
-.criterion-row{margin-bottom:12px;padding:12px;border:3px solid var(--border);background:var(--surface)}
-.criterion-row.positive{border-left:6px solid var(--green)}
-.criterion-row.negative{border-left:6px solid var(--red)}
-.criterion-row .cr-label{font-size:9px;margin-bottom:10px;color:var(--text);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.criterion-row .cr-label .cr-hint{font-size:7px;color:var(--dim);text-align:right;flex:1}
-.star-input{display:flex;gap:4px;justify-content:space-between}
-.star-input span{font-size:28px;color:#333;cursor:pointer;user-select:none;-webkit-user-select:none;line-height:1;
-  min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
-.star-input span.on{color:var(--yellow);text-shadow:0 0 8px rgba(255,215,0,.6)}
-.star-input span:active{transform:scale(1.15)}
-@media (max-width:520px){ .star-input span{font-size:30px;min-width:0;flex:1} }
-.pixel-btn{font-family:inherit;font-size:10px;padding:14px 18px;min-height:48px;background:var(--surface2);
-  color:var(--text);border:3px solid var(--border);box-shadow:5px 5px 0 var(--black);cursor:pointer;
-  letter-spacing:1px;display:inline-block;position:relative;touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.pixel-btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:2px 2px 0 var(--black)}
-.pixel-btn:disabled{opacity:.5;cursor:not-allowed}
-.pixel-btn.green{background:var(--green);color:var(--black);border-color:var(--green)}
-.pixel-btn.pink{background:var(--pink);color:#fff;border-color:var(--pink)}
-.pixel-btn.cyan{background:var(--cyan);color:var(--black);border-color:var(--cyan)}
-.pixel-btn.red{background:var(--red);color:#fff;border-color:var(--red)}
-.pixel-btn.yellow{background:var(--yellow);color:var(--black);border-color:var(--yellow)}
-.pixel-btn.wide{width:100%;text-align:center}
-.pixel-btn.loading{color:transparent!important;pointer-events:none}
-.pixel-btn.loading::after{content:'';position:absolute;top:50%;left:50%;width:16px;height:16px;margin:-8px 0 0 -8px;
-  border:3px solid var(--black);border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@media (max-width:520px){ .pixel-btn{font-size:9px;padding:14px 14px;min-height:52px} }
-.pixel-input,.pixel-textarea{font-family:inherit;font-size:16px;width:100%;padding:14px;background:var(--bg);
-  color:var(--text);border:3px solid var(--border);outline:none;resize:vertical;touch-action:manipulation;border-radius:0;
-  -webkit-appearance:none;appearance:none}
-.pixel-textarea{min-height:80px;font-size:14px}
-.pixel-input:focus,.pixel-textarea:focus{border-color:var(--green)}
-.entry-item{padding:12px;border:2px solid var(--border);margin-bottom:8px;background:var(--surface);font-size:9px}
-.entry-item .entry-top{display:flex;justify-content:space-between;color:var(--dim);font-size:8px;margin-bottom:6px;flex-wrap:wrap;gap:4px}
-.entry-item .entry-scores{display:flex;flex-wrap:wrap;gap:6px;font-size:8px}
-.entry-item .entry-scores span{padding:3px 7px;border:2px solid var(--border)}
-.lore-item{padding:12px;border:3px solid var(--border);margin-bottom:10px;background:var(--surface)}
-.lore-item .lore-text{font-size:10px;margin-bottom:10px;color:var(--text);line-height:1.9;word-break:break-word}
-.lore-item .lore-meta{display:flex;justify-content:space-between;align-items:center;font-size:8px;color:var(--dim);gap:8px;flex-wrap:wrap}
-.lore-vote-btns{display:flex;gap:6px}
-.lore-vote-btns button{font-family:inherit;font-size:8px;padding:10px 12px;min-height:40px;
-  border:2px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;touch-action:manipulation}
-.lore-vote-btns .kiss-btn{color:var(--pink);border-color:rgba(255,45,149,.5)}
-.lore-vote-btns .kick-btn{color:var(--orange);border-color:rgba(255,140,0,.5)}
-.kisskick-row{display:flex;justify-content:center;gap:10px;margin-top:12px}
-.kisskick-row button{font-family:inherit;font-size:9px;padding:12px 14px;min-height:48px;
-  border:2px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;flex:1;touch-action:manipulation}
-.kisskick-row .kiss-btn{color:var(--pink);border-color:rgba(255,45,149,.5)}
-.kisskick-row .kick-btn{color:var(--orange);border-color:rgba(255,140,0,.5)}
-.lore-composer{background:var(--surface);border:3px solid var(--border);box-shadow:4px 4px 0 var(--black);padding:12px;margin-bottom:16px}
-.lore-composer select,.lore-composer textarea{font-family:inherit;font-size:16px;padding:12px;background:var(--bg);
-  color:var(--text);border:2px solid var(--border);outline:none;border-radius:0;-webkit-appearance:none;appearance:none;touch-action:manipulation}
-.lore-composer select{width:100%;margin-bottom:8px;cursor:pointer}
-.lore-composer select:focus,.lore-composer textarea:focus{border-color:var(--green)}
-.lore-composer textarea{width:100%;min-height:80px;resize:vertical;margin-bottom:8px;font-size:15px}
-.lore-composer .lc-btn{font-family:inherit;font-size:10px;padding:14px 16px;min-height:48px;
-  background:var(--cyan);color:var(--black);border:2px solid var(--cyan);cursor:pointer;
-  box-shadow:3px 3px 0 var(--black);letter-spacing:1px;white-space:nowrap;touch-action:manipulation}
-.lore-composer .lc-btn:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
-.lore-composer .lc-btn:disabled{opacity:.4;cursor:not-allowed}
-.lore-composer .lc-hint{font-size:7px;color:var(--dim);letter-spacing:1px;margin-top:8px}
-.lore-feed{display:flex;flex-direction:column;gap:10px}
-.lore-post{display:flex;gap:10px;background:var(--surface);border:3px solid var(--border);
-  box-shadow:4px 4px 0 var(--black);padding:10px;align-items:flex-start}
-.lore-post.top1{border-color:rgba(255,215,0,.6)}
-.lore-post.top2{border-color:rgba(192,192,192,.5)}
-.lore-post.top3{border-color:rgba(205,127,50,.5)}
-.lp-vote{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px;flex-shrink:0}
-.lp-vote button{font-family:inherit;font-size:16px;width:48px;height:44px;padding:0;
-  border:2px solid var(--border);background:var(--surface2);color:var(--dim);cursor:pointer;line-height:1;
-  touch-action:manipulation;display:flex;align-items:center;justify-content:center}
-.lp-vote button:active{transform:scale(0.92)}
-.lp-vote .lp-score{font-size:12px;font-weight:bold;padding:3px 4px;min-width:36px;text-align:center}
-.lp-vote .lp-score.pos{color:var(--green)}
-.lp-vote .lp-score.neg{color:var(--red)}
-.lp-vote .lp-score.zero{color:var(--dim)}
-.lp-body{flex:1;min-width:0}
-.lp-text{font-size:10px;color:var(--text);line-height:1.9;margin-bottom:10px;word-break:break-word}
-.lp-meta{display:flex;justify-content:space-between;gap:8px;font-size:8px;color:var(--dim);flex-wrap:wrap}
-.lp-author{color:var(--cyan);cursor:pointer;padding:4px 0;min-height:32px;display:inline-flex;align-items:center}
-.lp-author:active{color:var(--green)}
-.lp-counts{color:var(--dim);font-size:7px}
-.lore-sort-bar{display:flex;justify-content:space-between;align-items:center;font-size:8px;
-  color:var(--dim);margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--border)}
-.lb-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.lb-tabs button{font-family:inherit;font-size:8px;padding:12px 10px;min-height:48px;background:var(--surface);
-  color:var(--dim);border:3px solid var(--border);box-shadow:3px 3px 0 var(--black);
-  cursor:pointer;flex:1;min-width:70px;touch-action:manipulation}
-.lb-tabs button.active{background:var(--yellow);color:var(--black);border-color:var(--yellow)}
-.lb-row{display:flex;align-items:center;gap:10px;padding:12px;min-height:56px;margin-bottom:6px;
-  background:var(--surface);border:3px solid var(--border);box-shadow:3px 3px 0 var(--black);cursor:pointer;
-  touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.lb-row:active{background:var(--surface2);border-color:var(--green);transform:translate(1px,1px)}
-.lb-rank{font-size:15px;min-width:40px;text-align:center;color:var(--yellow);text-shadow:2px 2px 0 var(--black)}
-.lb-rank.gold{color:var(--yellow)}
-.lb-rank.silver{color:#c0c0c0}
-.lb-rank.bronze{color:#cd7f32}
-.lb-name{flex:1;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb-roll{font-size:7px;color:var(--cyan);margin-right:8px}
-.lb-value{font-size:13px;font-weight:bold;flex-shrink:0}
-.lb-value.pos{color:var(--green)}
-.lb-value.neg{color:var(--red)}
-.lb-value.mid{color:var(--yellow)}
-.lb-value.kiss{color:var(--pink)}
-.lb-value.kick{color:var(--orange)}
-.lb-refresh{display:flex;justify-content:center;margin:12px 0}
-.swipe-container{position:relative;height:min(560px, 62vh);display:flex;align-items:center;justify-content:center;
-  touch-action:none;user-select:none;-webkit-user-select:none}
-.swipe-card{position:absolute;width:100%;max-width:380px;background:var(--surface);
-  border:4px solid var(--border);box-shadow:8px 8px 0 var(--black);padding:20px;text-align:center;cursor:grab;
-  user-select:none;-webkit-user-select:none;contain:layout paint style;will-change:transform;backface-visibility:hidden;
-  transform:translateZ(0);touch-action:none}
-.swipe-card .sc-name{font-size:15px;color:var(--green);margin-bottom:6px;text-shadow:2px 2px 0 var(--black);word-break:break-word}
-.swipe-card .sc-roll{font-size:9px;color:var(--cyan);margin-bottom:12px}
-.swipe-card .sc-score{font-size:30px;font-weight:bold;margin:10px 0;text-shadow:2px 2px 0 var(--black)}
-.swipe-card .sc-kk{display:flex;justify-content:center;gap:16px;margin:10px 0;font-size:9px;color:var(--dim)}
-.swipe-card .sc-criteria{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:12px;text-align:left}
-.swipe-card .sc-criteria .sc-crit{font-size:7px;padding:6px 8px;border:2px solid var(--border);display:flex;justify-content:space-between}
-@media (max-width:520px){ .swipe-card{max-width:94%;padding:16px} .swipe-card .sc-name{font-size:14px} .swipe-card .sc-score{font-size:26px} }
-.swipe-overlay{position:absolute;top:20px;font-size:24px;font-weight:bold;padding:8px 16px;border:4px solid;
-  opacity:0;pointer-events:none;z-index:10;letter-spacing:4px}
-.swipe-overlay.kiss{right:20px;color:var(--pink);border-color:var(--pink);transform:rotate(12deg)}
-.swipe-overlay.kick{left:20px;color:var(--orange);border-color:var(--orange);transform:rotate(-12deg)}
-.swipe-hint{text-align:center;font-size:8px;color:var(--dim);margin-top:10px}
-.swipe-actions{display:flex;justify-content:center;gap:12px;margin-top:14px}
-.swipe-actions button{font-family:inherit;font-size:10px;padding:16px 20px;min-height:56px;border:3px solid;
-  box-shadow:5px 5px 0 var(--black);cursor:pointer;letter-spacing:2px;touch-action:manipulation;flex:1}
-.swipe-actions button:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--black)}
-#submitOverlay{position:fixed;inset:0;background:rgba(10,10,26,.94);display:none;
-  align-items:center;justify-content:center;z-index:9998;flex-direction:column;gap:16px;
-  padding:var(--sat) var(--sar) var(--sab) var(--sal)}
-#submitOverlay.show{display:flex}
-#submitOverlay .ovr-title{font-size:13px;color:var(--green);letter-spacing:3px;animation:blink 1s infinite;text-align:center}
-#submitOverlay .ovr-bar{width:min(260px, 80vw);height:16px;background:var(--surface);border:3px solid var(--border);
-  box-shadow:4px 4px 0 var(--black);overflow:hidden}
-#submitOverlay .ovr-bar > div{height:100%;width:30%;background:var(--green);animation:barSlide 1.1s ease-in-out infinite}
-@keyframes barSlide{0%{margin-left:-30%}100%{margin-left:100%}}
-#submitOverlay .ovr-sub{font-size:8px;color:var(--dim);letter-spacing:1px;text-align:center}
-#toast{position:fixed;bottom:calc(88px + var(--sab));left:50%;transform:translateX(-50%) translateY(120px);
-  background:var(--green);color:var(--black);font-size:10px;padding:14px 20px;border:3px solid var(--black);
-  box-shadow:6px 6px 0 rgba(0,0,0,.5);z-index:10000;opacity:0;transition:transform .2s, opacity .2s;
-  pointer-events:none;max-width:calc(100% - 32px);text-align:center;line-height:1.6;white-space:pre-line}
-#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-#toast.error{background:var(--red);color:#fff}
-@media (min-width:641px){ #toast{bottom:calc(24px + var(--sab))} }
-.loading{text-align:center;padding:32px 20px;color:var(--dim);font-size:11px}
-.loading .blink{animation:blink .8s infinite}
-@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
-.empty{text-align:center;padding:40px 20px;color:var(--dim);font-size:10px;line-height:2}
 
-/* -------- Flappy canvas (shared) -------- */
-.flappy-wrap{margin:16px auto 0;width:280px;max-width:92%;position:relative}
+#app{position:relative;z-index:1;max-width:620px;margin:0 auto;
+  padding:calc(14px + var(--sat)) calc(12px + var(--sar)) calc(40px + var(--sab)) calc(12px + var(--sal))}
+
+/* ---------- HEADER ---------- */
+.header{text-align:center;padding:16px 0 14px;border-bottom:3px solid var(--border);margin-bottom:18px}
+.header h1{font-size:20px;color:var(--green);letter-spacing:3px;
+  text-shadow:3px 3px 0 var(--black),0 0 20px rgba(57,255,20,.4);animation:flicker 4s infinite}
+.header .sub{font-size:7px;color:var(--dim);margin-top:8px;letter-spacing:2px}
+@keyframes flicker{0%,94%,100%{opacity:1}95%{opacity:.6}96%{opacity:1}97%{opacity:.75}98%{opacity:1}}
+
+/* ---------- BOXES ---------- */
+.pixel-box{background:var(--surface);border:3px solid var(--border);
+  box-shadow:6px 6px 0 var(--black);padding:16px;margin-bottom:16px}
+@media (max-width:520px){ .pixel-box{box-shadow:4px 4px 0 var(--black);padding:13px} }
+.section-title{font-size:10px;color:var(--yellow);letter-spacing:2px;
+  padding-bottom:10px;border-bottom:2px solid var(--border);margin-bottom:14px}
+
+/* ---------- FAREWELL ---------- */
+.farewell{text-align:center}
+.fw-big{font-size:13px;color:var(--green);line-height:2.1;margin-bottom:16px;
+  text-shadow:2px 2px 0 var(--black),0 0 18px rgba(57,255,20,.35)}
+.fw-line{font-size:9px;color:var(--yellow);line-height:2.2;margin-bottom:18px}
+.fw-sub{font-size:8px;color:var(--cyan);letter-spacing:1px;margin-bottom:12px}
+.fw-list{list-style:none;display:inline-block;text-align:left;margin-bottom:18px}
+.fw-list li{font-size:8.5px;color:var(--text);line-height:2.3;display:flex;gap:10px}
+.fw-list .num{color:var(--pink);flex-shrink:0;min-width:30px}
+.fw-para{font-size:8.5px;color:var(--text);line-height:2.3;text-align:left;margin-bottom:16px}
+.fw-sign{font-size:10px;color:var(--green);letter-spacing:1px;margin-top:8px;
+  text-shadow:1px 1px 0 var(--black)}
+.fw-div{height:2px;background:var(--border);margin:16px 0}
+
+/* ---------- GAME ---------- */
+.game-hud{display:flex;justify-content:space-between;align-items:center;gap:8px;
+  margin-bottom:12px;font-size:8px;color:var(--dim);letter-spacing:1px}
+.game-hud b{color:var(--yellow);font-weight:normal}
+#soundBtn{font-family:inherit;font-size:7px;padding:8px 9px;min-height:34px;
+  background:var(--surface2);color:var(--dim);border:2px solid var(--border);
+  cursor:pointer;touch-action:manipulation;letter-spacing:1px}
+#soundBtn.on{color:var(--green);border-color:rgba(57,255,20,.5)}
+.flappy-wrap{position:relative;width:100%;max-width:360px;margin:0 auto}
 .flappy-wrap canvas{display:block;width:100%;height:auto;background:#05050f;
   border:3px solid var(--border);box-shadow:5px 5px 0 var(--black);
-  touch-action:none;cursor:pointer;image-rendering:pixelated;image-rendering:crisp-edges}
-.flappy-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
-  font-size:7px;color:var(--green);letter-spacing:1px;animation:blink 1.2s infinite;
-  pointer-events:none;text-shadow:1px 1px 0 var(--black)}
-.flappy-label{font-size:7px;color:var(--dim);letter-spacing:2px;margin-top:8px;text-align:center}
-/* Overlay variant (smaller canvas) */
-#submitOverlay .flappy-wrap{width:220px;margin:4px auto 0}
-#submitOverlay .flappy-wrap canvas{box-shadow:4px 4px 0 var(--black)}
+  touch-action:none;cursor:pointer;image-rendering:pixelated;image-rendering:crisp-edges;
+  -webkit-user-select:none;user-select:none}
+.game-hint{text-align:center;font-size:7px;color:var(--dim);letter-spacing:1px;margin-top:10px;line-height:2}
+.game-hint b{color:var(--green);font-weight:normal}
 
-@media (max-width:520px){
-  .header{padding:12px 0 12px;margin-bottom:14px}
-  .header h1{font-size:18px;letter-spacing:2px}
-  .header .sub{font-size:7px}
-  .sync-dot{font-size:7px;top:6px}
-}
+/* ---------- DEPT OF FINANCE ---------- */
+.dof-name{text-align:center;font-size:12px;color:var(--yellow);letter-spacing:2px;
+  margin:4px 0 16px;text-shadow:2px 2px 0 var(--black);word-break:break-word}
+.dof-counts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.dof-stat{border:3px solid var(--border);background:var(--surface2);padding:16px 8px;text-align:center}
+.dof-stat .ico{display:block;font-size:20px;line-height:1;margin-bottom:8px}
+.dof-stat .num{display:block;font-size:22px;font-weight:bold;line-height:1;margin-bottom:8px}
+.dof-stat .lbl{display:block;font-size:7px;color:var(--dim);letter-spacing:1px}
+.dof-stat.kiss{border-color:rgba(255,45,149,.45)}
+.dof-stat.kiss .ico,.dof-stat.kiss .num{color:var(--pink)}
+.dof-stat.kick{border-color:rgba(255,140,0,.45)}
+.dof-stat.kick .ico,.dof-stat.kick .num{color:var(--orange)}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.4)}100%{transform:scale(1)}}
+.pop{animation:pop .35s ease-out}
+.kk-row{display:flex;gap:10px}
+
+/* ---------- BUTTONS ---------- */
+.pixel-btn{font-family:inherit;font-size:9px;padding:16px 14px;min-height:52px;
+  background:var(--surface2);color:var(--text);border:3px solid var(--border);
+  box-shadow:5px 5px 0 var(--black);cursor:pointer;letter-spacing:1px;
+  display:inline-block;position:relative;touch-action:manipulation;
+  user-select:none;-webkit-user-select:none}
+.pixel-btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:2px 2px 0 var(--black)}
+.pixel-btn:disabled{opacity:.45;cursor:not-allowed}
+.pixel-btn.green{background:var(--green);color:var(--black);border-color:var(--green)}
+.pixel-btn.pink{background:var(--pink);color:#fff;border-color:var(--pink)}
+.pixel-btn.red{background:var(--red);color:#fff;border-color:var(--red)}
+.pixel-btn.cyan{background:var(--cyan);color:var(--black);border-color:var(--cyan)}
+.pixel-btn.wide{width:100%;text-align:center}
+.pixel-btn.loading{color:transparent!important;pointer-events:none}
+.pixel-btn.loading::after{content:'';position:absolute;top:50%;left:50%;width:16px;height:16px;
+  margin:-8px 0 0 -8px;border:3px solid var(--black);border-top-color:transparent;
+  border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- MESSAGE ---------- */
+.msg-hint{font-size:7.5px;color:var(--dim);line-height:2;margin-bottom:12px}
+.pixel-textarea{font-family:inherit;font-size:15px;width:100%;min-height:110px;padding:14px;
+  background:var(--bg);color:var(--text);border:3px solid var(--border);outline:none;
+  resize:vertical;border-radius:0;-webkit-appearance:none;appearance:none;touch-action:manipulation}
+.pixel-textarea:focus{border-color:var(--green)}
+.msg-counter{text-align:right;font-size:7px;color:var(--dim);margin:6px 0 12px}
+
+/* ---------- FOOTER ---------- */
+.footer{text-align:center;font-size:7px;color:var(--dim);letter-spacing:1px;
+  line-height:2.4;padding:10px 0 0;border-top:2px solid var(--border);margin-top:6px}
+
+/* ---------- TOAST ---------- */
+#toast{position:fixed;bottom:calc(28px + var(--sab));left:50%;
+  transform:translateX(-50%) translateY(140px);
+  background:var(--green);color:var(--black);font-size:9px;padding:14px 20px;
+  border:3px solid var(--black);box-shadow:6px 6px 0 rgba(0,0,0,.5);z-index:10000;
+  opacity:0;transition:transform .2s,opacity .2s;pointer-events:none;
+  max-width:calc(100% - 32px);text-align:center;line-height:1.7;white-space:pre-line}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+#toast.error{background:var(--red);color:#fff}
 </style>
 </head>
 <body>
 
 <div id="app">
+
   <div class="header">
-    <h1 id="brand">F31N FILES</h1>
-    <div class="sub">// CLASSIFIED //</div>
-    <div id="syncIndicator"></div>
+    <h1>F31N FILES</h1>
+    <div class="sub">// END OF TRANSMISSION //</div>
   </div>
-  <div class="nav" id="nav">
-    <button data-tab="roster" class="active">ROSTER</button>
-    <button data-tab="lore">LORE</button>
-    <button data-tab="leaderboard">BOARD</button>
-    <button data-tab="swipe">SWIPE</button>
+
+  <!-- ================= FAREWELL ================= -->
+  <div class="pixel-box farewell">
+    <div class="fw-big">NOTHING GOOD LASTS FOREVER<br>IN DU F31N</div>
+    <div class="fw-line">Site has been up for 24 Hours.<br>Now it's time to say goodbye.</div>
+
+    <div class="fw-sub">VERDICT OF THIS SOCIAL EXPERIENCE :</div>
+    <ul class="fw-list">
+      <li><span class="num">i.</span><span>Some used it for wholesome reasons</span></li>
+      <li><span class="num">ii.</span><span>Some were literal bullies</span></li>
+      <li><span class="num">iii.</span><span>Others were just Bhaddaimmas</span></li>
+      <li><span class="num">iv.</span><span>Some revolted against it</span></li>
+      <li><span class="num">v.</span><span>Others supported it</span></li>
+    </ul>
+
+    <p class="fw-para">But no matter what, we are all in this together. No matter how much we love or hate each other. No matter the Kiss or Kicks. This is our reality till graduation, so please bear each other a bit more.</p>
+
+    <div class="fw-div"></div>
+    <p class="fw-sign">Personally I love you all — Ciao.</p>
   </div>
-  <div id="content"></div>
+
+  <!-- ================= GAME ================= -->
+  <div class="pixel-box">
+    <div class="section-title">► F31N BIRD</div>
+    <div class="game-hud">
+      <span>SCORE <b id="hudScore">0</b></span>
+      <button id="soundBtn" type="button">♪ SOUND</button>
+      <span>BEST <b id="hudBest">0</b></span>
+    </div>
+    <div class="flappy-wrap">
+      <canvas id="flappy" width="320" height="200"></canvas>
+    </div>
+    <div class="game-hint"><b>TAP</b> · <b>CLICK</b> · <b>SPACE</b> &nbsp;TO FLAP</div>
+  </div>
+
+  <!-- ================= DEPT OF FINANCE ================= -->
+  <div class="pixel-box">
+    <div class="section-title">► FINAL VERDICT</div>
+    <div class="dof-name">DEPT OF FINANCE</div>
+    <div class="dof-counts">
+      <div class="dof-stat kiss">
+        <span class="ico">♥</span>
+        <span class="num" id="kissCount">—</span>
+        <span class="lbl">KISSES</span>
+      </div>
+      <div class="dof-stat kick">
+        <span class="ico">✖</span>
+        <span class="num" id="kickCount">—</span>
+        <span class="lbl">KICKS</span>
+      </div>
+    </div>
+    <div class="kk-row">
+      <button class="pixel-btn pink" id="kissBtn" type="button">♥ KISS</button>
+      <button class="pixel-btn red" id="kickBtn" type="button">✖ KICK</button>
+    </div>
+  </div>
+
+  <!-- ================= LORE TO ADMIN ================= -->
+  <div class="pixel-box">
+    <div class="section-title">► LORE → ADMIN</div>
+    <div class="msg-hint">Direct line. No names, no scores, no drama — just words that land straight in the admin's inbox.</div>
+    <textarea class="pixel-textarea" id="msgInput" maxlength="500"
+      placeholder="TYPE YOUR LORE..." autocorrect="off" autocapitalize="sentences" spellcheck="false"></textarea>
+    <div class="msg-counter"><span id="msgCount">0</span> / 500</div>
+    <button class="pixel-btn cyan wide" id="sendBtn" type="button">▶ SEND TO ADMIN</button>
+  </div>
+
+  <div class="footer">
+    F31N FILES · 2024–2025<br>
+    BUILT ONCE · LOVED ONCE · CLOSED ONCE
+  </div>
+
 </div>
 
 <div id="toast"></div>
-<div id="submitOverlay">
-  <div class="ovr-title">◤ PROCESSING EVALUATION ◢</div>
-  <div class="ovr-bar"><div></div></div>
-  <div class="flappy-wrap">
-    <canvas class="flappy-canvas" id="overlayFlappy" width="220" height="130"></canvas>
-  </div>
-  <div class="ovr-sub">UPLOADING AND RECALCULATING RATING...</div>
-</div>
 
 <script>
 // ============================================================
-// F31N FILES — Frontend v9 (flappy everywhere)
+// F31N FILES — Farewell build v1
 // ============================================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbxYQgcFPxAj1U1Hsi53Y9Ylueg5xLSIu-RSW6qApv8yx-jGAxXbagaFW8wdMhzlhEY1NQ/exec';
 
-const CK = 'f31n_v8_';
-const TTL_ROSTER = 30 * 1000;
+const $ = function (id) { return document.getElementById(id); };
 
-let STATE = {
-  students: [],
-  leaderboard: null,
-  lbTab: 'topRated',
-  loreFeed: [],
-  loreComposerRoll: '',
-  currentTab: 'roster',
-  currentStudent: null,
-  currentDetail: null,
-  detailError: null,
-  loading: true,
-  loadingStart: null,
-  status: '',
-  error: null,
-  fromCache: false,
-  syncing: false,
-  swipeOrder: [],
-  swipeIndex: 0,
-  rosterPage: 0,
-  rosterPageSize: 30,
-  rosterQuery: '',
-  rosterSort: 'roll'
-};
+let STATE = { kiss: 0, kick: 0, busy: false, loaded: false };
 
-// ---------- LOCAL CACHE ----------
-function cWrite(key, data) {
-  try { localStorage.setItem(CK + key, JSON.stringify({ t: Date.now(), d: data })); } catch(_){}
+// ---------- UTILS ----------
+let toastTimer = null;
+function toast(msg, isErr) {
+  const t = $('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = isErr ? 'error show' : 'show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.className = ''; }, 3800);
 }
-function cRead(key, maxAge) {
-  try {
-    const raw = localStorage.getItem(CK + key);
-    if (!raw) return null;
-    const o = JSON.parse(raw);
-    if (!o || !o.t) return null;
-    if (maxAge && Date.now() - o.t > maxAge) return null;
-    return o.d;
-  } catch(_){ return null; }
+function haptic(ms) {
+  try { if (navigator.vibrate) navigator.vibrate(ms || 12); } catch (_) {}
 }
-function cClear() {
-  try {
-    Object.keys(localStorage).filter(k => k.startsWith(CK)).forEach(k => localStorage.removeItem(k));
-  } catch(_){}
+function bumpEl(el) {
+  if (!el) return;
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
 }
 
 // ---------- API ----------
-async function api(action, params = {}, timeoutMs = 25000) {
+async function api(action, params, timeoutMs) {
   const url = new URL(API_URL);
   url.searchParams.set('action', action);
-  Object.entries(params).forEach(([k, v]) => {
-    if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
-  });
+  if (params) {
+    for (const k in params) {
+      if (Object.prototype.hasOwnProperty.call(params, k) && params[k] != null) {
+        url.searchParams.set(k, String(params[k]));
+      }
+    }
+  }
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-  const t0 = Date.now();
+  const timer = setTimeout(function () { ctrl.abort(); }, timeoutMs || 20000);
   try {
     const res = await fetch(url.toString(), {
       method: 'GET', signal: ctrl.signal, redirect: 'follow', cache: 'no-store'
     });
-    clearTimeout(timer);
-    const txt = await res.text();
-    console.log(`[F31N] ${action} ${res.status} ${Date.now() - t0}ms ${txt.length}b`);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    try { return JSON.parse(txt); } catch { throw new Error('Bad JSON: ' + txt.slice(0, 100)); }
-  } catch (err) {
+    const txt = await res.text();
+    let data;
+    try { data = JSON.parse(txt); }
+    catch (_) { throw new Error('BAD RESPONSE'); }
+    if (data && data.error) throw new Error(data.error);
+    return data;
+  } finally {
     clearTimeout(timer);
-    console.error(`[F31N FAIL] ${action} ${Date.now() - t0}ms`, err);
-    throw err;
   }
-}
-
-async function apiWrite(action, params, maxRetries = 2) {
-  let lastErr;
-  for (let i = 0; i <= maxRetries; i++) {
-    try {
-      const res = await api(action, params, 20000);
-      if (res && res.error) throw new Error(res.error);
-      return res;
-    } catch (err) {
-      lastErr = err;
-      if (i < maxRetries) await new Promise(r => setTimeout(r, 400 * (i + 1)));
-    }
-  }
-  throw lastErr;
-}
-
-// ---------- OVERLAY ----------
-function showOverlay(title, sub) {
-  const ov = document.getElementById('submitOverlay');
-  if (!ov) return;
-  if (title) ov.querySelector('.ovr-title').textContent = title;
-  if (sub) ov.querySelector('.ovr-sub').textContent = sub;
-  ov.classList.add('show');
-  const canvas = ov.querySelector('.flappy-canvas');
-  if (canvas) startGameOn(canvas);
-}
-function hideOverlay() {
-  const ov = document.getElementById('submitOverlay');
-  if (!ov) return;
-  const canvas = ov.querySelector('.flappy-canvas');
-  if (canvas) stopGameOn(canvas);
-  ov.classList.remove('show');
-}
-function haptic(ms) {
-  try { if (navigator.vibrate) navigator.vibrate(ms || 15); } catch(_){}
-}
-
-// ---------- STUDENT PATCH ----------
-function patchStudent(updated) {
-  if (!updated || !updated.roll) return;
-  const roll = updated.roll;
-  const i = STATE.students.findIndex(s => s.roll === roll);
-  if (i >= 0) STATE.students[i] = Object.assign({}, STATE.students[i], updated);
-  else STATE.students.push(updated);
-
-  for (let j = 0; j < STATE.swipeOrder.length; j++) {
-    if (STATE.swipeOrder[j].roll === roll) {
-      STATE.swipeOrder[j] = Object.assign({}, STATE.swipeOrder[j], updated);
-      break;
-    }
-  }
-  if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
-    STATE.currentDetail.student = Object.assign({}, STATE.currentDetail.student, updated);
-    cWrite('detail_' + roll, STATE.currentDetail);
-  }
-  cWrite('roster', STATE.students);
 }
 
 // ============================================================
-// FLAPPY BIRD — instance factory
+// DEPT OF FINANCE — KISS / KICK
 // ============================================================
-function createFlappy(canvas, hintEl) {
-  const W = canvas.width;
-  const H = canvas.height;
+function renderStats() {
+  const k = $('kissCount'), x = $('kickCount');
+  if (k) k.textContent = STATE.loaded ? STATE.kiss : '—';
+  if (x) x.textContent = STATE.loaded ? STATE.kick : '—';
+}
+
+async function loadStats() {
+  try {
+    const d = await api('stats', null, 20000);
+    STATE.kiss = Number(d.kiss) || 0;
+    STATE.kick = Number(d.kick) || 0;
+    STATE.loaded = true;
+    renderStats();
+  } catch (err) {
+    STATE.loaded = false;
+    renderStats();
+  }
+}
+
+async function vote(type) {
+  if (STATE.busy) return;
+  STATE.busy = true;
+  haptic(12);
+
+  const kissEl = $('kissCount'), kickEl = $('kickCount');
+
+  // optimistic
+  if (type === 'kiss') {
+    STATE.kiss++;
+    if (kissEl) { kissEl.textContent = STATE.kiss; bumpEl(kissEl); }
+  } else {
+    STATE.kick++;
+    if (kickEl) { kickEl.textContent = STATE.kick; bumpEl(kickEl); }
+  }
+  STATE.loaded = true;
+
+  try {
+    const d = await api(type, null, 20000);
+    STATE.kiss = Number(d.kiss) || 0;
+    STATE.kick = Number(d.kick) || 0;
+    renderStats();
+    toast(type === 'kiss' ? '♥ KISS SENT' : '✖ KICK SENT');
+    haptic([12, 26, 12]);
+  } catch (err) {
+    if (type === 'kiss') STATE.kiss--; else STATE.kick--;
+    renderStats();
+    toast('NOT SAVED — TRY AGAIN', true);
+    haptic(60);
+  } finally {
+    STATE.busy = false;
+  }
+}
+
+// ============================================================
+// LORE → ADMIN
+// ============================================================
+async function sendMessage() {
+  const ta = $('msgInput');
+  const btn = $('sendBtn');
+  if (!ta || !btn) return;
+
+  const text = ta.value.trim();
+  if (text.length < 2) {
+    toast('WRITE SOMETHING FIRST', true);
+    haptic(30);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.textContent = 'SENDING...';
+  haptic(15);
+
+  try {
+    await api('message', { text: text }, 25000);
+    ta.value = '';
+    updateMsgCount();
+    toast('MESSAGE SENT TO ADMIN');
+    haptic([15, 30, 15]);
+  } catch (err) {
+    toast('FAILED — TRY AGAIN', true);
+    haptic(80);
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.textContent = '▶ SEND TO ADMIN';
+  }
+}
+
+function updateMsgCount() {
+  const ta = $('msgInput'), c = $('msgCount');
+  if (ta && c) c.textContent = ta.value.length;
+}
+
+// ============================================================
+// F31N BIRD
+// ============================================================
+(function () {
+  const canvas = document.getElementById('flappy');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d', { alpha: false });
+  const W = canvas.width;    // 320
+  const H = canvas.height;   // 200
 
-  const GRAVITY   = 0.45;
-  const JUMP      = -6.2;
-  const GAP       = Math.max(50, Math.round(H * 0.36));
-  const PIPE_W    = 28;
-  const SPEED     = 1.9;
-  const SPAWN     = 76;
-  const MIN_TOP   = 20;
-  const SAFE_PAD  = 18;
+  const GROUND_H = 20;
+  const PLAY_H   = H - GROUND_H;
 
-  const bird = { x: 58, y: H / 2, vy: 0, r: 6 };
+  const GRAVITY    = 0.36;
+  const JUMP       = -5.2;
+  const PIPE_W     = 34;
+  const BIRD_X     = 74;
+  const BIRD_R     = 7;
+  const SPAWN      = 92;
+  const BASE_SPEED = 1.7;
+  const BASE_GAP   = 76;
+  const MIN_GAP    = 58;
 
-  let pipes = [];
-  let frame = 0;
-  let lastSpawn = 0;
-  let score = 0;
+  const BEST_KEY = 'f31n_bird_best_v2';
+  const SND_KEY  = 'f31n_bird_sound';
+
+  const hudScore = document.getElementById('hudScore');
+  const hudBest  = document.getElementById('hudBest');
+  const soundBtn = document.getElementById('soundBtn');
+
   let best = 0;
-  let started = false;
-  let raf = null;
-  let running = false;
+  try { best = parseInt(localStorage.getItem(BEST_KEY) || '0', 10) || 0; } catch (_) {}
 
-  function reset() {
-    bird.x = 58;
-    bird.y = H / 2;
-    bird.vy = 0;
-    pipes.length = 0;
-    score = 0;
-    started = false;
-    lastSpawn = frame;
-    if (hintEl) hintEl.style.display = '';
+  let muted = false;
+  try { muted = localStorage.getItem(SND_KEY) === 'off'; } catch (_) {}
+
+  let bird, pipes, particles, stars, buildings, cityW;
+  let frame = 0, lastSpawn = 0, score = 0;
+  let groundOff = 0, scroll = 0, shake = 0, flash = 0, deadAt = 0;
+  let state = 'ready';
+  let running = false, raf = null, lastTs = 0;
+
+  // ---------- AUDIO ----------
+  let actx = null;
+  function beep(freq, dur, type, vol) {
+    if (muted) return;
+    try {
+      if (!actx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        actx = new AC();
+      }
+      if (actx.state === 'suspended') actx.resume();
+      const o = actx.createOscillator();
+      const g = actx.createGain();
+      o.type = type || 'square';
+      o.frequency.value = freq;
+      const v = vol == null ? 0.04 : vol;
+      const t = actx.currentTime;
+      g.gain.setValueAtTime(v, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(t); o.stop(t + dur + 0.03);
+    } catch (_) {}
   }
 
-  function flap() {
-    if (!running) return;
-    if (!started) {
-      started = true;
-      lastSpawn = frame;
-      if (hintEl) hintEl.style.display = 'none';
+  // ---------- WORLD GEN ----------
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < 46; i++) {
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * (PLAY_H - 36),
+        s: Math.random() < 0.25 ? 2 : 1,
+        sp: 0.05 + Math.random() * 0.18
+      });
     }
-    bird.vy = JUMP;
-    haptic(5);
+  }
+  function initCity() {
+    buildings = [];
+    let x = 0;
+    while (x < W + 120) {
+      const w = 14 + Math.random() * 22;
+      const h = 16 + Math.random() * 38;
+      buildings.push({ x: x, w: w, h: h, lit: Math.random() < 0.55 });
+      x += w + 5 + Math.random() * 9;
+    }
+    cityW = x;
+  }
+
+  // ---------- PARTICLES ----------
+  function burst(x, y, color, count) {
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: x, y: y,
+        vx: (Math.random() - 0.5) * 3.4,
+        vy: (Math.random() - 0.5) * 3.4 - 0.6,
+        life: 22 + Math.random() * 16,
+        max: 38,
+        c: color,
+        s: Math.random() < 0.4 ? 3 : 2
+      });
+    }
+  }
+
+  // ---------- RESET ----------
+  function reset() {
+    bird = { x: BIRD_X, y: PLAY_H / 2, vy: 0, rot: 0 };
+    pipes = [];
+    particles = [];
+    score = 0;
+    lastSpawn = frame;
+    shake = 0;
+    flash = 0;
+    state = 'ready';
+    updateHud();
+  }
+
+  function updateHud() {
+    if (hudScore) hudScore.textContent = score;
+    if (hudBest) hudBest.textContent = best;
+  }
+
+  function saveBest() {
+    try { localStorage.setItem(BEST_KEY, String(best)); } catch (_) {}
+  }
+
+  // ---------- INPUT ----------
+  function flap() {
+    if (state === 'ready') {
+      state = 'playing';
+      lastSpawn = frame;
+      bird.vy = JUMP;
+      beep(660, 0.06, 'square', 0.035);
+      haptic(4);
+    } else if (state === 'playing') {
+      bird.vy = JUMP;
+      beep(660, 0.06, 'square', 0.035);
+      haptic(4);
+    } else if (state === 'dead') {
+      if (performance.now() - deadAt < 700) return;
+      reset();
+      state = 'playing';
+      lastSpawn = frame;
+      bird.vy = JUMP;
+      beep(660, 0.06, 'square', 0.035);
+      haptic(4);
+    }
   }
 
   function onPointer(e) {
@@ -506,109 +533,315 @@ function createFlappy(canvas, hintEl) {
     flap();
   }
 
-  function loop() {
-    if (!running) return;
+  // ---------- DIE ----------
+  function die() {
+    state = 'dead';
+    deadAt = performance.now();
+    shake = 12;
+    flash = 1;
+    burst(bird.x, bird.y, '#ff3131', 16);
+    burst(bird.x, bird.y, '#ffd700', 8);
+    beep(180, 0.18, 'sawtooth', 0.05);
+    if (score > best) { best = score; saveBest(); }
+    updateHud();
+    haptic([20, 40, 20]);
+  }
 
-    if (started) {
-      bird.vy += GRAVITY;
-      bird.y  += bird.vy;
+  // ---------- UPDATE ----------
+  function update(k) {
+    frame += k;
+    const speed = Math.min(BASE_SPEED + score * 0.035, 3.2);
 
-      if (frame - lastSpawn >= SPAWN) {
-        lastSpawn = frame;
-        const minT = MIN_TOP;
-        const maxT = H - GAP - SAFE_PAD;
-        const top  = minT + Math.random() * (maxT - minT);
-        pipes.push({ x: W, top: top, scored: false });
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      s.x -= s.sp * k;
+      if (s.x < -3) { s.x = W + 3; s.y = Math.random() * (PLAY_H - 36); }
+    }
+
+    groundOff = (groundOff + speed * k) % 24;
+    scroll += speed * k;
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx * k;
+      p.y += p.vy * k;
+      p.vy += 0.16 * k;
+      p.life -= k;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+
+    if (shake > 0) shake = Math.max(0, shake - k * 0.9);
+    if (flash > 0) flash = Math.max(0, flash - k * 0.05);
+
+    if (state === 'ready') {
+      bird.y = PLAY_H / 2 + Math.sin(frame * 0.075) * 7;
+      bird.rot = 0;
+      return;
+    }
+
+    if (state === 'dead') {
+      bird.vy += GRAVITY * 1.5 * k;
+      bird.y += bird.vy * k;
+      if (bird.y > PLAY_H - BIRD_R) { bird.y = PLAY_H - BIRD_R; bird.vy = 0; }
+      bird.rot = Math.min(bird.rot + 0.13 * k, Math.PI / 2);
+      return;
+    }
+
+    // ---- playing ----
+    bird.vy += GRAVITY * k;
+    bird.y += bird.vy * k;
+    bird.rot = Math.max(-0.45, Math.min(1.15, bird.vy * 0.075));
+
+    if (frame - lastSpawn >= SPAWN) {
+      lastSpawn = frame;
+      const gap = Math.max(MIN_GAP, BASE_GAP - score * 0.6);
+      const minTop = 16;
+      const maxTop = PLAY_H - gap - 16;
+      const top = minTop + Math.random() * Math.max(1, maxTop - minTop);
+      pipes.push({ x: W + 8, top: top, gap: gap, scored: false });
+    }
+
+    for (let i = pipes.length - 1; i >= 0; i--) {
+      const p = pipes[i];
+      p.x -= speed * k;
+
+      if (!p.scored && p.x + PIPE_W < bird.x - BIRD_R) {
+        p.scored = true;
+        score++;
+        if (score > best) { best = score; saveBest(); }
+        burst(bird.x + 8, bird.y, '#ffd700', 7);
+        beep(980, 0.07, 'square', 0.035);
+        updateHud();
       }
+      if (p.x + PIPE_W < -12) pipes.splice(i, 1);
+    }
 
-      for (let i = pipes.length - 1; i >= 0; i--) {
-        const p = pipes[i];
-        p.x -= SPEED;
-        if (!p.scored && p.x + PIPE_W < bird.x) {
-          p.scored = true;
-          score++;
-          if (score > best) best = score;
+    // collisions
+    if (bird.y - BIRD_R < 0) { bird.y = BIRD_R; bird.vy = 0; }
+    if (bird.y + BIRD_R > PLAY_H) { die(); return; }
+
+    for (let j = 0; j < pipes.length; j++) {
+      const p = pipes[j];
+      if (bird.x + BIRD_R > p.x && bird.x - BIRD_R < p.x + PIPE_W) {
+        if (bird.y - BIRD_R < p.top || bird.y + BIRD_R > p.top + p.gap) {
+          die();
+          return;
         }
-        if (p.x + PIPE_W < 0) pipes.splice(i, 1);
       }
+    }
+  }
 
-      let dead = false;
-      if (bird.y - bird.r < 0 || bird.y + bird.r > H) dead = true;
-      else {
-        for (let j = 0; j < pipes.length; j++) {
-          const p = pipes[j];
-          if (bird.x + bird.r > p.x && bird.x - bird.r < p.x + PIPE_W) {
-            if (bird.y - bird.r < p.top || bird.y + bird.r > p.top + GAP) {
-              dead = true; break;
+  // ---------- DRAW ----------
+  function drawCity() {
+    const off = scroll * 0.35;
+    for (let rep = 0; rep < 2; rep++) {
+      const base = -off + rep * cityW;
+      for (let i = 0; i < buildings.length; i++) {
+        const b = buildings[i];
+        const bx = base + b.x;
+        if (bx > W || bx + b.w < 0) continue;
+        ctx.fillStyle = '#0e0e24';
+        ctx.fillRect(bx | 0, (PLAY_H - b.h) | 0, b.w | 0, b.h | 0);
+
+        if (b.lit) {
+          ctx.fillStyle = 'rgba(57,255,20,0.16)';
+          const x0 = bx | 0, w0 = b.w | 0, y0 = (PLAY_H - b.h) | 0;
+          for (let wy = y0 + 4; wy < PLAY_H - 4; wy += 6) {
+            for (let wx = x0 + 3; wx < x0 + w0 - 3; wx += 6) {
+              if (((wx * 7 + wy * 13) % 5) === 0) ctx.fillRect(wx, wy, 2, 2);
             }
           }
         }
       }
-      if (dead) {
-        haptic([18, 36, 18]);
-        reset();
-      }
     }
+  }
 
-    // --- draw ---
-    ctx.fillStyle = '#05050f';
-    ctx.fillRect(0, 0, W, H);
+  function drawPipeSeg(x, y, w, h, isTop) {
+    if (h <= 0) return;
+    ctx.fillStyle = '#22a83a';
+    ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = '#39ff14';
+    ctx.fillRect(x + 2, y, 4, h);
+    ctx.fillStyle = 'rgba(0,0,0,0.28)';
+    ctx.fillRect(x + w - 5, y, 5, h);
 
-    // parallax stars
-    ctx.fillStyle = 'rgba(57,255,20,0.22)';
-    const off = (frame * 0.5) % W;
-    for (let i = 0; i < 10; i++) {
-      const x = (i * 41 + 11 - off + W) % W;
-      const y = (i * 23 + 7) % H;
-      ctx.fillRect(x | 0, y | 0, 1, 1);
-    }
+    const capH = 8;
+    const capY = isTop ? (y + h - capH) : y;
+    ctx.fillStyle = '#39ff14';
+    ctx.fillRect(x - 3, capY, w + 6, capH);
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillRect(x - 3, capY + capH - 2, w + 6, 2);
+  }
 
-    // pipes
+  function drawPipes() {
     for (let i = 0; i < pipes.length; i++) {
       const p = pipes[i];
-      const px = p.x | 0;
-      const top = p.top | 0;
-      const bot = (p.top + GAP) | 0;
-      ctx.fillStyle = '#39ff14';
-      ctx.fillRect(px, 0, PIPE_W, top);
-      ctx.fillRect(px, bot, PIPE_W, H - bot);
-      ctx.fillStyle = 'rgba(255,255,255,0.15)';
-      ctx.fillRect(px + 3, 0, 3, top);
-      ctx.fillRect(px + 3, bot, 3, H - bot);
+      const x = Math.round(p.x);
+      const topH = Math.round(p.top);
+      const botY = Math.round(p.top + p.gap);
+      drawPipeSeg(x, 0, PIPE_W, topH, true);
+      drawPipeSeg(x, botY, PIPE_W, PLAY_H - botY, false);
     }
+  }
 
-    // bird
+  function drawBird() {
+    const x = Math.round(bird.x);
+    const y = Math.round(bird.y);
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(bird.rot);
+
+    // body
     ctx.fillStyle = '#ffd700';
-    ctx.fillRect((bird.x - bird.r) | 0, (bird.y - bird.r) | 0, bird.r * 2, bird.r * 2);
-    ctx.fillStyle = '#ff3131';
-    ctx.fillRect((bird.x + 2) | 0, (bird.y - 2) | 0, 3, 3);
+    ctx.fillRect(-7, -6, 14, 12);
+    ctx.fillStyle = '#ffb300';
+    ctx.fillRect(-7, 3, 14, 3);
+    ctx.fillStyle = '#fff3b0';
+    ctx.fillRect(-7, -6, 14, 2);
 
-    // scoreboard
-    ctx.font = '9px monospace';
+    // wing
+    let wingY = 1;
+    if (state === 'playing') wingY = (Math.sin(frame * 0.38) > 0) ? -3 : 2;
+    else if (state === 'dead') wingY = 3;
     ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'left';
-    ctx.fillText('SCORE ' + score, 6, 12);
-    ctx.textAlign = 'right';
-    ctx.fillText('BEST ' + best, W - 6, 12);
+    ctx.fillRect(-5, wingY - 2, 8, 5);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(-5, wingY + 1, 8, 2);
 
-    if (!started) {
+    // eye
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(2, -4, 4, 4);
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(4, -3, 2, 2);
+
+    // beak
+    ctx.fillStyle = '#ff6b00';
+    ctx.fillRect(6, 0, 4, 3);
+    ctx.fillStyle = '#d94f00';
+    ctx.fillRect(6, 2, 4, 1);
+
+    ctx.restore();
+  }
+
+  function drawGround() {
+    ctx.fillStyle = '#0b0b1c';
+    ctx.fillRect(0, PLAY_H, W, GROUND_H);
+    ctx.fillStyle = '#39ff14';
+    ctx.fillRect(0, PLAY_H, W, 2);
+    ctx.fillStyle = 'rgba(57,255,20,0.22)';
+    for (let x = -groundOff; x < W + 24; x += 24) {
+      ctx.fillRect(x | 0, PLAY_H + 6, 10, 2);
+      ctx.fillRect((x + 12) | 0, PLAY_H + 13, 5, 2);
+    }
+  }
+
+  function drawParticles() {
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      ctx.globalAlpha = Math.max(0, Math.min(1, p.life / p.max));
+      ctx.fillStyle = p.c;
+      ctx.fillRect(p.x | 0, p.y | 0, p.s, p.s);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawOverlayText() {
+    if (state === 'ready') {
       ctx.fillStyle = 'rgba(0,0,0,0.55)';
       ctx.fillRect(0, 0, W, H);
-      ctx.fillStyle = '#39ff14';
-      ctx.font = 'bold 11px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('TAP TO FLAP', W / 2, H / 2 + 4);
+      ctx.fillStyle = '#39ff14';
+      ctx.font = 'bold 13px monospace';
+      ctx.fillText('TAP TO FLAP', W / 2, H / 2 - 4);
+      ctx.font = '8px monospace';
+      ctx.fillStyle = '#6666aa';
+      ctx.fillText('DODGE THE PIPES · BEAT YOUR BEST', W / 2, H / 2 + 16);
+    } else if (state === 'dead') {
+      const alpha = Math.min(0.7, (performance.now() - deadAt) / 600);
+      ctx.fillStyle = 'rgba(0,0,0,' + alpha + ')';
+      ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ff3131';
+      ctx.font = 'bold 15px monospace';
+      ctx.fillText('GAME OVER', W / 2, H / 2 - 16);
+      ctx.fillStyle = '#ffd700';
+      ctx.font = 'bold 11px monospace';
+      ctx.fillText('SCORE ' + score, W / 2, H / 2 + 6);
+      ctx.fillStyle = '#39ff14';
+      ctx.font = '8px monospace';
+      if (performance.now() - deadAt > 700) {
+        ctx.fillText('TAP TO RETRY', W / 2, H / 2 + 30);
+      }
+    }
+  }
+
+  function draw() {
+    ctx.save();
+    if (shake > 0) {
+      ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
     }
 
-    frame++;
+    // sky
+    ctx.fillStyle = '#05050f';
+    ctx.fillRect(-14, -14, W + 28, H + 28);
+
+    // stars
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      ctx.fillStyle = (i % 7 === 0) ? 'rgba(0,240,255,0.35)' : 'rgba(57,255,20,0.28)';
+      ctx.fillRect(s.x | 0, s.y | 0, s.s, s.s);
+    }
+
+    drawCity();
+    drawPipes();
+    drawGround();
+    drawBird();
+    drawParticles();
+
+    ctx.restore();
+
+    // in-canvas score
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 11px monospace';
+    ctx.fillStyle = 'rgba(224,224,255,0.85)';
+    ctx.fillText(String(score), 8, 16);
+    ctx.textAlign = 'right';
+    ctx.font = '8px monospace';
+    ctx.fillStyle = 'rgba(102,102,170,0.9)';
+    ctx.fillText('BEST ' + best, W - 8, 15);
+
+    drawOverlayText();
+
+    if (flash > 0) {
+      ctx.fillStyle = 'rgba(255,49,49,' + (flash * 0.45) + ')';
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
+
+  // ---------- LOOP ----------
+  function loop(ts) {
+    if (!running) return;
+    if (!lastTs) lastTs = ts;
+    let dt = ts - lastTs;
+    lastTs = ts;
+    if (dt > 100) dt = 100;
+    const k = dt / 16.667;
+
+    update(k);
+    draw();
+
     raf = requestAnimationFrame(loop);
   }
 
+  // ---------- START / STOP ----------
   function start() {
     if (running) return;
     running = true;
+    lastTs = 0;
+    initStars();
+    initCity();
     reset();
-    frame = 0;
+    updateHud();
     if (window.PointerEvent) {
       canvas.addEventListener('pointerdown', onPointer);
     } else {
@@ -619,7 +852,6 @@ function createFlappy(canvas, hintEl) {
   }
 
   function stop() {
-    if (!running) return;
     running = false;
     if (raf) cancelAnimationFrame(raf);
     raf = null;
@@ -631,1303 +863,78 @@ function createFlappy(canvas, hintEl) {
     }
   }
 
-  return { start: start, stop: stop };
-}
-
-// Game registry — keyed on the canvas element itself
-function startGameOn(canvas) {
-  if (!canvas) return;
-  if (canvas._f31nGame) return;
-  const wrap = canvas.parentElement;
-  const hint = wrap ? wrap.querySelector('.flappy-hint') : null;
-  const game = createFlappy(canvas, hint);
-  canvas._f31nGame = game;
-  game.start();
-}
-function stopGameOn(canvas) {
-  if (!canvas || !canvas._f31nGame) return;
-  canvas._f31nGame.stop();
-  canvas._f31nGame = null;
-}
-// Stop every game inside the main content area (never touches the overlay)
-function stopContentGames() {
-  const all = document.querySelectorAll('#content canvas.flappy-canvas');
-  for (let i = 0; i < all.length; i++) stopGameOn(all[i]);
-}
-
-// Build a flappy-loading block for insertion into #content
-let _flappyIdSeq = 0;
-function flappyLoadingBlock(msg) {
-  const id = 'flappyInline' + (++_flappyIdSeq);
-  return {
-    id: id,
-    html: `
-      <div class="loading">
-        <div><span class="blink">▮</span> ${msg}</div>
-        <div class="flappy-wrap">
-          <canvas class="flappy-canvas" id="${id}" width="280" height="160"></canvas>
-          <div class="flappy-hint">TAP TO FLAP</div>
-        </div>
-      </div>`
-  };
-}
-function mountFlappyBlock(el, block) {
-  el.innerHTML = block.html;
-  startGameOn(document.getElementById(block.id));
-}
-
-// ---------- BOOT ----------
-async function boot() {
-  const cachedRoster = cRead('roster', TTL_ROSTER);
-
-  if (Array.isArray(cachedRoster) && cachedRoster.length) {
-    STATE.students = cachedRoster;
-    STATE.swipeOrder = shuffle(cachedRoster.slice());
-    STATE.swipeIndex = 0;
-    STATE.loading = false;
-    STATE.fromCache = true;
-    render();
-    backgroundRefresh();
-    return;
+  // ---------- SOUND TOGGLE ----------
+  function renderSoundBtn() {
+    if (!soundBtn) return;
+    soundBtn.textContent = muted ? '♪ OFF' : '♪ ON';
+    soundBtn.classList.toggle('on', !muted);
   }
-
-  STATE.loading = true;
-  STATE.loadingStart = Date.now();
-  STATE.status = 'CONNECTING...';
-  render();
-
-  try {
-    const lb = await api('leaderboard');
-    if (lb && !lb.error) STATE.leaderboard = lb;
-  } catch(_){}
-
-  await loadRoster();
-  loadLore();
-}
-
-async function loadRoster() {
-  STATE.status = 'FETCHING ROSTER...';
-  render();
-  try {
-    const data = await api('roster');
-    if (data && data.error) throw new Error(data.error);
-    if (!Array.isArray(data)) throw new Error('Bad payload');
-    STATE.students = data;
-    STATE.swipeOrder = shuffle(data.slice());
-    STATE.swipeIndex = 0;
-    STATE.fromCache = false;
-    STATE.error = null;
-    cWrite('roster', data);
-  } catch (err) {
-    STATE.error = err.message || String(err);
-  }
-  STATE.loading = false;
-  STATE.rosterPage = 0;
-  render();
-}
-
-async function backgroundRefresh() {
-  if (STATE.syncing) return;
-  STATE.syncing = true;
-  renderSync();
-  try {
-    const [roster, lb, lore] = await Promise.all([
-      api('roster').catch(() => null),
-      api('leaderboard').catch(() => null),
-      api('alllore').catch(() => null)
-    ]);
-    if (Array.isArray(roster) && roster.length) {
-      const byRoll = Object.create(null);
-      for (const s of roster) byRoll[s.roll] = s;
-      const seen = new Set();
-      const newOrder = [];
-      for (const s of STATE.swipeOrder) {
-        if (byRoll[s.roll]) { newOrder.push(byRoll[s.roll]); seen.add(s.roll); }
-      }
-      for (const s of roster) { if (!seen.has(s.roll)) newOrder.push(s); }
-      STATE.swipeOrder = newOrder;
-      STATE.students = roster;
-      STATE.fromCache = false;
-      cWrite('roster', roster);
-    }
-    if (lb && !lb.error) STATE.leaderboard = lb;
-    if (Array.isArray(lore)) STATE.loreFeed = lore;
-  } catch(_){}
-  STATE.syncing = false;
-  renderSync();
-  render();
-}
-
-function renderSync() {
-  const el = document.getElementById('syncIndicator');
-  if (!el) return;
-  el.className = STATE.syncing ? 'sync-dot' : '';
-  el.textContent = STATE.syncing ? 'SYNCING' : '';
-}
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
-  }
-  return arr;
-}
-
-// ============================================================
-// RENDER (rAF-batched)
-// ============================================================
-let _renderQueued = false;
-let _loadTickTimer = null;
-
-function render() {
-  if (_renderQueued) return;
-  _renderQueued = true;
-  requestAnimationFrame(_doRenderRaf);
-}
-function _doRenderRaf() {
-  _renderQueued = false;
-  _doRender();
-}
-
-function _doRender() {
-  const navBtns = document.querySelectorAll('#nav button');
-  for (let i = 0; i < navBtns.length; i++) {
-    navBtns[i].classList.toggle('active', navBtns[i].dataset.tab === STATE.currentTab);
-  }
-
-  const content = document.getElementById('content');
-
-  if (STATE.loading) {
-    renderLoading(content);
-    return;
-  }
-  if (_loadTickTimer) { clearInterval(_loadTickTimer); _loadTickTimer = null; }
-
-  if (STATE.error && !STATE.students.length) {
-    renderError(content);
-    return;
-  }
-
-  if (STATE.currentTab === 'roster') {
-    if (STATE.currentStudent) renderDetail(content);
-    else renderRoster(content);
-  } else if (STATE.currentTab === 'lore') {
-    renderLore(content);
-  } else if (STATE.currentTab === 'leaderboard') {
-    renderLeaderboard(content);
-  } else if (STATE.currentTab === 'swipe') {
-    renderSwipe(content);
-  }
-}
-
-// ---------- LOADING (boot) ----------
-function renderLoading(el) {
-  // Reuse existing canvas to avoid killing the running game
-  if (el.dataset.mode === 'loading' && el.querySelector('#flappyCanvas')) {
-    const s = document.getElementById('loadStatus');
-    if (s) s.textContent = STATE.status || 'LOADING...';
-    return;
-  }
-  stopContentGames();
-  el.dataset.mode = 'loading';
-  el.innerHTML = `
-    <div class="loading">
-      <div><span class="blink">▮</span> <span id="loadStatus">${esc(STATE.status || 'LOADING...')}</span></div>
-      <div style="margin-top:10px;font-size:10px;color:var(--yellow);" id="loadSecs">0s</div>
-      <div class="flappy-wrap">
-        <canvas class="flappy-canvas" id="flappyCanvas" width="300" height="180"></canvas>
-        <div class="flappy-hint" id="flappyHint">TAP TO FLAP</div>
-      </div>
-      <div class="flappy-label">► F31N BIRD — v1.0 ◄</div>
-      <div style="margin-top:14px;font-size:8px;color:var(--dim);line-height:2;">
-        First load can take 15–25s (cold start).<br>
-        After that, everything is cached and instant.
-      </div>
-    </div>`;
-  startGameOn(document.getElementById('flappyCanvas'));
-  startLoadTick();
-}
-
-function startLoadTick() {
-  if (_loadTickTimer) clearInterval(_loadTickTimer);
-  _loadTickTimer = setInterval(() => {
-    const el = document.getElementById('loadSecs');
-    if (!el || !STATE.loading) {
-      clearInterval(_loadTickTimer);
-      _loadTickTimer = null;
-      return;
-    }
-    const secs = STATE.loadingStart ? Math.floor((Date.now() - STATE.loadingStart) / 1000) : 0;
-    el.textContent = secs + 's';
-  }, 500);
-}
-
-// ---------- ERROR SCREEN ----------
-function renderError(el) {
-  stopContentGames();
-  el.dataset.mode = 'error';
-  const block = flappyLoadingBlock('CONNECTION FAILED');
-  el.innerHTML = `
-    <div class="pixel-box" style="text-align:center;padding:24px;">
-      <div style="font-size:14px;color:var(--red);margin-bottom:12px;">⚠ CONNECTION FAILED</div>
-      <div style="font-size:9px;color:var(--text);margin-bottom:16px;line-height:2;word-break:break-word;">${esc(STATE.error)}</div>
-      <button class="pixel-btn green wide" onclick="loadRoster()">▶ RETRY</button>
-      <div style="height:10px"></div>
-      <button class="pixel-btn wide" onclick="hardReset()">↻ CLEAR CACHE</button>
-    </div>
-    ${block.html}`;
-  startGameOn(document.getElementById(block.id));
-}
-
-function hardReset() {
-  cClear();
-  STATE.students = []; STATE.swipeOrder = []; STATE.swipeIndex = 0;
-  STATE.leaderboard = null; STATE.loreFeed = []; STATE.error = null;
-  STATE.loading = true; STATE.loadingStart = Date.now(); STATE.status = 'CONNECTING...';
-  render();
-  boot();
-}
-
-function goHome() {
-  STATE.currentTab = 'roster';
-  STATE.currentStudent = null;
-  STATE.currentDetail = null;
-  STATE.detailError = null;
-  STATE.rosterQuery = '';
-  STATE.rosterPage = 0;
-  STATE.error = null;
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  backgroundRefresh();
-}
-
-// ---------- ROSTER ----------
-function renderRoster(el) {
-  stopContentGames();
-  el.dataset.mode = 'roster';
-
-  if (!STATE.students.length) {
-    el.innerHTML = `<div class="empty">NO STUDENTS FOUND.</div>`;
-    return;
-  }
-  const q = STATE.rosterQuery.trim().toLowerCase();
-  let filtered = q
-    ? STATE.students.filter(s => s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q))
-    : STATE.students.slice();
-
-  filtered = sortRoster(filtered, STATE.rosterSort);
-
-  const total = filtered.length;
-  const totalPages = Math.max(1, Math.ceil(total / STATE.rosterPageSize));
-  if (STATE.rosterPage >= totalPages) STATE.rosterPage = totalPages - 1;
-  const start = STATE.rosterPage * STATE.rosterPageSize;
-  const items = filtered.slice(start, start + STATE.rosterPageSize);
-
-  const badge = STATE.fromCache ? '<span class="cache-badge">CACHED</span>' : '';
-
-  let html = `
-    <div style="margin-bottom:10px;">
-      <input class="pixel-input" id="rosterSearch" type="search" placeholder="SEARCH NAME OR ROLL..."
-             value="${esc(STATE.rosterQuery)}" oninput="onRosterSearch(this.value)"
-             autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
-    </div>
-    <div class="sort-bar">
-      <span class="sort-label">SORT:</span>
-      <button class="sort-btn ${STATE.rosterSort === 'roll' ? 'active' : ''}" onclick="setRosterSort('roll')">ROLL ↑</button>
-      <button class="sort-btn ${STATE.rosterSort === 'name' ? 'active' : ''}" onclick="setRosterSort('name')">NAME A-Z</button>
-      <button class="sort-btn ${STATE.rosterSort === 'rating' ? 'active' : ''}" onclick="setRosterSort('rating')">RATING ↓</button>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--dim);margin-bottom:10px;">
-      <span>● ${total} RECORD${total !== 1 ? 'S' : ''} ${badge}</span>
-      <span>PAGE ${STATE.rosterPage + 1} / ${totalPages}</span>
-    </div>`;
-
-  if (!items.length) {
-    html += `<div class="empty">NO MATCHES FOR "${esc(STATE.rosterQuery)}"</div>`;
-    el.innerHTML = html;
-    return;
-  }
-
-  for (let i = 0; i < items.length; i++) {
-    const s = items[i];
-    const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
-    html += `
-      <div class="roster-item" onclick="openDetail('${s.roll}')">
-        <div class="left">
-          <span class="roll">${esc(s.roll)}</span>
-          <span class="name">${esc(s.name)}</span>
-        </div>
-        <div class="right">
-          <div class="kk-mini">♥${s.kisses} ✖${s.kicks}</div>
-          <div class="rating-badge ${cls}">${s.rating.toFixed(2)}</div>
-        </div>
-      </div>`;
-  }
-
-  if (totalPages > 1) {
-    html += `
-      <div style="display:flex;gap:8px;margin-top:16px;">
-        <button class="pixel-btn" style="flex:1;" ${STATE.rosterPage === 0 ? 'disabled' : ''}
-                onclick="rosterPage(-1)">← PREV</button>
-        <button class="pixel-btn" style="flex:1;" ${STATE.rosterPage >= totalPages - 1 ? 'disabled' : ''}
-                onclick="rosterPage(1)">NEXT →</button>
-      </div>`;
-  }
-  el.innerHTML = html;
-}
-
-function setRosterSort(mode) {
-  if (STATE.rosterSort === mode) return;
-  haptic(10);
-  STATE.rosterSort = mode;
-  STATE.rosterPage = 0;
-  render();
-}
-
-function sortRoster(arr, mode) {
-  const copy = arr.slice();
-  if (mode === 'name') {
-    copy.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-  } else if (mode === 'rating') {
-    copy.sort((a, b) => b.rating - a.rating);
-  } else {
-    copy.sort((a, b) => compareRolls(a.roll, b.roll));
-  }
-  return copy;
-}
-
-function compareRolls(a, b) {
-  const pa = parseRoll(a), pb = parseRoll(b);
-  if (pa[0] !== pb[0]) return pa[0] - pb[0];
-  if (pa[1] !== pb[1]) return pa[1] - pb[1];
-  return pa[2].localeCompare(pb[2]);
-}
-function parseRoll(s) {
-  const m = String(s).match(/^(\d+)-(\d+)$/);
-  if (!m) return [Infinity, 0, String(s)];
-  return [Number(m[1]), Number(m[2]), String(s)];
-}
-
-let _searchTimer;
-function onRosterSearch(val) {
-  STATE.rosterQuery = val;
-  STATE.rosterPage = 0;
-  clearTimeout(_searchTimer);
-  _searchTimer = setTimeout(() => {
-    const active = document.activeElement;
-    const wasSearch = active && active.id === 'rosterSearch';
-    const pos = wasSearch ? active.selectionStart : 0;
-    render();
-    if (wasSearch) {
-      const inp = document.getElementById('rosterSearch');
-      if (inp) { inp.focus(); inp.setSelectionRange(pos, pos); }
-    }
-  }, 150);
-}
-function rosterPage(d) {
-  haptic(10);
-  STATE.rosterPage += d;
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ---------- LORE FEED ----------
-function loadLore() {
-  api('alllore').then(data => {
-    if (Array.isArray(data)) {
-      STATE.loreFeed = data;
-      if (STATE.currentTab === 'lore') render();
-    }
-  }).catch(() => {});
-}
-
-function renderLore(el) {
-  stopContentGames();
-  el.dataset.mode = 'lore';
-
-  let rollOpts = '';
-  for (let i = 0; i < STATE.students.length; i++) {
-    const s = STATE.students[i];
-    rollOpts += `<option value="${esc(s.roll)}" ${STATE.loreComposerRoll === s.roll ? 'selected' : ''}>${esc(s.roll)} — ${esc(s.name)}</option>`;
-  }
-
-  let html = `
-    <div class="lore-composer">
-      <select id="loreRoll" onchange="STATE.loreComposerRoll=this.value">
-        <option value="">— PICK A STUDENT —</option>
-        ${rollOpts}
-      </select>
-      <textarea id="loreComposerText" placeholder="DROP SOME LORE..." autocorrect="off" autocapitalize="sentences"></textarea>
-      <button class="lc-btn" onclick="submitLorePost()">+ POST LORE</button>
-      <div class="lc-hint">POSTS WITH MORE ♥ THAN ✖ RISE TO THE TOP</div>
-    </div>
-    <div class="lore-sort-bar">
-      <span>● ${STATE.loreFeed.length} POST${STATE.loreFeed.length !== 1 ? 'S' : ''}</span>
-      <span>ALL POSTS · SORTED BY SCORE</span>
-    </div>
-    <div class="lore-feed">
-  `;
-
-  if (!STATE.loreFeed.length) {
-    html += `<div class="empty">NO LORE POSTS YET.<br><br>Be the first to drop one.</div>`;
-  } else {
-    for (let i = 0; i < STATE.loreFeed.length; i++) {
-      const l = STATE.loreFeed[i];
-      const scoreCls = l.score > 0 ? 'pos' : l.score < 0 ? 'neg' : 'zero';
-      const rankCls = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
-      const scoreTxt = l.score > 0 ? '+' + l.score : String(l.score);
-
-      html += `
-        <div class="lore-post ${rankCls}">
-          <div class="lp-vote">
-            <button class="up" onclick="voteLoreFeed('${l.id}','kiss')">♥</button>
-            <div class="lp-score ${scoreCls}">${scoreTxt}</div>
-            <button class="down" onclick="voteLoreFeed('${l.id}','kick')">✖</button>
-          </div>
-          <div class="lp-body">
-            <div class="lp-text">"${esc(l.text)}"</div>
-            <div class="lp-meta">
-              <span class="lp-author" onclick="openDetailFromLore('${esc(l.roll)}')">${esc(l.roll)} · ${esc(l.name)}</span>
-              <span class="lp-counts">♥ ${l.kiss} &nbsp; ✖ ${l.kick}</span>
-            </div>
-          </div>
-        </div>`;
-    }
-  }
-
-  html += `</div>`;
-  el.innerHTML = html;
-}
-
-async function submitLorePost() {
-  const roll = document.getElementById('loreRoll').value;
-  const text = document.getElementById('loreComposerText').value.trim();
-
-  if (!roll) { toast('PICK A STUDENT FIRST', true); haptic(30); return; }
-  if (!text) { toast('WRITE SOMETHING FIRST', true); haptic(30); return; }
-
-  const student = STATE.students.find(s => s.roll === roll);
-  const name = student ? student.name : '';
-
-  const btn = document.querySelector('.lore-composer .lc-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'POSTING...'; }
-  showOverlay('◤ POSTING LORE ◢', 'SAVING TO THE ARCHIVE...');
-  haptic(15);
-
-  const t0 = Date.now();
-  try {
-    const res = await apiWrite('addlore', { roll, name, text }, 2);
-    const elapsed = Date.now() - t0;
-    if (elapsed < 600) await new Promise(r => setTimeout(r, 600 - elapsed));
-    hideOverlay();
-
-    document.getElementById('loreComposerText').value = '';
-
-    const newPost = {
-      id: res.id, roll: res.roll, name: res.name, text: res.text,
-      kiss: 0, kick: 0, score: 0
-    };
-    STATE.loreFeed = [newPost, ...STATE.loreFeed];
-
-    if (res.updated) patchStudent(res.updated);
-
-    toast('LORE POSTED');
-    haptic([15, 30, 15]);
-    render();
-
-    api('leaderboard').then(x => { if (x && !x.error) STATE.leaderboard = x; }).catch(() => {});
-  } catch (err) {
-    hideOverlay();
-    toast('FAILED: ' + err.message, true);
-    haptic(80);
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '+ POST LORE'; }
-  }
-}
-
-async function voteLoreFeed(loreId, vote) {
-  haptic(10);
-  const post = STATE.loreFeed.find(p => p.id === loreId);
-  const prev = post ? { kiss: post.kiss, kick: post.kick, score: post.score } : null;
-  if (post) {
-    if (vote === 'kiss') post.kiss++;
-    else                 post.kick++;
-    post.score = post.kiss - post.kick;
-    STATE.loreFeed.sort((a, b) => b.score - a.score);
-    render();
-  }
-
-  try {
-    const res = await apiWrite('voteLore', { loreId, vote }, 2);
-    if (post && typeof res.kiss === 'number' && typeof res.kick === 'number') {
-      post.kiss = res.kiss;
-      post.kick = res.kick;
-      post.score = res.score;
-      STATE.loreFeed.sort((a, b) => b.score - a.score);
-      render();
-    }
-    toast(vote === 'kiss' ? '♥ KISSED' : '✖ KICKED');
-  } catch (err) {
-    if (post && prev) {
-      post.kiss = prev.kiss;
-      post.kick = prev.kick;
-      post.score = prev.score;
-      STATE.loreFeed.sort((a, b) => b.score - a.score);
-      render();
-    }
-    toast('FAILED: ' + err.message, true);
-  }
-}
-
-function openDetailFromLore(roll) {
-  haptic(10);
-  STATE.currentTab = 'roster';
-  openDetail(roll);
-}
-
-// ---------- LEADERBOARD ----------
-function loadLeaderboard(force) {
-  if (force) STATE.leaderboard = null;
-  api('leaderboard').then(x => {
-    if (x && !x.error) {
-      STATE.leaderboard = x;
-      if (STATE.currentTab === 'leaderboard') render();
-    }
-  }).catch(() => {});
-}
-
-function renderLeaderboard(el) {
-  stopContentGames();
-
-  const lb = STATE.leaderboard;
-  if (!lb) {
-    el.dataset.mode = 'leaderboard-loading';
-    const block = flappyLoadingBlock('LOADING BOARD...');
-    mountFlappyBlock(el, block);
-    loadLeaderboard(false);
-    return;
-  }
-  el.dataset.mode = 'leaderboard';
-
-  const tabs = [
-    { k: 'topRated',   label: 'TOP' },
-    { k: 'mostEval',   label: 'RATED' },
-    { k: 'mostKissed', label: 'KISSED' },
-    { k: 'mostKicked', label: 'KICKED' }
-  ];
-
-  let html = `
-    <div class="lb-tabs">
-      ${tabs.map(t => `<button class="${STATE.lbTab === t.k ? 'active' : ''}" onclick="setLbTab('${t.k}')">${t.label}</button>`).join('')}
-    </div>
-    <div style="font-size:8px;color:var(--dim);margin-bottom:12px;text-align:center;">
-      ${lb.total || 0} SUBJECTS · UPDATED JUST NOW
-    </div>
-    <div class="lb-refresh">
-      <button class="pixel-btn cyan" onclick="loadLeaderboard(true)">↻ REFRESH BOARD</button>
-    </div>
-  `;
-
-  const list = lb[STATE.lbTab] || [];
-  if (!list.length) {
-    html += `<div class="empty">NOTHING HERE YET.</div>`;
-    el.innerHTML = html;
-    return;
-  }
-
-  for (let i = 0; i < list.length; i++) {
-    const s = list[i];
-    const rank = i + 1;
-    const rankCls = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
-    let valueHtml;
-    if (STATE.lbTab === 'topRated') {
-      const c = s.rating > 3 ? 'pos' : s.rating < 2 ? 'neg' : 'mid';
-      valueHtml = `<span class="lb-value ${c}">${s.rating.toFixed(2)}</span>`;
-    } else if (STATE.lbTab === 'mostEval') {
-      valueHtml = `<span class="lb-value mid">${s.evalCount}×</span>`;
-    } else if (STATE.lbTab === 'mostKissed') {
-      valueHtml = `<span class="lb-value kiss">♥ ${s.kisses}</span>`;
-    } else {
-      valueHtml = `<span class="lb-value kick">✖ ${s.kicks}</span>`;
-    }
-
-    html += `
-      <div class="lb-row" onclick="openDetail('${s.roll}')">
-        <div class="lb-rank ${rankCls}">#${rank}</div>
-        <div class="lb-name"><span class="lb-roll">${esc(s.roll)}</span>${esc(s.name)}</div>
-        ${valueHtml}
-      </div>`;
-  }
-
-  el.innerHTML = html;
-}
-
-function setLbTab(k) { haptic(10); STATE.lbTab = k; render(); }
-
-// ---------- DETAIL ----------
-async function openDetail(roll) {
-  STATE.currentStudent = roll;
-  STATE.currentDetail = null;
-  STATE.detailError = null;
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  try {
-    const d = await api('detail', { roll });
-    if (!d || d.error) throw new Error((d && d.error) || 'No data');
-    STATE.currentDetail = d;
-    cWrite('detail_' + roll, d);
-  } catch (err) {
-    STATE.detailError = err.message || String(err);
-  }
-  render();
-}
-
-function closeDetail() {
-  haptic(10);
-  STATE.currentStudent = null;
-  STATE.currentDetail = null;
-  STATE.detailError = null;
-  render();
-}
-
-function renderDetail(el) {
-  stopContentGames();
-
-  if (STATE.detailError) {
-    el.dataset.mode = 'detail-error';
-    el.innerHTML = `
-      <button class="pixel-btn wide" onclick="closeDetail()" style="margin-bottom:12px;">← BACK</button>
-      <div class="pixel-box" style="text-align:center;padding:30px;">
-        <div style="font-size:13px;color:var(--red);margin-bottom:12px;">⚠ COULD NOT LOAD</div>
-        <div style="font-size:9px;color:var(--text);margin-bottom:16px;line-height:2;">${esc(STATE.detailError)}</div>
-        <button class="pixel-btn green wide" onclick="openDetail('${STATE.currentStudent}')">▶ RETRY</button>
-      </div>`;
-    return;
-  }
-  if (!STATE.currentDetail) {
-    el.dataset.mode = 'detail-loading';
-    const block = flappyLoadingBlock('LOADING FILE...');
-    mountFlappyBlock(el, block);
-    return;
-  }
-  el.dataset.mode = 'detail';
-
-  const s = STATE.currentDetail.student;
-  const entries = STATE.currentDetail.entries;
-  const lore = STATE.currentDetail.lore;
-  const cls = s.rating > 3 ? 'rating-pos' : s.rating < 2 ? 'rating-neg' : 'rating-mid';
-  const pos = (s.positive !== undefined) ? s.positive : ((s.personality + s.cool + s.helpfulness) / 3);
-  const neg = (s.negative !== undefined) ? s.negative : 0;
-
-  let loreHtml = lore.length ? lore.map(loreItem).join('') : '<div class="empty">NO LORE YET.</div>';
-  let entriesHtml = entries.length ? entries.map(entryItem).join('') : '<div class="empty">NO EVALUATIONS YET.</div>';
-
-  el.innerHTML = `
-    <button class="pixel-btn wide" onclick="closeDetail()" style="margin-bottom:12px;">← BACK</button>
-
-    <div class="pixel-box detail-header">
-      <div class="big-roll">${esc(s.roll)}</div>
-      <div class="big-name">${esc(s.name)}</div>
-      <div class="big-score ${cls}">${s.rating.toFixed(2)}</div>
-      <div class="score-formula">
-        <span class="pos">+${pos.toFixed(2)} positive</span>
-        −
-        <span class="neg">${neg.toFixed(2)} negative</span>
-        =
-        <span class="${cls}">${s.rating.toFixed(2)}</span>
-      </div>
-      <div style="font-size:8px;color:var(--dim);margin-top:8px;">
-        ${s.evalCount} EVALUATION${s.evalCount !== 1 ? 'S' : ''}
-      </div>
-    </div>
-
-    <div class="section-title">► STAT BREAKDOWN</div>
-    <div class="criteria-grid">
-      ${critCard('PERSONALITY', s.personality, true)}
-      ${critCard('COOL',        s.cool,        true)}
-      ${critCard('HELPFULNESS', s.helpfulness, true)}
-      ${critCard('PETTINESS',   s.pettiness,   false)}
-      ${critCard('HATE',        s.hate,        false)}
-      ${critCard('ANNOYING',    s.annoying,    false)}
-    </div>
-
-    <div class="section-title">► SUBMIT EVALUATION</div>
-    <div class="eval-section" id="evalForm">
-      ${criteriaRow('Personality', 'personality', true)}
-      ${criteriaRow('Cool',        'cool',        true)}
-      ${criteriaRow('Helpfulness', 'helpfulness', true)}
-      ${criteriaRow('Pettiness',   'pettiness',   false)}
-      ${criteriaRow('Hate',        'hate',        false)}
-      ${criteriaRow('Annoying',    'annoying',    false)}
-      <textarea class="pixel-textarea" id="evalLore" placeholder="Optional lore / comment..." autocorrect="off" autocapitalize="sentences"></textarea>
-      <div style="margin-top:10px;">
-        <button class="pixel-btn green wide" disabled onclick="submitEval('${s.roll}')">⚠ SET ALL 6 CRITERIA</button>
-      </div>
-    </div>
-
-    <div class="section-title">► LORE (${lore.length})</div>
-    <div style="margin-bottom:10px;">
-      <textarea class="pixel-textarea" id="loreInput" placeholder="Drop some lore..." autocorrect="off" autocapitalize="sentences"></textarea>
-      <div style="margin-top:8px;">
-        <button class="pixel-btn cyan wide" onclick="addLore('${s.roll}','${esc(s.name)}')">+ ADD LORE</button>
-      </div>
-    </div>
-    <div>${loreHtml}</div>
-
-    <div class="section-title">► QUICK REACTIONS</div>
-    <div class="kisskick-row">
-      <button class="kiss-btn" onclick="sendKiss('${s.roll}')">♥ KISS (${s.kisses})</button>
-      <button class="kick-btn" onclick="sendKick('${s.roll}')">✖ KICK (${s.kicks})</button>
-    </div>
-
-    <div class="section-title" style="margin-top:18px;">► ENTRY HISTORY (${entries.length})</div>
-    <div>${entriesHtml}</div>
-  `;
-
-  const inputs = el.querySelectorAll('.star-input');
-  for (let i = 0; i < inputs.length; i++) inputs[i].dataset.value = '0';
-  _evalBtn = null;
-  updateEvalButtonState();
-}
-
-let _evalBtn = null;
-function updateEvalButtonState() {
-  const form = document.getElementById('evalForm');
-  if (!form) { _evalBtn = null; return; }
-  if (!_evalBtn || !form.contains(_evalBtn)) {
-    _evalBtn = form.querySelector('button.green');
-  }
-  if (!_evalBtn) return;
-  let allSet = true;
-  const inputs = form.querySelectorAll('.star-input');
-  for (let i = 0; i < inputs.length; i++) {
-    const v = parseInt(inputs[i].dataset.value || '0', 10);
-    if (!v || v < 1 || v > 5) { allSet = false; break; }
-  }
-  _evalBtn.disabled = !allSet;
-  _evalBtn.textContent = allSet ? '▶ SUBMIT EVALUATION' : '⚠ SET ALL 6 CRITERIA';
-}
-
-function critCard(label, value, positive) {
-  return `
-    <div class="criteria-card ${positive ? 'positive' : 'negative'}">
-      <div class="label">${label}</div>
-      <div class="value">${value.toFixed(1)}</div>
-      <div class="stars-display">${stars(value, positive ? 'var(--green)' : 'var(--red)')}</div>
-    </div>`;
-}
-
-function criteriaRow(label, key, positive) {
-  return `
-    <div class="criterion-row ${positive ? 'positive' : 'negative'}">
-      <div class="cr-label">
-        <span>${positive ? '▲' : '▼'} ${label.toUpperCase()}</span>
-        <span class="cr-hint">${positive ? '1-5 STARS' : '1→0 · 2→−0.5 · 3→−1 · 4→−2 · 5→−3'}</span>
-      </div>
-      <div class="star-input" data-target="${key}">
-        <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span>
-        <span data-val="4">★</span><span data-val="5">★</span>
-      </div>
-    </div>`;
-}
-
-function stars(v, color) {
-  const f = Math.round(v);
-  let o = '';
-  for (let i = 1; i <= 5; i++) o += `<span style="color:${i <= f ? color : '#333'}">★</span>`;
-  return o;
-}
-
-function entryItem(e) {
-  const cls = e.score > 3 ? 'var(--green)' : e.score < 2 ? 'var(--red)' : 'var(--yellow)';
-  return `
-    <div class="entry-item">
-      <div class="entry-top">
-        <span>${formatDate(e.time)}</span>
-        <span style="color:${cls};font-size:11px;">SCORE: ${e.score.toFixed(2)}</span>
-      </div>
-      <div class="entry-scores">
-        <span style="color:var(--green)">P:${e.personality}</span>
-        <span style="color:var(--green)">C:${e.cool}</span>
-        <span style="color:var(--green)">H:${e.helpfulness}</span>
-        <span style="color:var(--red)">Pe:${e.pettiness}</span>
-        <span style="color:var(--red)">Ha:${e.hate}</span>
-        <span style="color:var(--red)">An:${e.annoying}</span>
-      </div>
-      ${e.lore ? `<div style="margin-top:8px;color:var(--dim);font-size:9px;line-height:1.8;">"${esc(e.lore)}"</div>` : ''}
-    </div>`;
-}
-
-function loreItem(l) {
-  return `
-    <div class="lore-item">
-      <div class="lore-text">"${esc(l.text)}"</div>
-      <div class="lore-meta">
-        <span>${formatDate(l.id)}</span>
-        <div class="lore-vote-btns">
-          <button class="kiss-btn" onclick="voteLore('${l.id}','kiss')">♥ ${l.kiss}</button>
-          <button class="kick-btn" onclick="voteLore('${l.id}','kick')">✖ ${l.kick}</button>
-        </div>
-      </div>
-    </div>`;
-}
-
-// ---------- ACTIONS ----------
-async function submitEval(roll) {
-  const form = document.getElementById('evalForm');
-  if (!form) return;
-
-  const data = {};
-  let allSet = true;
-  const inputs = form.querySelectorAll('.star-input');
-  for (let i = 0; i < inputs.length; i++) {
-    const v = parseInt(inputs[i].dataset.value || '0', 10);
-    if (!v || v < 1 || v > 5) allSet = false;
-    data[inputs[i].dataset.target] = v;
-  }
-  if (!allSet) { toast('SET ALL 6 CRITERIA FIRST', true); haptic(30); return; }
-
-  const student = STATE.students.find(x => x.roll === roll);
-  data.roll = roll;
-  data.name = student ? student.name : '';
-  data.lore = document.getElementById('evalLore').value.trim();
-
-  const btn = form.querySelector('button.green');
-  if (btn) { btn.classList.add('loading'); btn.textContent = 'SUBMITTING...'; }
-  showOverlay('◤ PROCESSING EVALUATION ◢', 'UPLOADING AND RECALCULATING RATING...');
-  haptic(15);
-
-  const t0 = Date.now();
-  try {
-    const res = await apiWrite('submiteval', data, 2);
-    const elapsed = Date.now() - t0;
-    if (elapsed < 700) await new Promise(r => setTimeout(r, 700 - elapsed));
-    hideOverlay();
-
-    let oldRating = null;
-    if (res.updated) {
-      const prev = STATE.students.find(s => s.roll === roll);
-      oldRating = prev ? prev.rating : null;
-      patchStudent(res.updated);
-
-      if (STATE.currentDetail) {
-        const newEntry = {
-          time: new Date(),
-          personality: Number(data.personality),
-          cool: Number(data.cool),
-          helpfulness: Number(data.helpfulness),
-          pettiness: Number(data.pettiness),
-          hate: Number(data.hate),
-          annoying: Number(data.annoying),
-          score: res.score,
-          lore: data.lore
-        };
-        STATE.currentDetail.entries = [newEntry, ...STATE.currentDetail.entries];
-        cWrite('detail_' + roll, STATE.currentDetail);
-      }
-    }
-
-    STATE.leaderboard = null;
-    loadLeaderboard(false);
-    render();
-
-    const bigScore = document.querySelector('.big-score');
-    if (bigScore) {
-      bigScore.classList.add('updated');
-      setTimeout(() => bigScore.classList.remove('updated'), 800);
-    }
-
-    if (oldRating !== null && res.updated) {
-      const delta = res.updated.rating - oldRating;
-      const sign = delta >= 0 ? '+' : '';
-      toast(`SCORED ${res.score.toFixed(2)}\nRATING ${oldRating.toFixed(2)} → ${res.updated.rating.toFixed(2)} (${sign}${delta.toFixed(2)})`);
-    } else {
-      toast(`SCORED ${res.score.toFixed(2)}`);
-    }
-    haptic([15, 40, 15]);
-  } catch (err) {
-    hideOverlay();
-    if (btn) { btn.classList.remove('loading'); updateEvalButtonState(); }
-    toast('FAILED: ' + err.message, true);
-    haptic(80);
-  }
-}
-
-async function addLore(roll, name) {
-  const text = document.getElementById('loreInput').value.trim();
-  if (!text) { toast('WRITE SOMETHING FIRST', true); haptic(30); return; }
-  showOverlay('◤ POSTING LORE ◢', 'SAVING TO THE ARCHIVE...');
-  haptic(15);
-  try {
-    const res = await apiWrite('addlore', { roll, name, text }, 2);
-    document.getElementById('loreInput').value = '';
-    hideOverlay();
-    toast('LORE ADDED');
-    haptic([15, 30, 15]);
-
-    if (res.updated) patchStudent(res.updated);
-    else {
-      const d = await api('detail', { roll });
-      STATE.currentDetail = d;
-      cWrite('detail_' + roll, d);
-    }
-
-    render();
-    loadLore();
-  } catch (err) {
-    hideOverlay();
-    toast('FAILED: ' + err.message, true);
-    haptic(80);
-  }
-}
-
-async function voteLore(loreId, vote) {
-  haptic(10);
-  try {
-    const res = await apiWrite('voteLore', { loreId, vote }, 2);
-    toast(vote === 'kiss' ? '♥ KISSED' : '✖ KICKED');
-    const roll = STATE.currentStudent;
-
-    if (STATE.currentDetail && Array.isArray(STATE.currentDetail.lore)) {
-      const item = STATE.currentDetail.lore.find(l => l.id === loreId);
-      if (item) {
-        item.kiss = res.kiss;
-        item.kick = res.kick;
-      }
-      cWrite('detail_' + roll, STATE.currentDetail);
-      render();
-    }
-    loadLore();
-  } catch (err) { toast('FAILED: ' + err.message, true); }
-}
-
-async function sendKiss(roll) {
-  haptic(12);
-  const s = STATE.students.find(x => x.roll === roll);
-  const prevKiss = s ? s.kisses : 0;
-  if (s) s.kisses++;
-  if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
-    STATE.currentDetail.student.kisses++;
-  }
-  render();
-
-  try {
-    const res = await apiWrite('kiss', { roll }, 2);
-    if (res.updated) patchStudent(res.updated);
-    else if (s && typeof res.kisses === 'number') {
-      s.kisses = res.kisses;
-      if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
-        STATE.currentDetail.student.kisses = res.kisses;
-      }
-    }
-    cWrite('roster', STATE.students);
-    toast('♥ KISS SENT');
-    haptic([15, 30, 15]);
-
-    STATE.leaderboard = null;
-    loadLeaderboard(false);
-    render();
-  } catch {
-    if (s) s.kisses = prevKiss;
-    if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
-      STATE.currentDetail.student.kisses = prevKiss;
-    }
-    cWrite('roster', STATE.students);
-    render();
-    toast('NOT SAVED — TRY AGAIN', true);
-    haptic(60);
-  }
-}
-
-async function sendKick(roll) {
-  haptic(12);
-  const s = STATE.students.find(x => x.roll === roll);
-  const prevKick = s ? s.kicks : 0;
-  if (s) s.kicks++;
-  if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
-    STATE.currentDetail.student.kicks++;
-  }
-  render();
-
-  try {
-    const res = await apiWrite('kick', { roll }, 2);
-    if (res.updated) patchStudent(res.updated);
-    else if (s && typeof res.kicks === 'number') {
-      s.kicks = res.kicks;
-      if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
-        STATE.currentDetail.student.kicks = res.kicks;
-      }
-    }
-    cWrite('roster', STATE.students);
-    toast('✖ KICK SENT');
-    haptic([15, 30, 15]);
-
-    STATE.leaderboard = null;
-    loadLeaderboard(false);
-    render();
-  } catch {
-    if (s) s.kicks = prevKick;
-    if (STATE.currentDetail && STATE.currentDetail.student && STATE.currentDetail.student.roll === roll) {
-      STATE.currentDetail.student.kicks = prevKick;
-    }
-    cWrite('roster', STATE.students);
-    render();
-    toast('NOT SAVED — TRY AGAIN', true);
-    haptic(60);
-  }
-}
-
-// ---------- SWIPE ----------
-function renderSwipe(el) {
-  stopContentGames();
-  el.dataset.mode = 'swipe';
-
-  if (!STATE.swipeOrder.length) {
-    el.innerHTML = `<div class="empty">NO PROFILES TO SWIPE.</div>`;
-    return;
-  }
-  const total = STATE.swipeOrder.length;
-  const idx = STATE.swipeIndex;
-  if (idx >= total) {
-    el.innerHTML = `
-      <div class="pixel-box" style="text-align:center;padding:40px 20px;">
-        <div style="font-size:15px;color:var(--green);margin-bottom:12px;">DECK CLEARED</div>
-        <div style="font-size:10px;color:var(--dim);margin-bottom:20px;">You saw all ${total} profiles.</div>
-        <button class="pixel-btn green wide" onclick="resetSwipe()">▶ RESHUFFLE</button>
-      </div>`;
-    return;
-  }
-  const s = STATE.swipeOrder[idx];
-  const cls = s.rating > 3 ? 'var(--green)' : s.rating < 2 ? 'var(--red)' : 'var(--yellow)';
-  const pct = Math.round((idx / total) * 100);
-
-  el.innerHTML = `
-    <div style="margin-bottom:10px;">
-      <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--dim);margin-bottom:6px;">
-        <span>CARD ${idx + 1} / ${total}</span><span>${pct}%</span>
-      </div>
-      <div style="height:10px;background:var(--surface2);border:2px solid var(--border);">
-        <div style="height:100%;width:${pct}%;background:var(--green);transition:width .2s;"></div>
-      </div>
-    </div>
-
-    <div class="swipe-container" id="swipeContainer">
-      <div class="swipe-overlay kiss" id="overlayKiss">KISS</div>
-      <div class="swipe-overlay kick" id="overlayKick">KICK</div>
-      <div class="swipe-card" id="swipeCard">
-        <div class="sc-name">${esc(s.name)}</div>
-        <div class="sc-roll">${esc(s.roll)}</div>
-        <div class="sc-score" style="color:${cls}">${s.rating.toFixed(2)}</div>
-        <div class="sc-kk"><span>♥ ${s.kisses}</span><span>✖ ${s.kicks}</span></div>
-        <div class="sc-criteria">
-          <div class="sc-crit" style="color:var(--green)"><span>PERSONALITY</span><span>${s.personality.toFixed(1)}</span></div>
-          <div class="sc-crit" style="color:var(--green)"><span>COOL</span><span>${s.cool.toFixed(1)}</span></div>
-          <div class="sc-crit" style="color:var(--green)"><span>HELPFUL</span><span>${s.helpfulness.toFixed(1)}</span></div>
-          <div class="sc-crit" style="color:var(--red)"><span>PETTY</span><span>${s.pettiness.toFixed(1)}</span></div>
-          <div class="sc-crit" style="color:var(--red)"><span>HATE</span><span>${s.hate.toFixed(1)}</span></div>
-          <div class="sc-crit" style="color:var(--red)"><span>ANNOY</span><span>${s.annoying.toFixed(1)}</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="swipe-hint">DRAG · SWIPE LEFT/RIGHT</div>
-
-    <div class="swipe-actions">
-      <button class="pixel-btn pink" onclick="doSwipe('kiss')">♥ KISS</button>
-      <button class="pixel-btn yellow" onclick="skipSwipe()">SKIP</button>
-      <button class="pixel-btn red" onclick="doSwipe('kick')">✖ KICK</button>
-    </div>
-
-    <div style="display:flex;gap:8px;margin-top:10px;">
-      <button class="pixel-btn" style="flex:1;" ${idx === 0 ? 'disabled' : ''} onclick="prevSwipe()">← PREV</button>
-      <button class="pixel-btn" style="flex:1;" ${idx >= total - 1 ? 'disabled' : ''} onclick="nextSwipe()">NEXT →</button>
-    </div>
-  `;
-  initSwipeDrag();
-}
-
-function initSwipeDrag() {
-  const card = document.getElementById('swipeCard');
-  if (!card) return;
-  const kissOv = document.getElementById('overlayKiss');
-  const kickOv = document.getElementById('overlayKick');
-
-  let sx = 0, sy = 0, cx = 0;
-  let drag = false;
-  let lockedAxis = null;
-
-  function begin(x, y) {
-    sx = x; sy = y; cx = 0;
-    drag = true; lockedAxis = null;
-    card.style.transition = 'none';
-  }
-  function move(x, y, ev) {
-    if (!drag) return;
-    const dx = x - sx, dy = y - sy;
-    if (lockedAxis === null) {
-      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
-      lockedAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-    }
-    if (lockedAxis === 'y') return;
-    if (ev && ev.cancelable) ev.preventDefault();
-    cx = dx;
-    card.style.transform = `translate3d(${cx}px,0,0) rotate(${cx * 0.05}deg)`;
-    const p = Math.min(Math.abs(cx) / 110, 1);
-    if (cx > 0) { kissOv.style.opacity = p; kickOv.style.opacity = 0; }
-    else        { kickOv.style.opacity = p; kissOv.style.opacity = 0; }
-  }
-  function end() {
-    if (!drag) return;
-    drag = false;
-    const wasX = lockedAxis === 'x';
-    const d = cx;
-    lockedAxis = null;
-    if (wasX && d > 90) { haptic(15); doSwipe('kiss'); }
-    else if (wasX && d < -90) { haptic(15); doSwipe('kick'); }
-    else {
-      card.style.transition = 'transform 0.22s ease-out';
-      card.style.transform = '';
-      kissOv.style.opacity = 0; kickOv.style.opacity = 0;
-    }
-    cx = 0;
-  }
-
-  if (window.PointerEvent) {
-    card.addEventListener('pointerdown', e => {
-      if (e.target.closest('button')) return;
-      begin(e.clientX, e.clientY);
-      try { card.setPointerCapture(e.pointerId); } catch(_){}
+  if (soundBtn) {
+    soundBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      muted = !muted;
+      try { localStorage.setItem(SND_KEY, muted ? 'off' : 'on'); } catch (_) {}
+      renderSoundBtn();
+      if (!muted) beep(880, 0.06, 'square', 0.03);
+      haptic(10);
     });
-    card.addEventListener('pointermove', e => move(e.clientX, e.clientY, e), { passive: false });
-    card.addEventListener('pointerup', end);
-    card.addEventListener('pointercancel', end);
-    card.addEventListener('pointerleave', end);
-  } else {
-    card.addEventListener('touchstart', e => {
-      if (e.target.closest('button')) return;
-      if (e.touches.length !== 1) return;
-      begin(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: true });
-    card.addEventListener('touchmove', e => {
-      if (!drag || e.touches.length !== 1) return;
-      move(e.touches[0].clientX, e.touches[0].clientY, e);
-    }, { passive: false });
-    card.addEventListener('touchend', end, { passive: true });
-    card.addEventListener('touchcancel', end, { passive: true });
   }
-}
+  renderSoundBtn();
 
-function doSwipe(direction) {
-  const s = STATE.swipeOrder[STATE.swipeIndex];
-  if (!s) return;
-  if (direction === 'kiss') sendKiss(s.roll);
-  else if (direction === 'kick') sendKick(s.roll);
-  animateOut(direction, () => { STATE.swipeIndex++; render(); });
-}
-function skipSwipe() { haptic(8); animateOut('skip', () => { STATE.swipeIndex++; render(); }); }
-function prevSwipe() { haptic(8); if (STATE.swipeIndex > 0) { STATE.swipeIndex--; render(); } }
-function nextSwipe() { haptic(8); if (STATE.swipeIndex < STATE.swipeOrder.length - 1) { STATE.swipeIndex++; render(); } }
-function resetSwipe() { haptic(15); STATE.swipeOrder = shuffle(STATE.students.slice()); STATE.swipeIndex = 0; render(); }
-
-function animateOut(d, cb) {
-  const c = document.getElementById('swipeCard');
-  if (!c) { cb(); return; }
-  c.style.transition = 'transform 0.3s ease-out, opacity 0.3s';
-  if (d === 'kiss')      c.style.transform = 'translate3d(420px,0,0) rotate(30deg)';
-  else if (d === 'kick') c.style.transform = 'translate3d(-420px,0,0) rotate(-30deg)';
-  else                   c.style.transform = 'translate3d(0,-420px,0)';
-  c.style.opacity = '0';
-  setTimeout(cb, 320);
-}
-
-// ---------- UTILS ----------
-function formatDate(v) {
-  if (!v) return '—';
-  try {
-    const d = new Date(v);
-    if (isNaN(d.getTime())) return String(v).slice(0, 16);
-    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  } catch { return String(v).slice(0, 16); }
-}
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-let toastTimer;
-function toast(msg, isErr) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = isErr ? 'error show' : 'show';
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.className = ''; }, 4000);
-}
-
-// ---------- EVENT DELEGATION ----------
-const contentEl = document.getElementById('content');
-contentEl.addEventListener('click', e => {
-  const star = e.target.closest('.star-input > span');
-  if (!star) return;
-  const inp = star.closest('.star-input');
-  const val = parseInt(star.dataset.val, 10);
-  if (!val) return;
-  inp.dataset.value = val;
-  const kids = inp.children;
-  for (let i = 0; i < kids.length; i++) {
-    kids[i].classList.toggle('on', parseInt(kids[i].dataset.val, 10) <= val);
-  }
-  haptic(8);
-  updateEvalButtonState();
-});
-
-document.getElementById('nav').addEventListener('click', e => {
-  if (e.target.tagName === 'BUTTON') {
-    haptic(10);
-    const tab = e.target.dataset.tab;
-    if (tab === STATE.currentTab && tab !== 'leaderboard') return;
-    STATE.currentTab = tab;
-    STATE.currentStudent = null;
-    STATE.currentDetail = null;
-    STATE.detailError = null;
-
-    if (tab === 'leaderboard') {
-      STATE.leaderboard = null;
-      render();
-      loadLeaderboard(false);
-      return;
+  // ---------- KEYBOARD ----------
+  document.addEventListener('keydown', function (e) {
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.code === 'Space' || e.key === ' ' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      flap();
     }
-    if (tab === 'lore') loadLore();
-    if (tab === 'roster' && !STATE.students.length) { loadRoster(); return; }
+  });
 
-    render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  // ---------- VISIBILITY ----------
+  document.addEventListener('visibilitychange', function () {
+    lastTs = 0;
+  });
+
+  start();
+})();
+
+// ============================================================
+// WIRE UP
+// ============================================================
+document.addEventListener('DOMContentLoaded', function () {
+  const kissBtn = $('kissBtn');
+  const kickBtn = $('kickBtn');
+  const sendBtn = $('sendBtn');
+  const msgInput = $('msgInput');
+
+  if (kissBtn) kissBtn.addEventListener('click', function () { vote('kiss'); });
+  if (kickBtn) kickBtn.addEventListener('click', function () { vote('kick'); });
+  if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+  if (msgInput) msgInput.addEventListener('input', updateMsgCount);
+
+  loadStats();
 });
 
-document.getElementById('brand').addEventListener('click', () => { haptic(15); goHome(); });
-
-document.addEventListener('keydown', e => {
-  if (STATE.currentTab !== 'swipe' || STATE.loading) return;
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-  if (e.key === 'ArrowRight')      { e.preventDefault(); doSwipe('kiss'); }
-  else if (e.key === 'ArrowLeft')  { e.preventDefault(); doSwipe('kick'); }
-  else if (e.key === ' ')          { e.preventDefault(); skipSwipe(); }
-  else if (e.key === 'ArrowDown')  { e.preventDefault(); nextSwipe(); }
-  else if (e.key === 'ArrowUp')    { e.preventDefault(); prevSwipe(); }
-});
-
-document.addEventListener('touchmove', e => {
-  if (STATE.currentTab === 'swipe' && e.target.closest('#swipeCard')) {
-    if (e.cancelable) e.preventDefault();
-  }
-}, { passive: false });
-
-document.addEventListener('contextmenu', e => {
-  if (STATE.currentTab === 'swipe' && e.target.closest('#swipeCard')) e.preventDefault();
-});
-
-// ---------- BOOT ----------
-fetch(API_URL + '?action=ping&_t=' + Date.now(), { cache: 'no-store' }).catch(() => {});
-boot();
+// fallback if DOMContentLoaded already fired
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  setTimeout(function () {
+    if (STATE.loaded === false && $('kissCount') && $('kissCount').textContent === '—') {
+      const kissBtn = $('kissBtn');
+      const kickBtn = $('kickBtn');
+      const sendBtn = $('sendBtn');
+      const msgInput = $('msgInput');
+      if (kissBtn && !kissBtn._wired) {
+        kissBtn._wired = true;
+        kissBtn.addEventListener('click', function () { vote('kiss'); });
+        kickBtn.addEventListener('click', function () { vote('kick'); });
+        sendBtn.addEventListener('click', sendMessage);
+        msgInput.addEventListener('input', updateMsgCount);
+      }
+      loadStats();
+    }
+  }, 0);
+}
 </script>
 </body>
 </html>
